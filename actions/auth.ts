@@ -28,7 +28,7 @@ export async function signInAction(formData: FormData) {
       };
     }
   }
-  redirect("/chat");
+  redirect("/jobs");
 }
 
 export async function signUpAction(formData: FormData) {
