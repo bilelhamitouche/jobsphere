@@ -58,12 +58,13 @@ function SignUpForm() {
                 setIsPending(true);
                 try {
                   const result = await signUpAction(formData);
-                  result?.message && toast.error(result?.message);
-                  !result?.message &&
-                    !result?.errors &&
+                  if (result?.message) toast.error(result?.message);
+                  if (!result?.message && !result?.errors) {
                     toast.success("Signed Up Successfully");
-                  router.push("/signin");
+                    router.push("/signin");
+                  }
                 } catch (err) {
+                  console.log(err);
                 } finally {
                   setIsPending(false);
                 }

@@ -57,12 +57,13 @@ function SignInForm() {
                 formData.append("password", data.password);
                 try {
                   const result = await signInAction(formData);
-                  result?.message && toast.error(result.message);
-                  !result?.message &&
-                    !result?.errors &&
+                  if (result?.message) toast.error(result.message);
+                  if (!result?.message && !result?.errors) {
                     toast.success("Signed In Successfully");
-                  router.push("/jobs");
+                    router.push("/");
+                  }
                 } catch (err) {
+                  console.log(err);
                 } finally {
                   setIsPending(false);
                 }
