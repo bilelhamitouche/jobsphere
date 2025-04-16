@@ -3,7 +3,6 @@
 import { auth } from "@/lib/auth";
 import { signInSchema, signUpSchema } from "@/lib/zod";
 import { APIError } from "better-auth/api";
-import { redirect } from "next/navigation";
 
 export async function signInAction(formData: FormData) {
   const email = formData.get("email");
@@ -28,7 +27,6 @@ export async function signInAction(formData: FormData) {
       };
     }
   }
-  redirect("/jobs");
 }
 
 export async function signUpAction(formData: FormData) {
