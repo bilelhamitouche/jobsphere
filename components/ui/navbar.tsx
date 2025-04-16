@@ -1,8 +1,8 @@
+"use client";
+
 import { BriefcaseBusiness } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./button";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import {
   DropdownMenu,
@@ -10,18 +10,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
+import { authClient } from "@/lib/auth-client";
 
-async function Navbar() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+function Navbar() {
+  const { data: session } = authClient.useSession();
   return (
     <header className="container flex justify-between items-center p-4 mx-auto max-w-6xl">
       <Link href="/" className="flex gap-2 items-center">
         <BriefcaseBusiness size={25} className="text-primary" />
         <span className="text-2xl font-bold text-primary">JobSphere</span>
       </Link>
-      {!session ? (
+      {!session?.user ? (
         <div className="space-x-2">
           <Button variant="outline" asChild>
             <Link href="/signin">Sign In</Link>
@@ -36,7 +35,10 @@ async function Navbar() {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Avatar>
-              <AvatarImage src={session?.user.image!} alt="user image" />
+              <AvatarImage
+                src={session?.user.image as string}
+                alt="user image"
+              />
               <AvatarFallback>{session?.user.name[0]}</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
@@ -44,8 +46,8 @@ async function Navbar() {
             <DropdownMenuItem>
               <Link href="/settings">Settings</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link href="/settings">Settings</Link>
+            <DropdownMenuItem onClick={() => authClient.signOut()}>
+              Sign Out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
