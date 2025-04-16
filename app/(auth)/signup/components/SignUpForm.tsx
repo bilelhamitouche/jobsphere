@@ -22,17 +22,14 @@ import { Input } from "@/components/ui/input";
 import { signUpSchema } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-const initialState = {
-  errors: null,
-  message: null,
-};
-
 function SignUpForm() {
+  const router = useRouter();
   const [isPending, setIsPending] = useState<boolean>(false);
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -62,6 +59,10 @@ function SignUpForm() {
                 try {
                   const result = await signUpAction(formData);
                   result?.message && toast.error(result?.message);
+                  !result?.message &&
+                    !result?.errors &&
+                    toast.success("Signed Up Successfully");
+                  router.push("/signin");
                 } catch (err) {
                 } finally {
                   setIsPending(false);
@@ -109,7 +110,9 @@ function SignUpForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Sign Up</Button>
+            <Button type="submit" className="w-full" disabled={isPending}>
+              Sign Up
+            </Button>
           </form>
         </Form>
       </CardContent>
