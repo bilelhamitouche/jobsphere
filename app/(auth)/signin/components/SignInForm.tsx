@@ -26,13 +26,10 @@ import { signInAction } from "@/actions/auth";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useState } from "react";
-
-const initialState = {
-  errors: null,
-  message: null,
-};
+import { useRouter } from "next/navigation";
 
 function SignInForm() {
+  const router = useRouter();
   const [isPending, setIsPending] = useState<boolean>(false);
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -61,6 +58,10 @@ function SignInForm() {
                 try {
                   const result = await signInAction(formData);
                   result?.message && toast.error(result.message);
+                  !result?.message &&
+                    !result?.errors &&
+                    toast.success("Signed In Successfully");
+                  router.push("/jobs");
                 } catch (err) {
                 } finally {
                   setIsPending(false);
@@ -94,7 +95,9 @@ function SignInForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Sign In</Button>
+            <Button type="submit" disabled={isPending} className="w-full">
+              Sign In
+            </Button>
           </form>
         </Form>
       </CardContent>
