@@ -1,10 +1,10 @@
 function Hero() {
   return (
-    <section className="flex flex-col items-center py-20 space-y-4 bg-gradient-to-b from-primary-foreground to-primary-background">
-      <h1 className="text-6xl font-bold tracking-tight">
+    <section className="flex flex-col items-center py-20 px-8 space-y-4 text-center bg-gradient-to-b from-primary-foreground to-primary-background">
+      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
         Find Your <span className="text-primary">Dream Job</span> Today
       </h1>
-      <p className="max-w-2xl text-xl text-center text-gray-600">
+      <p className="max-w-2xl text-lg text-gray-600 md:text-xl">
         Search thousands of job listings and connect with top employers looking
         for talent like you.
       </p>
