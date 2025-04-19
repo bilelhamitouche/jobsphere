@@ -1,13 +1,20 @@
 import { Separator } from "./separator";
 import { FaLinkedin, FaTwitter } from "react-icons/fa";
 import Link from "next/link";
+import { BriefcaseBusiness } from "lucide-react";
 
 function Footer() {
   return (
     <footer className="p-4 border-t bg-primary-foreground border-t-gray-200">
-      <div className="grid grid-cols-1 gap-2 py-4 pb-8 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-8 py-4 pb-8 md:grid-cols-4 md:gap-2">
         <div className="flex flex-col gap-4">
-          <h3 className="text-lg font-bold text-primary">JobSphere</h3>
+          <Link
+            href="/"
+            className="flex gap-2 items-center text-lg font-bold text-primary"
+          >
+            <BriefcaseBusiness size="20" />
+            <span>JobSphere</span>
+          </Link>
           <p className="text-sm text-gray-500">
             Connecting the right talent with the right opportunities
           </p>
