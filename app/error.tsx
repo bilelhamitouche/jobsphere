@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-function Error() {
+export default function Error() {
   return (
     <div className="flex flex-col gap-4 justify-center items-center p-4 h-full text-center">
       <h1 className="text-3xl font-bold text-red-500 md:text-4xl">
@@ -24,4 +24,3 @@ function Error() {
   );
 }
 
-export default Error;

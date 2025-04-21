@@ -2,7 +2,7 @@ import Filter from "./components/Filter";
 import JobsList from "./components/JobsList";
 import Search from "./components/Search";
 
-function Jobs() {
+export default function Jobs() {
   return (
     <div className="p-8 space-y-8 h-full bg-primary-foreground">
       <h1 className="text-2xl font-bold">Browse Jobs</h1>
@@ -14,5 +14,3 @@ function Jobs() {
     </div>
   );
 }
-
-export default Jobs;

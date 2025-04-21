@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-function NotFound() {
+export default function NotFound() {
   return (
     <div className="flex flex-col gap-4 justify-center items-center p-4 h-full text-center">
       <h2 className="text-xl font-bold md:text-4xl lg:text-6xl text-primary">
@@ -22,5 +22,3 @@ function NotFound() {
     </div>
   );
 }
-
-export default NotFound;
