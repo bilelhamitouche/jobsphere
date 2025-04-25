@@ -45,10 +45,10 @@ function Footer() {
           <Link href="/about" className="text-sm text-gray-600">
             About Us
           </Link>
-          <Link href="/contact" className="text-sm text-gray-500">
+          <Link href="/contact" className="text-sm text-gray-600">
             Contact
           </Link>
-          <Link href="/privacy" className="text-sm text-gray-500">
+          <Link href="/privacy" className="text-sm text-gray-600">
             Privacy Policy
           </Link>
         </div>
