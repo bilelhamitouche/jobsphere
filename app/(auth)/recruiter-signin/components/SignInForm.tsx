@@ -108,7 +108,7 @@ function SignInForm() {
         <p>
           <span>Don&apos;t have an account?</span>
           <Button variant="link" size="sm" asChild>
-            <Link href="/signup">Sign Up</Link>
+            <Link href="/recruiter-signup">Sign Up</Link>
           </Button>
         </p>
       </CardFooter>
