@@ -63,7 +63,7 @@ function SignUpForm() {
                   if (result?.message) toast.error(result?.message);
                   if (!result?.message && !result?.errors) {
                     toast.success("Signed Up Successfully");
-                    router.push("/signin");
+                    router.push("/recruiter-signin");
                   }
                 } catch (err) {
                   console.log(err);
