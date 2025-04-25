@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en" className="h-full light">
       <body className={`${inter.className} h-full antialiased`}>
         {children}
-        <Toaster richColors closeButton />
+        <Toaster richColors closeButton theme="light" />
       </body>
     </html>
   );
