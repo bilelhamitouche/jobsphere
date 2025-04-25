@@ -14,6 +14,7 @@ import { authClient } from "@/lib/auth-client";
 
 function Navbar() {
   const { data: session } = authClient.useSession();
+  console.log(session?.user);
   return (
     <header className="container flex justify-between items-center p-4 mx-auto">
       <Link href="/" className="flex gap-2 items-center">
@@ -62,7 +63,7 @@ function Navbar() {
               <AvatarFallback>{session?.user.name[0]}</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent align="end">
             <DropdownMenuItem>
               <Link href="/settings">Settings</Link>
             </DropdownMenuItem>
