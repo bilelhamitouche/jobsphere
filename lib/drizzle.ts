@@ -1,5 +1,13 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-import { pgTable, timestamp, text, boolean } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  timestamp,
+  text,
+  boolean,
+  pgEnum,
+  integer,
+} from "drizzle-orm/pg-core";
+import { on } from "events";
 
 export const db = drizzle(process.env.DATABASE_URL!);
 
@@ -9,8 +17,10 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull(),
   image: text("image"),
+  resumeUrl: text("reusme_url"),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
+  role: text("role"),
 });
 
 export const session = pgTable("session", {
@@ -51,6 +61,69 @@ export const verification = pgTable("verification", {
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
+});
+
+export const experienceLevelEnum = pgEnum("experience_level", [
+  "none",
+  "junior",
+  "intermediate",
+  "senior",
+]);
+
+export const jobType = pgEnum("job_type", [
+  "full",
+  "part",
+  "internship",
+  "remot",
+]);
+
+export const jobListing = pgTable("job_listing", {
+  id: text("id")
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
+  position: text("position").notNull(),
+  experienceLevel: experienceLevelEnum().notNull(),
+  postedAt: timestamp("posted_at").defaultNow(),
+});
+
+export const jobApplication = pgTable("job_application", {
+  id: text("id")
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id),
+  jobListingId: text("joblisting_id")
+    .notNull()
+    .references(() => jobListing.id),
+  appliedAt: timestamp("applied_at").notNull().defaultNow(),
+});
+
+export const jobSaved = pgTable("job_saved", {
+  id: text("id")
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id),
+  jobListingId: text("joblisting_id")
+    .notNull()
+    .references(() => jobListing.id),
+});
+
+export const company = pgTable("company", {
+  id: text("id")
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  foundationYear: integer("foundation_year"),
+  headquarters: text("headquarters"),
+  website: text("website"),
 });
 
 export const schema = { user, session, account, verification };
