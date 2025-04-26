@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -10,8 +12,10 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Briefcase, Clock, Star } from "lucide-react";
+import { useQueryState } from "nuqs";
 
 function Filter() {
+  const [type, setType] = useQueryState("type");
   return (
     <Card className="col-start-1 col-end-3 row-start-2 row-end-3 md:col-end-2 min-w-xs">
       <CardContent className="flex flex-col items-start space-y-4">
