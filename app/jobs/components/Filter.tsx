@@ -9,7 +9,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Briefcase, Clock, MapPin } from "lucide-react";
+import { Briefcase, Clock, Star } from "lucide-react";
 
 function Filter() {
   return (
@@ -40,21 +40,19 @@ function Filter() {
           </div>
           <Separator />
           <h2 className="flex gap-2 items-center">
-            <MapPin size="18" />
-            <span>Location</span>
+            <Star size="18" />
+            <span>Experience Level</span>
           </h2>
           <Select>
             <SelectTrigger value="all" className="w-full">
-              All
+              All Experience Levels
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All</SelectItem>
-              <SelectItem value="af">Africa</SelectItem>
-              <SelectItem value="us">America</SelectItem>
-              <SelectItem value="as">Asia</SelectItem>
-              <SelectItem value="au">Australia</SelectItem>
-              <SelectItem value="eu">Europe</SelectItem>
-              <SelectItem value="re">Remote</SelectItem>
+              <SelectItem value="none">No Experience</SelectItem>
+              <SelectItem value="junior">Junior</SelectItem>
+              <SelectItem value="intermediate">Intermediate</SelectItem>
+              <SelectItem value="senior">Senior</SelectItem>
             </SelectContent>
           </Select>
           <Separator />
