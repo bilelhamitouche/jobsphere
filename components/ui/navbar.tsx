@@ -1,6 +1,6 @@
 "use client";
 
-import { BriefcaseBusiness } from "lucide-react";
+import { BriefcaseBusiness, Menu } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./button";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
@@ -72,6 +72,9 @@ function Navbar() {
           </DropdownMenuContent>
         </DropdownMenu>
       )}
+      <Button variant="outline" className="block md:hidden">
+        <Menu />
+      </Button>
     </header>
   );
 }
