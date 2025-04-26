@@ -64,8 +64,8 @@ export const verification = pgTable("verification", {
 
 export const experienceLevelEnum = pgEnum("experience_level", [
   "none",
-  "junior",
-  "intermediate",
+  "entry",
+  "mid",
   "senior",
 ]);
 
@@ -84,6 +84,18 @@ export const jobListing = pgTable("job_listing", {
   position: text("position").notNull(),
   experienceLevel: experienceLevelEnum().notNull(),
   postedAt: timestamp("posted_at").defaultNow(),
+});
+
+export const jobRequirement = pgTable("job_requirement", {
+  id: text("id")
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
+  jobId: text("job_id")
+    .notNull()
+    .unique()
+    .references(() => jobListing.id),
+  requirement: text("requirement").notNull(),
 });
 
 export const jobApplication = pgTable("job_application", {
