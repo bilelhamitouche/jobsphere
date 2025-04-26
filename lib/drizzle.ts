@@ -7,7 +7,6 @@ import {
   pgEnum,
   integer,
 } from "drizzle-orm/pg-core";
-import { on } from "events";
 
 export const db = drizzle(process.env.DATABASE_URL!);
 
