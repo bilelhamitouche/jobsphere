@@ -1,7 +1,7 @@
 import ComingSoon from "@/components/ui/coming-soon";
 
-function EmployeeResources() {
+function EmployerResources() {
   return <ComingSoon />;
 }
 
-export default EmployeeResources;
+export default EmployerResources;
