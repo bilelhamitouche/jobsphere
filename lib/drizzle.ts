@@ -6,6 +6,7 @@ import {
   boolean,
   pgEnum,
   integer,
+  primaryKey,
 } from "drizzle-orm/pg-core";
 
 export const db = drizzle(process.env.DATABASE_URL!);
@@ -16,7 +17,7 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull(),
   image: text("image"),
-  resumeUrl: text("reusme_url"),
+  resumeUrl: text("resume_url"),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
   role: text("role"),
@@ -73,7 +74,7 @@ export const jobType = pgEnum("job_type", [
   "full",
   "part",
   "internship",
-  "remot",
+  "remote",
 ]);
 
 export const jobListing = pgTable("job_listing", {
@@ -81,49 +82,94 @@ export const jobListing = pgTable("job_listing", {
     .primaryKey()
     .notNull()
     .$defaultFn(() => crypto.randomUUID()),
+  description: text("description").notNull(),
   position: text("position").notNull(),
+  type: jobType("job_type").notNull(),
   experienceLevel: experienceLevelEnum().notNull(),
-  postedAt: timestamp("posted_at").defaultNow(),
+  location: text("location").notNull(),
+  companyId: text("company_id")
+    .notNull()
+    .references(() => company.id, { onDelete: "cascade" }),
+  postedAt: timestamp("posted_at").notNull().defaultNow(),
 });
 
-export const jobRequirement = pgTable("job_requirement", {
+export const requirement = pgTable("requirement", {
   id: text("id")
     .primaryKey()
     .notNull()
     .$defaultFn(() => crypto.randomUUID()),
-  jobId: text("job_id")
-    .notNull()
-    .unique()
-    .references(() => jobListing.id),
-  requirement: text("requirement").notNull(),
+  name: text("name").notNull().unique(),
 });
 
-export const jobApplication = pgTable("job_application", {
+export const jobListingRequirement = pgTable(
+  "job_listing_requirement",
+  {
+    jobListingId: text("job_listing_id")
+      .notNull()
+      .references(() => jobListing.id, { onDelete: "cascade" }),
+    requirementId: text("requirement_id")
+      .notNull()
+      .references(() => requirement.id, { onDelete: "cascade" }),
+  },
+  (table) => [
+    primaryKey({ columns: [table.jobListingId, table.requirementId] }),
+  ],
+);
+
+export const skill = pgTable("skill", {
   id: text("id")
     .primaryKey()
     .notNull()
     .$defaultFn(() => crypto.randomUUID()),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id),
-  jobListingId: text("joblisting_id")
-    .notNull()
-    .references(() => jobListing.id),
-  appliedAt: timestamp("applied_at").notNull().defaultNow(),
+  name: text("name").notNull().unique(),
 });
 
-export const jobSaved = pgTable("job_saved", {
-  id: text("id")
-    .primaryKey()
-    .notNull()
-    .$defaultFn(() => crypto.randomUUID()),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id),
-  jobListingId: text("joblisting_id")
-    .notNull()
-    .references(() => jobListing.id),
-});
+export const jobListingSkill = pgTable(
+  "job_listing_skill",
+  {
+    jobListingId: text("job_listing_id")
+      .notNull()
+      .references(() => jobListing.id, { onDelete: "cascade" }),
+    skillId: text("skill_id")
+      .notNull()
+      .references(() => skill.id, { onDelete: "cascade" }),
+  },
+  (table) => [primaryKey({ columns: [table.jobListingId, table.skillId] })],
+);
+
+export const jobApplicationStatus = pgEnum("job_application_status", [
+  "pending",
+  "accepted",
+  "rejected",
+]);
+
+export const jobListingApplication = pgTable(
+  "job_listing_application",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    jobListingId: text("job_listing_id")
+      .notNull()
+      .references(() => jobListing.id, { onDelete: "cascade" }),
+    appliedAt: timestamp("applied_at").notNull().defaultNow(),
+    status: jobApplicationStatus().default("pending"),
+  },
+  (table) => [primaryKey({ columns: [table.userId, table.jobListingId] })],
+);
+
+export const jobListingSaved = pgTable(
+  "job_listing_saved",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
+    jobListingId: text("job_listing_id")
+      .notNull()
+      .references(() => jobListing.id, { onDelete: "cascade" }),
+  },
+  (table) => [primaryKey({ columns: [table.userId, table.jobListingId] })],
+);
 
 export const company = pgTable("company", {
   id: text("id")
@@ -131,10 +177,48 @@ export const company = pgTable("company", {
     .notNull()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
+  about: text("about"),
   email: text("email").notNull().unique(),
   foundationYear: integer("foundation_year"),
   headquarters: text("headquarters"),
   website: text("website"),
+  recruiterId: text("recruiter_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
 });
+
+export const industry = pgTable("industry", {
+  id: text("id")
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull(),
+});
+
+export const companyIndustry = pgTable(
+  "company_industry",
+  {
+    companyId: text("company_id")
+      .notNull()
+      .references(() => company.id, { onDelete: "cascade" }),
+    industryId: text("industry_id")
+      .notNull()
+      .references(() => industry.id, { onDelete: "cascade" }),
+  },
+  (table) => [primaryKey({ columns: [table.industryId, table.companyId] })],
+);
+
+export const jobListingIndustry = pgTable(
+  "job_listing_industry",
+  {
+    jobListingId: text("job_listing_id")
+      .notNull()
+      .references(() => jobListing.id, { onDelete: "cascade" }),
+    industryId: text("industry_id")
+      .notNull()
+      .references(() => industry.id, { onDelete: "cascade" }),
+  },
+  (table) => [primaryKey({ columns: [table.industryId, table.jobListingId] })],
+);
 
 export const schema = { user, session, account, verification };
