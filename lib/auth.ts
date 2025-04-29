@@ -1,4 +1,5 @@
-import { betterAuth, z } from "better-auth";
+import "server-only";
+import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { db, schema } from "./drizzle";
