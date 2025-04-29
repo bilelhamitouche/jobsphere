@@ -1,5 +1,5 @@
 "use server";
-
+import "server-only";
 import { auth } from "@/lib/auth";
 import { signInSchema, signUpSchema } from "@/lib/zod";
 import { APIError } from "better-auth/api";
