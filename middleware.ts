@@ -5,6 +5,9 @@ export async function middleware(request: NextRequest) {
   const sessionCookie = getSessionCookie(request);
 
   if (!sessionCookie) {
+    if (request.url.includes("/recruiter")) {
+      return NextResponse.redirect(new URL("/recruiter-signin", request.url));
+    }
     return NextResponse.redirect(new URL("/signin", request.url));
   }
 
@@ -12,5 +15,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/recruiter"],
+  matcher: ["/recruiter", "/recruiter/:path", "/jobseeker", "/jobseeker/:path"],
 };
