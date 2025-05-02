@@ -21,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { signUpSchema } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -114,7 +115,14 @@ function SignUpForm() {
               )}
             />
             <Button type="submit" className="w-full" disabled={isPending}>
-              Sign Up
+              {isPending ? (
+                <div className="flex gap-2 items-center">
+                  <Loader2 className="animate-spin" />
+                  <span>Please wait</span>
+                </div>
+              ) : (
+                <span>Sign Up</span>
+              )}
             </Button>
           </form>
         </Form>

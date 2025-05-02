@@ -27,6 +27,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 function SignInForm() {
   const router = useRouter();
@@ -99,7 +100,14 @@ function SignInForm() {
               )}
             />
             <Button type="submit" disabled={isPending} className="w-full">
-              Sign In
+              {isPending ? (
+                <div className="flex gap-2 items-center">
+                  <Loader2 className="animate-spin" />
+                  <span>Please wait</span>
+                </div>
+              ) : (
+                <span>Sign Up</span>
+              )}
             </Button>
           </form>
         </Form>
