@@ -1,7 +1,11 @@
 import Footer from "@/components/ui/footer";
 import Navbar from "@/components/ui/navbar";
 
-function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div>
       <Navbar />
@@ -10,5 +14,3 @@ function Layout({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-
-export default Layout;
