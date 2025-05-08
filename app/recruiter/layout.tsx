@@ -1,13 +1,16 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import RecruiterSidebar from "./components/sidebar";
+import Navbar from "./components/navbar";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
+    <div className="w-full h-full bg-primary-foreground">
       <SidebarProvider>
         <RecruiterSidebar />
-        <SidebarTrigger />
-        {children}
+        <main className="w-full h-full">
+          <Navbar />
+          {children}
+        </main>
       </SidebarProvider>
     </div>
   );
