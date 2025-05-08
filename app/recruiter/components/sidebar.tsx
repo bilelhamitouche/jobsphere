@@ -1,9 +1,10 @@
-import "server-only";
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -15,22 +16,20 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { auth } from "@/lib/auth";
+import { authClient } from "@/lib/auth-client";
 import {
   BriefcaseBusiness,
   ChevronsUpDown,
   Factory,
   Home,
+  LogOut,
   Send,
   Settings,
 } from "lucide-react";
-import { headers } from "next/headers";
 import Link from "next/link";
 
-async function RecruiterSidebar() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+function RecruiterSidebar() {
+  const { data: session } = authClient.useSession();
   return (
     <Sidebar>
       <SidebarHeader>
@@ -40,9 +39,9 @@ async function RecruiterSidebar() {
         </h1>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu>
+        <SidebarMenu className="p-2">
           <SidebarMenuItem>
-            <SidebarMenuButton>
+            <SidebarMenuButton asChild>
               <Link href="/recruiter" className="flex gap-2 items-center">
                 <Home size="15" />
                 <span>Dashboard</span>
@@ -50,7 +49,7 @@ async function RecruiterSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton>
+            <SidebarMenuButton asChild>
               <Link
                 href="/recruiter/company"
                 className="flex gap-2 items-center"
@@ -61,7 +60,7 @@ async function RecruiterSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton>
+            <SidebarMenuButton asChild>
               <Link href="/recruiter/jobs" className="flex gap-2 items-center">
                 <BriefcaseBusiness size="15" />
                 Jobs
@@ -69,21 +68,13 @@ async function RecruiterSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton>
+            <SidebarMenuButton asChild>
               <Link
                 href="/recruiter/applications"
                 className="flex gap-2 items-center"
               >
                 <Send size="15" />
                 Applications
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Link href="/settings" className="flex gap-2 items-center">
-                <Settings size="15" />
-                Settings
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -117,8 +108,30 @@ async function RecruiterSidebar() {
                   </div>
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuItem>Hello</DropdownMenuItem>
+              <DropdownMenuContent className="w-60">
+                <DropdownMenuItem>
+                  <Avatar>
+                    <AvatarImage
+                      src={session?.user.image as string}
+                      alt={`${session?.user.image} image`}
+                    />
+                    <AvatarFallback>
+                      {session?.user.name.toUpperCase()[0]}
+                    </AvatarFallback>
+                  </Avatar>
+                  {session?.user.email}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/settings/account">
+                    <Settings />
+                    <span>Settings</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => authClient.signOut()}>
+                  <LogOut className="text-red-500" />
+                  <span className="text-red-500">Sign Out</span>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
