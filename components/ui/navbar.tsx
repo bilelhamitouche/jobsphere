@@ -1,6 +1,12 @@
 "use client";
 
-import { BriefcaseBusiness, Menu } from "lucide-react";
+import {
+  BriefcaseBusiness,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  Settings,
+} from "lucide-react";
 import Link from "next/link";
 import { Button } from "./button";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
@@ -62,12 +68,22 @@ function Navbar() {
               <AvatarFallback>{session?.user.name[0]}</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-40">
             <DropdownMenuItem>
+              <LayoutDashboard />
+              <Link
+                href={`${session.user.role === "recruiter" ? "/recruiter" : "/jobseeker"}`}
+              >
+                Dashboard
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Settings />
               <Link href="/settings">Settings</Link>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => authClient.signOut()}>
-              Sign Out
+              <LogOut className="text-red-500" />
+              <span className="text-red-500">Sign Out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
