@@ -14,6 +14,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
 import { authClient } from "@/lib/auth-client";
@@ -69,6 +70,8 @@ function Navbar() {
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40">
+            <DropdownMenuItem>{session?.user.email}</DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LayoutDashboard />
               <Link
