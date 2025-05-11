@@ -1,3 +1,4 @@
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,14 +34,18 @@ function JobCard({
       <CardHeader className="flex flex-col gap-4 items-start">
         <CardTitle className="flex gap-4 items-center">
           {companyImageUrl ? (
-            <Image
-              src={companyImageUrl}
-              alt="${company} url"
-              width="18"
-              height="18"
-            />
+            <Avatar>
+              <AvatarImage
+                src={companyImageUrl}
+                alt="${company} url"
+                width="18"
+                height="18"
+              />
+            </Avatar>
           ) : (
-            <div className="size-18 bg-primary-foreground"></div>
+            <div className="flex justify-center items-center text-xl size-18 bg-primary-foreground">
+              {company.toUpperCase()[0]}
+            </div>
           )}
           <div className="flex flex-col gap-1">
             <span className="text-lg">{position}</span>
