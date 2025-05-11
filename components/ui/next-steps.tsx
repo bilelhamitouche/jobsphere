@@ -20,7 +20,7 @@ function NextSteps() {
           className="text-primary hover:text-primary-foreground hover:bg-primary"
           asChild
         >
-          <Link href="/jobs">Browser Jobs</Link>
+          <Link href="/jobs">Browse Jobs</Link>
         </Button>
       </div>
     </section>
