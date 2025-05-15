@@ -2,6 +2,8 @@
 import { auth } from "@/lib/auth";
 import { signInSchema, signUpSchema } from "@/lib/zod";
 import { APIError } from "better-auth/api";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export async function signInAction(formData: FormData) {
   const email = formData.get("email");
@@ -114,4 +116,25 @@ export async function recruiterSignUpAction(formData: FormData) {
       };
     }
   }
+}
+
+async function getSession() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+  return session;
+}
+
+export async function getUserInfo() {
+  return await getSession();
+}
+
+export async function isAuthenticated() {
+  const session = await getSession();
+  if(!session) redirect("/signin");
+}
+
+export async function isRecruiterAuthenticated() {
+  const session = await getSession();
+  if(!session) redirect("/recruiter-signin");
 }
