@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Lato } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { ClientProvider } from "@/components/QueryClientProvider";
 
-const inter = Inter({
+const lato = Lato({
+  variable: "--font-lato",
   subsets: ["latin"],
+  weight: ["400", "700"]
 });
 
 export const metadata: Metadata = {
@@ -20,10 +23,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full light">
-      <body className={`${inter.className} h-full antialiased`}>
-        <NuqsAdapter>{children}</NuqsAdapter>
-        <Toaster richColors closeButton theme="light" />
-      </body>
+      <ClientProvider>
+        <body className={`${lato.className} h-full antialiased`}>
+          <NuqsAdapter>{children}</NuqsAdapter>
+          <Toaster richColors closeButton theme="light" />
+        </body>
+      </ClientProvider>
     </html>
   );
 }
