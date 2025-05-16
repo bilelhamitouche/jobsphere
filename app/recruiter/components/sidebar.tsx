@@ -90,7 +90,7 @@ function RecruiterSidebar() {
                     <div className="flex gap-1">
                       <Avatar>
                         <AvatarImage
-                          src={session?.user.image!}
+                          src={session?.user.image as string}
                           alt={`${session?.user.name} image`}
                         />
                         <AvatarFallback>
