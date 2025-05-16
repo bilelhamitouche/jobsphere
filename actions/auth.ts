@@ -126,7 +126,8 @@ async function getSession() {
 }
 
 export async function getUserInfo() {
-  return await getSession();
+  const session = await getSession();
+  return session?.user;
 }
 
 export async function isAuthenticated() {
