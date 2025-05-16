@@ -8,8 +8,29 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getCompanyInfo } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
 
 export default function CompanyInfo() {
+  const { data: session, isPending: isSessionPending } = authClient.useSession()
+  const router = useRouter()
+  useEffect(() => {
+    if(isSessionPending) return;
+    if(!session) router.push("/recruiter-signin")
+  }, [session, isSessionPending, router]) 
+  const { data: companyInfo, isPending } = useQuery({
+    queryKey: ["companyInfo"],
+    queryFn: getCompanyInfo,
+    enabled: !!session,
+  })
+  console.log(companyInfo)
+  useEffect(() => {
+    if(!isPending && !isSessionPending && companyInfo.length !== 0) router.push("/recruiter")
+  }, [companyInfo, isPending, isSessionPending, router])
   const form = useForm<z.infer<typeof companyInfoSchema>>({
     resolver: zodResolver(companyInfoSchema),
     defaultValues: {
@@ -21,6 +42,9 @@ export default function CompanyInfo() {
       industry: "",
     }
   })
+  if (isPending) return <div className="h-full w-full justify-center items-center flex">
+    <Loader2 className="animate-spin"></Loader2>
+  </div>
   return (
     <div className="h-full w-full flex items-center justify-center">
       <Card className="w-3xl">
