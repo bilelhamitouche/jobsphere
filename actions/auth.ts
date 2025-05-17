@@ -121,7 +121,7 @@ export async function recruiterSignUpAction(formData: FormData) {
 async function getSession() {
   const session = await auth.api.getSession({
     headers: await headers(),
-  })
+  });
   return session;
 }
 
@@ -132,10 +132,11 @@ export async function getUserInfo() {
 
 export async function isAuthenticated() {
   const session = await getSession();
-  if(!session) redirect("/signin");
+  if (!session) redirect("/signin");
 }
 
 export async function isRecruiterAuthenticated() {
   const session = await getSession();
-  if(!session) redirect("/recruiter-signin");
+  if (!session || session.user.role !== "recruiter")
+    redirect("/recruiter-signin");
 }
