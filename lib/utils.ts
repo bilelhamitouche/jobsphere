@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export async function getCompanyInfo() {
-  const response = await fetch("/api/recruiter/company");
+  const response = await fetch("/api/recruiter/company", { method: "GET" });
   const companyInfo = await response.json();
   return companyInfo;
 }
