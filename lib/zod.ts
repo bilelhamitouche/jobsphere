@@ -49,5 +49,5 @@ export const companyInfoSchema = z.object({
   headquarters: z.string().trim(),
   website: z.string().trim(),
   industry: z.string().trim(),
-  logo_url: z.string().trim()
+  logo_url: z.string().trim(),
 });
