@@ -171,6 +171,14 @@ export const jobListingSaved = pgTable(
   (table) => [primaryKey({ columns: [table.userId, table.jobListingId] })],
 );
 
+export const industry = pgTable("industry", {
+  id: text("id")
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull(),
+});
+
 export const company = pgTable("company", {
   id: text("id")
     .primaryKey()
@@ -185,40 +193,9 @@ export const company = pgTable("company", {
   recruiterId: text("recruiter_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-});
-
-export const industry = pgTable("industry", {
-  id: text("id")
-    .primaryKey()
+  industryId: text("industry_id")
     .notNull()
-    .$defaultFn(() => crypto.randomUUID()),
-  name: text("name").notNull(),
+    .references(() => industry.id),
 });
-
-export const companyIndustry = pgTable(
-  "company_industry",
-  {
-    companyId: text("company_id")
-      .notNull()
-      .references(() => company.id, { onDelete: "cascade" }),
-    industryId: text("industry_id")
-      .notNull()
-      .references(() => industry.id, { onDelete: "cascade" }),
-  },
-  (table) => [primaryKey({ columns: [table.industryId, table.companyId] })],
-);
-
-export const jobListingIndustry = pgTable(
-  "job_listing_industry",
-  {
-    jobListingId: text("job_listing_id")
-      .notNull()
-      .references(() => jobListing.id, { onDelete: "cascade" }),
-    industryId: text("industry_id")
-      .notNull()
-      .references(() => industry.id, { onDelete: "cascade" }),
-  },
-  (table) => [primaryKey({ columns: [table.industryId, table.jobListingId] })],
-);
 
 export const schema = { user, session, account, verification };
