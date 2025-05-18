@@ -34,20 +34,22 @@ export const jobListingSchema = z.object({
 
 export const companyInfoSchema = z.object({
   name: z.string().trim().min(1, { message: "Name is required" }),
-  about: z.string().trim(),
+  about: z.string().trim().optional(),
   email: z
     .string()
     .trim()
     .email({ message: "Must be a valid email adddress" })
     .min(1, { message: "Email is required" }),
   foundation_year: z
-    .number()
-    .min(1000, { message: "Must be founded at least in 1000" })
-    .max(new Date().getFullYear(), {
+    .string()
+    .refine((value) => Number(value) > 1000, {
+      message: "Must be founded at least at 1000",
+    })
+    .refine((value) => Number(value) <= new Date().getFullYear(), {
       message: "Cannot be founded in the future",
     }),
   headquarters: z.string().trim(),
   website: z.string().trim(),
-  industry: z.string().trim(),
-  logo_url: z.string().trim(),
+  industry: z.string().trim().min(1, { message: "Industry is Required" }),
+  logo_url: z.string().trim().optional(),
 });
