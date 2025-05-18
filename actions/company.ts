@@ -8,7 +8,7 @@ export async function getCompanyInfoAction(recruiterId: string) {
   return companyInfo;
 }
 
-export async function createCompany(formData: FormData) {
+export async function createCompanyAction(formData: FormData) {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
   const about = formData.get("about") as string;
@@ -17,6 +17,7 @@ export async function createCompany(formData: FormData) {
   const industry = formData.get("industry") as string;
   const logoUrl = formData.get("logo_url") as string;
   const recruiterId = formData.get("recruiterId") as string;
+  console.log("Executed");
   console.log(
     name,
     email,
@@ -28,18 +29,21 @@ export async function createCompany(formData: FormData) {
     recruiterId,
   );
 
-  const result = companyInfoSchema.safeParse({
-    name,
-    email,
-    about,
-    foundationYear,
-    website,
-    industry,
-    logoUrl,
-  });
-  if (!result.success) {
-    return {
-      errors: result.error.flatten().fieldErrors,
-    };
-  }
+  // const result = companyInfoSchema.safeParse({
+  //   name,
+  //   email,
+  //   about,
+  //   foundationYear,
+  //   website,
+  //   industry,
+  //   logoUrl,
+  // });
+  // if (!result.success) {
+  //   return {
+  //     errors: result.error.flatten().fieldErrors,
+  //   };
+  // }
+  return {
+    message: "Hello",
+  };
 }
