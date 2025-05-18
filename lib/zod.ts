@@ -1,4 +1,3 @@
-import { warn } from "console";
 import { z } from "zod";
 
 export const signInSchema = z.object({
@@ -32,14 +31,30 @@ export const jobListingSchema = z.object({
   industry: z.string().trim(),
 });
 
+export const companyIndustry = z.enum([
+  "Technology",
+  "Marketing",
+  "Finance",
+  "Healthcare",
+  "Transportation",
+  "Energy",
+  "Telecommunications",
+  "Food & Beverage",
+  "Manufactoring",
+  "Government",
+  "Pharmaceuticals",
+  "Insurance",
+  "E-Commerce",
+]);
+
 export const companyInfoSchema = z.object({
   name: z.string().trim().min(1, { message: "Name is required" }),
-  about: z.string().trim().optional(),
   email: z
     .string()
     .trim()
     .email({ message: "Must be a valid email adddress" })
     .min(1, { message: "Email is required" }),
+  about: z.string().trim().optional(),
   foundation_year: z
     .string()
     .refine((value) => Number(value) > 1000, {
@@ -48,8 +63,8 @@ export const companyInfoSchema = z.object({
     .refine((value) => Number(value) <= new Date().getFullYear(), {
       message: "Cannot be founded in the future",
     }),
-  headquarters: z.string().trim(),
-  website: z.string().trim(),
-  industry: z.string().trim().min(1, { message: "Industry is Required" }),
+  headquarters: z.string().trim().optional(),
+  website: z.string().trim().optional(),
+  industry: companyIndustry,
   logo_url: z.string().trim().optional(),
 });

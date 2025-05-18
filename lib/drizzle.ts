@@ -171,13 +171,22 @@ export const jobListingSaved = pgTable(
   (table) => [primaryKey({ columns: [table.userId, table.jobListingId] })],
 );
 
-export const industry = pgTable("industry", {
-  id: text("id")
-    .primaryKey()
-    .notNull()
-    .$defaultFn(() => crypto.randomUUID()),
-  name: text("name").notNull(),
-});
+export const industry = pgEnum("industry", [
+  "Technology",
+  "Marketing",
+  "Finance",
+  "Healthcare",
+  "Transportation",
+  "Energy",
+  "Telecommunications",
+  "Food & Beverage",
+  "Consulting",
+  "Manufactoring",
+  "Government",
+  "Pharmaceuticals",
+  "Insurance",
+  "E-Commerce",
+]);
 
 export const company = pgTable("company", {
   id: text("id")
@@ -185,17 +194,16 @@ export const company = pgTable("company", {
     .notNull()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
-  about: text("about"),
   email: text("email").notNull().unique(),
-  foundationYear: integer("foundation_year"),
+  about: text("about"),
+  foundationYear: integer("foundation_year").notNull(),
   headquarters: text("headquarters"),
   website: text("website"),
+  logo_url: text("logo_url"),
+  industry: industry("industry").notNull(),
   recruiterId: text("recruiter_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  industryId: text("industry_id")
-    .notNull()
-    .references(() => industry.id),
 });
 
 export const schema = { user, session, account, verification };

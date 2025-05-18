@@ -2,6 +2,9 @@ import "server-only";
 import { company, db } from "./drizzle";
 import { DrizzleError, eq } from "drizzle-orm";
 import { isRecruiterAuthenticated } from "@/actions/auth";
+import { z } from "zod";
+import { companyIndustry } from "./zod";
+
 export async function getJobListing() {}
 
 export async function getCompanyInfoById(recruiterId: string) {
@@ -26,8 +29,9 @@ export async function createCompany(
   foundationYear: number,
   headquarters: string | null,
   website: string | null,
+  logo_url: string | null,
   recruiterId: string,
-  industryId: string,
+  industry: z.infer<typeof companyIndustry>,
 ) {
   await isRecruiterAuthenticated();
   try {
@@ -40,8 +44,9 @@ export async function createCompany(
         foundationYear,
         headquarters,
         website,
+        logo_url,
         recruiterId,
-        industryId,
+        industry,
       })
       .returning();
     console.log(newCompany);
