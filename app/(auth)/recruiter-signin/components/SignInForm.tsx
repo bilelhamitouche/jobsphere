@@ -63,7 +63,7 @@ function SignInForm() {
                   if (result?.message) toast.error(result.message);
                   if (!result?.message && !result?.errors) {
                     toast.success("Signed In Successfully");
-                    router.push("/");
+                    router.push("/company-info");
                   }
                 } catch (err) {
                   console.log(err);
