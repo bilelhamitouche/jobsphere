@@ -1,7 +1,8 @@
 "use server";
 import "server-only";
 import { companyInfoSchema } from "@/lib/zod";
-import { getCompanyInfoById } from "@/lib/queries";
+import { createCompany, getCompanyInfoById } from "@/lib/queries";
+import { DrizzleError } from "drizzle-orm";
 
 export async function getCompanyInfoAction(recruiterId: string) {
   const companyInfo = await getCompanyInfoById(recruiterId);
@@ -9,15 +10,15 @@ export async function getCompanyInfoAction(recruiterId: string) {
 }
 
 export async function createCompanyAction(formData: FormData) {
-  const name = formData.get("name") as string;
-  const email = formData.get("email") as string;
-  const about = formData.get("about") as string;
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const about = formData.get("about");
   const foundationYear = formData.get("foundation_year");
-  const website = formData.get("website") as string;
-  const industry = formData.get("industry") as string;
-  const logoUrl = formData.get("logo_url") as string;
-  const recruiterId = formData.get("recruiterId") as string;
-  console.log("Executed");
+  const website = formData.get("website");
+  const industry = formData.get("industry");
+  const headquarters = formData.get("headquarters");
+  const logoUrl = formData.get("logo_url");
+  const recruiterId = formData.get("recruiter_id");
   console.log(
     name,
     email,
@@ -25,25 +26,43 @@ export async function createCompanyAction(formData: FormData) {
     foundationYear,
     website,
     industry,
+    headquarters,
     logoUrl,
     recruiterId,
   );
-
-  // const result = companyInfoSchema.safeParse({
-  //   name,
-  //   email,
-  //   about,
-  //   foundationYear,
-  //   website,
-  //   industry,
-  //   logoUrl,
-  // });
-  // if (!result.success) {
+  const result = companyInfoSchema.safeParse({
+    name,
+    email,
+    about,
+    foundationYear,
+    headquarters,
+    website,
+    logoUrl,
+    industry,
+  });
+  console.log(result.error);
+  if (!result.success) {
+    return {
+      errors: result.error.flatten().fieldErrors,
+    };
+  }
+  // try {
+  //   console.log("Before");
+  //   await createCompany(
+  //     result.data.name,
+  //     result.data.email,
+  //     result.data.about || null,
+  //     Number(result.data.foundation_year),
+  //     result.data.headquarters || null,
+  //     result.data.website || null,
+  //     result.data.logo_url || null,
+  //     recruiterId,
+  //     result.data.industry,
+  //   );
+  //   console.log("After");
+  // } catch (err) {
   //   return {
-  //     errors: result.error.flatten().fieldErrors,
+  //     message: err,
   //   };
   // }
-  return {
-    message: "Hello",
-  };
 }
