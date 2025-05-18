@@ -7,7 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { companyInfoSchema } from "@/lib/zod";
+import { companyIndustry, companyInfoSchema } from "@/lib/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,10 +26,19 @@ import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getCompanyInfo } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createCompanyAction } from "@/actions/company";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function CompanyInfo() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const selectOptions = companyIndustry.options;
   const form = useForm<z.infer<typeof companyInfoSchema>>({
     resolver: zodResolver(companyInfoSchema),
     defaultValues: {
@@ -39,7 +48,7 @@ export default function CompanyInfo() {
       foundation_year: "2000",
       headquarters: "",
       website: "",
-      industry: "",
+      industry: undefined,
       logo_url: "",
     },
   });
@@ -78,8 +87,25 @@ export default function CompanyInfo() {
             <form
               onSubmit={form.handleSubmit(
                 async (data: z.infer<typeof companyInfoSchema>) => {
-                  console.log("Hello world");
-                  console.log(data);
+                  setIsLoading(true);
+                  const formData = new FormData();
+                  formData.append("name", data.name);
+                  formData.append("email", data.email);
+                  formData.append("about", data.about as string);
+                  formData.append("foundation_year", data.foundation_year);
+                  formData.append("website", data.website as string);
+                  formData.append("headquarters", data.headquarters as string);
+                  formData.append("industry", data.industry);
+                  formData.append("logo_url", data.logo_url as string);
+                  formData.append("recruiter_id", session?.user.id as string);
+                  try {
+                    const result = await createCompanyAction(formData);
+                    console.log(result);
+                  } catch (err) {
+                    console.log(err);
+                  } finally {
+                    setIsLoading(false);
+                  }
                 },
               )}
             >
@@ -128,9 +154,20 @@ export default function CompanyInfo() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Industry</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Enter a industry" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {selectOptions.map((option, index) => (
+                          <SelectItem key={index} value={option}>
+                            {option}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -187,7 +224,16 @@ export default function CompanyInfo() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Save</Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <div className="flex gap-2 items-center">
+                    <Loader2 className="animate-spin"></Loader2>
+                    <span>Please wait</span>
+                  </div>
+                ) : (
+                  <span>Save</span>
+                )}
+              </Button>
             </form>
           </Form>
         </CardContent>
