@@ -27,8 +27,22 @@ import { useQuery } from "@tanstack/react-query";
 import { getCompanyInfo } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
+import { createCompanyAction } from "@/actions/company";
 
 export default function CompanyInfo() {
+  const form = useForm<z.infer<typeof companyInfoSchema>>({
+    resolver: zodResolver(companyInfoSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      about: "",
+      foundation_year: "2000",
+      headquarters: "",
+      website: "",
+      industry: "",
+      logo_url: "",
+    },
+  });
   const { data: session, isPending: isSessionPending } =
     authClient.useSession();
   const router = useRouter();
@@ -45,17 +59,6 @@ export default function CompanyInfo() {
     if (!isPending && !isSessionPending && companyInfo.length !== 0)
       router.push("/recruiter");
   }, [companyInfo, isPending, isSessionPending, router]);
-  const form = useForm<z.infer<typeof companyInfoSchema>>({
-    resolver: zodResolver(companyInfoSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      about: "",
-      foundation_year: 2000,
-      website: "",
-      industry: "",
-    },
-  });
   if (isPending)
     return (
       <div className="flex flex-col gap-2 justify-center items-center w-full h-full">
@@ -72,7 +75,14 @@ export default function CompanyInfo() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form className="grid grid-cols-1 gap-4 space-y-2 w-full md:grid-cols-2">
+            <form
+              onSubmit={form.handleSubmit(
+                async (data: z.infer<typeof companyInfoSchema>) => {
+                  console.log("Hello world");
+                  console.log(data);
+                },
+              )}
+            >
               <FormField
                 name="name"
                 control={form.control}
@@ -100,24 +110,11 @@ export default function CompanyInfo() {
                 )}
               />
               <FormField
-                name="foundation_year"
+                name="headquarters"
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Foundation Year</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="website"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Website (optional)</FormLabel>
+                    <FormLabel>Headquarters</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -139,11 +136,37 @@ export default function CompanyInfo() {
                 )}
               />
               <FormField
+                name="foundation_year"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Foundation Year</FormLabel>
+                    <FormControl>
+                      <Input type="number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="website"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Website</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
                 name="logo_url"
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Logo Image (optional)</FormLabel>
+                    <FormLabel>Logo Url</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -155,18 +178,16 @@ export default function CompanyInfo() {
                 name="about"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItem className="col-span-2">
-                    <FormLabel>About (optional)</FormLabel>
+                  <FormItem>
+                    <FormLabel>About</FormLabel>
                     <FormControl>
-                      <Textarea {...field} className="col-span-2"></Textarea>
+                      <Textarea {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="col-span-2">
-                Save
-              </Button>
+              <Button type="submit">Save</Button>
             </form>
           </Form>
         </CardContent>
