@@ -34,11 +34,11 @@ export async function createCompanyAction(formData: FormData) {
     name,
     email,
     about,
-    foundationYear,
+    foundation_year: foundationYear,
     headquarters,
     website,
-    logoUrl,
     industry,
+    logo_url: logoUrl,
   });
   console.log(result.error);
   if (!result.success) {
