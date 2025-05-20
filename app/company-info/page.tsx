@@ -25,7 +25,7 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getCompanyInfo } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createCompanyAction } from "@/actions/company";
 import {
@@ -35,6 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Link from "next/link";
 
 export default function CompanyInfo() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -55,20 +56,39 @@ export default function CompanyInfo() {
   const { data: session, isPending: isSessionPending } =
     authClient.useSession();
   const router = useRouter();
-  useEffect(() => {
-    if (isSessionPending) return;
-    if (session?.user.role !== "recruiter") router.push("/");
-    if (!session) router.push("/recruiter-signin");
-  }, [session, isSessionPending, router]);
   const { data: companyInfo, isPending } = useQuery({
     queryKey: ["companyInfo"],
     queryFn: getCompanyInfo,
   });
   useEffect(() => {
-    if (!isPending && !isSessionPending && companyInfo.length !== 0)
-      router.push("/recruiter");
+    console.log("Session useEffect running");
+    console.log("isSessionPending:", isSessionPending);
+    console.log("session:", session);
+    if (isSessionPending) {
+      console.log("Session is pending, returning.");
+      return;
+    }
+    console.log("Session is not pending.");
+    if (session?.user.role !== "recruiter") {
+      console.log("User is signed in but not a recruiter, redirecting to /.");
+      router.push("/");
+    }
+    if ((!session && isSessionPending) || (!session && isSessionPending)) {
+      console.log(
+        "No session and not pending, redirecting to /recruiter-signin.",
+      );
+      router.push("/recruiter-signin");
+    }
+  }, [session, isSessionPending, router]);
+  useEffect(() => {
+    if (!isPending && !isSessionPending) {
+      const companyInfoExists = companyInfo && companyInfo.length > 0;
+      if (companyInfoExists) {
+        router.push("/recruiter");
+      }
+    }
   }, [companyInfo, isPending, isSessionPending, router]);
-  if (isPending)
+  if (isPending || isSessionPending)
     return (
       <div className="flex flex-col gap-2 justify-center items-center w-full h-full">
         <Loader2 size="28" className="animate-spin text-primary"></Loader2>
@@ -76,8 +96,14 @@ export default function CompanyInfo() {
       </div>
     );
   return (
-    <div className="flex justify-center items-center w-full h-full">
-      <Card className="w-3xl">
+    <div className="flex flex-col gap-4 justify-center items-start p-4 w-full h-full md:p-8">
+      <Button variant="link" className="font-semibold text-gray-800" asChild>
+        <Link href="/">
+          <ArrowLeft size="10" />
+          <span>Back to home</span>
+        </Link>
+      </Button>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle className="text-xl font-bold">Company Info</CardTitle>
           <CardDescription>Enter your company info</CardDescription>
@@ -85,6 +111,7 @@ export default function CompanyInfo() {
         <CardContent>
           <Form {...form}>
             <form
+              className="grid gap-4 md:grid-cols-2"
               onSubmit={form.handleSubmit(
                 async (data: z.infer<typeof companyInfoSchema>) => {
                   setIsLoading(true);
@@ -156,7 +183,7 @@ export default function CompanyInfo() {
                     <FormLabel>Industry</FormLabel>
                     <Select onValueChange={field.onChange}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Enter a industry" />
                         </SelectTrigger>
                       </FormControl>
@@ -202,7 +229,7 @@ export default function CompanyInfo() {
                 name="logo_url"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="md:col-span-2">
                     <FormLabel>Logo Url</FormLabel>
                     <FormControl>
                       <Input {...field} />
@@ -215,7 +242,7 @@ export default function CompanyInfo() {
                 name="about"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="md:col-span-2">
                     <FormLabel>About</FormLabel>
                     <FormControl>
                       <Textarea {...field} />
@@ -224,7 +251,11 @@ export default function CompanyInfo() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isLoading}>
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="md:col-span-2"
+              >
                 {isLoading ? (
                   <div className="flex gap-2 items-center">
                     <Loader2 className="animate-spin"></Loader2>
