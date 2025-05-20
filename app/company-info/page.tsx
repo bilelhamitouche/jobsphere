@@ -61,22 +61,13 @@ export default function CompanyInfo() {
     queryFn: getCompanyInfo,
   });
   useEffect(() => {
-    console.log("Session useEffect running");
-    console.log("isSessionPending:", isSessionPending);
-    console.log("session:", session);
     if (isSessionPending) {
-      console.log("Session is pending, returning.");
       return;
     }
-    console.log("Session is not pending.");
-    if (session?.user.role !== "recruiter") {
-      console.log("User is signed in but not a recruiter, redirecting to /.");
+    if (session && session?.user.role !== "recruiter") {
       router.push("/");
     }
     if ((!session && isSessionPending) || (!session && isSessionPending)) {
-      console.log(
-        "No session and not pending, redirecting to /recruiter-signin.",
-      );
       router.push("/recruiter-signin");
     }
   }, [session, isSessionPending, router]);
@@ -127,7 +118,6 @@ export default function CompanyInfo() {
                   formData.append("recruiter_id", session?.user.id as string);
                   try {
                     const result = await createCompanyAction(formData);
-                    console.log(result);
                   } catch (err) {
                     console.log(err);
                   } finally {
