@@ -11,7 +11,7 @@ export async function getCompanyInfoById(recruiterId: string) {
   await isRecruiterAuthenticated();
   try {
     const companyInfo = await db
-      .select()
+      .selectDistinct()
       .from(company)
       .where(eq(company.recruiterId, recruiterId));
     return companyInfo;
