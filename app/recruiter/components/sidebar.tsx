@@ -27,9 +27,11 @@ import {
   Settings,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function RecruiterSidebar() {
   const { data: session } = authClient.useSession();
+  const router = useRouter();
   return (
     <Sidebar>
       <SidebarHeader>
@@ -128,7 +130,17 @@ function RecruiterSidebar() {
                     <span>Settings</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => authClient.signOut()}>
+                <DropdownMenuItem
+                  onClick={() =>
+                    authClient.signOut({
+                      fetchOptions: {
+                        onSuccess: () => {
+                          router.push("/recruiter-signin");
+                        },
+                      },
+                    })
+                  }
+                >
                   <LogOut className="text-red-500" />
                   <span className="text-red-500">Sign Out</span>
                 </DropdownMenuItem>
