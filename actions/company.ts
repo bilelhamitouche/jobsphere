@@ -2,7 +2,6 @@
 import "server-only";
 import { companyInfoSchema } from "@/lib/zod";
 import { createCompany, getCompanyInfoById } from "@/lib/queries";
-import { DrizzleError } from "drizzle-orm";
 
 export async function getCompanyInfoAction(recruiterId: string) {
   const companyInfo = await getCompanyInfoById(recruiterId);
@@ -46,23 +45,21 @@ export async function createCompanyAction(formData: FormData) {
       errors: result.error.flatten().fieldErrors,
     };
   }
-  // try {
-  //   console.log("Before");
-  //   await createCompany(
-  //     result.data.name,
-  //     result.data.email,
-  //     result.data.about || null,
-  //     Number(result.data.foundation_year),
-  //     result.data.headquarters || null,
-  //     result.data.website || null,
-  //     result.data.logo_url || null,
-  //     recruiterId,
-  //     result.data.industry,
-  //   );
-  //   console.log("After");
-  // } catch (err) {
-  //   return {
-  //     message: err,
-  //   };
-  // }
+  try {
+    await createCompany(
+      result.data.name,
+      result.data.email,
+      result.data.about || null,
+      Number(result.data.foundation_year),
+      result.data.headquarters || null,
+      result.data.website || null,
+      result.data.logo_url || null,
+      recruiterId as string,
+      result.data.industry,
+    );
+  } catch (err) {
+    return {
+      message: err,
+    };
+  }
 }
