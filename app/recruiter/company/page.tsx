@@ -1,12 +1,7 @@
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Edit } from "lucide-react";
 import Link from "next/link";
+import CompanyDetails from "../components/CompanyDetails";
 
 export default function RecruiterCompany() {
   return (
@@ -20,14 +15,7 @@ export default function RecruiterCompany() {
           </Link>
         </Button>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Company Info</CardTitle>
-          <CardDescription>
-            This is all the information about your company
-          </CardDescription>
-        </CardHeader>
-      </Card>
+      <CompanyDetails />
     </div>
   );
 }
