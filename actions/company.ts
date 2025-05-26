@@ -1,12 +1,7 @@
 "use server";
 import "server-only";
 import { companyInfoSchema } from "@/lib/zod";
-import { createCompany, getCompanyInfoById } from "@/lib/queries";
-
-export async function getCompanyInfoAction(recruiterId: string) {
-  const companyInfo = await getCompanyInfoById(recruiterId);
-  return companyInfo;
-}
+import { createCompany } from "@/lib/queries";
 
 export async function createCompanyAction(formData: FormData) {
   const name = formData.get("name");
@@ -18,17 +13,6 @@ export async function createCompanyAction(formData: FormData) {
   const headquarters = formData.get("headquarters");
   const logoUrl = formData.get("logo_url");
   const recruiterId = formData.get("recruiter_id");
-  console.log(
-    name,
-    email,
-    about,
-    foundationYear,
-    website,
-    industry,
-    headquarters,
-    logoUrl,
-    recruiterId,
-  );
   const result = companyInfoSchema.safeParse({
     name,
     email,
@@ -39,7 +23,6 @@ export async function createCompanyAction(formData: FormData) {
     industry,
     logo_url: logoUrl,
   });
-  console.log(result.error);
   if (!result.success) {
     return {
       errors: result.error.flatten().fieldErrors,
