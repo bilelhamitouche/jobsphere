@@ -49,7 +49,6 @@ export async function createCompany(
         industry,
       })
       .returning();
-    console.log(newCompany);
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
