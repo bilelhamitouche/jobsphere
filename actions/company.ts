@@ -2,6 +2,7 @@
 import "server-only";
 import { companyInfoSchema } from "@/lib/zod";
 import { createCompany } from "@/lib/queries";
+import { revalidatePath } from "next/cache";
 
 export async function createCompanyAction(formData: FormData) {
   const name = formData.get("name");
@@ -45,4 +46,5 @@ export async function createCompanyAction(formData: FormData) {
       message: err,
     };
   }
+  revalidatePath("/company-info");
 }
