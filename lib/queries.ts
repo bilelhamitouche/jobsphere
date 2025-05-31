@@ -29,26 +29,56 @@ export async function createCompany(
   foundationYear: number,
   headquarters: string | null,
   website: string | null,
-  logo_url: string | null,
+  logoUrl: string | null,
   recruiterId: string,
   industry: z.infer<typeof companyIndustry>,
 ) {
   await isRecruiterAuthenticated();
   try {
-    const newCompany = await db
-      .insert(company)
-      .values({
+    await db.insert(company).values({
+      name,
+      email,
+      about,
+      foundationYear,
+      headquarters,
+      website,
+      logoUrl,
+      recruiterId,
+      industry,
+    });
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function updateCompany(
+  name: string,
+  email: string,
+  about: string | null,
+  foundationYear: number,
+  headquarters: string | null,
+  website: string | null,
+  logoUrl: string | null,
+  recruiterId: string,
+  industry: z.infer<typeof companyIndustry>,
+) {
+  await isRecruiterAuthenticated();
+  try {
+    await db
+      .update(company)
+      .set({
         name,
         email,
         about,
         foundationYear,
         headquarters,
         website,
-        logo_url,
-        recruiterId,
+        logoUrl,
         industry,
       })
-      .returning();
+      .where(eq(company.recruiterId, recruiterId));
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
