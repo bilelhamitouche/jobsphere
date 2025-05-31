@@ -7,7 +7,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getCompanyInfoById } from "@/lib/queries";
+import { Dot } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function CompanyDetails() {
   const user = await getUserInfo();
@@ -18,22 +20,25 @@ export default async function CompanyDetails() {
       <Card className="w-full h-full">
         <CardHeader>
           <div className="flex justify-between items-center w-full">
-            <div>
-              <CardTitle className="text-2xl">{companyData.name}</CardTitle>
-              <CardDescription>
-                Specializes in:{" "}
-                <span className="text-black">{companyData.industry}</span>
+            <div className="flex flex-col">
+              <CardTitle className="text-2xl tracking-tight">
+                {companyData.name}
+              </CardTitle>
+              <CardDescription className="flex items-center text-sm font-medium">
+                {companyData.industry}
+                <Dot size={22} />
+                {companyData.headquarters}
               </CardDescription>
             </div>
             {companyData.logo_url ? (
               <Image
                 src={companyData.logo_url}
                 alt={`${companyData.name} image`}
-                width={20}
-                height={20}
+                width={16}
+                height={16}
               />
             ) : (
-              <div className="flex justify-center items-center text-2xl text-center text-white size-20 bg-primary">
+              <div className="flex justify-center items-center text-2xl text-center text-white size-16 bg-primary">
                 {companyData.name[0].toUpperCase()}
               </div>
             )}
@@ -59,7 +64,13 @@ export default async function CompanyDetails() {
             </div>
             <div className="flex justify-between items-center w-full">
               <span className="text-gray-500">Website</span>
-              <span>{companyData.website}</span>
+              <Link
+                href={`https://${companyData.website as string}`}
+                className="text-blue-500 hover:underline"
+                target="_blank"
+              >
+                {companyData.website}
+              </Link>
             </div>
           </div>
         </CardContent>
