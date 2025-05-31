@@ -7,8 +7,8 @@ import {
 
 export default function RecruiterApplications() {
   return (
-    <div className="p-4 space-y-4 w-full h-full">
-      <h2 className="text-2xl font-semibold">All Applications</h2>
+    <div className="p-6 space-y-4 w-full h-full">
+      <h2 className="text-3xl font-semibold">All Applications</h2>
       <Card>
         <CardHeader>
           <CardTitle>All Applications</CardTitle>
