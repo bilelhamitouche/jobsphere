@@ -199,7 +199,7 @@ export const company = pgTable("company", {
   foundationYear: integer("foundation_year").notNull(),
   headquarters: text("headquarters"),
   website: text("website"),
-  logo_url: text("logo_url"),
+  logoUrl: text("logo_url"),
   industry: industry("industry").notNull(),
   recruiterId: text("recruiter_id")
     .notNull()
