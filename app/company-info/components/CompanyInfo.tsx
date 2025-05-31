@@ -21,9 +21,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useRouter } from "next/navigation";
 import { ArrowLeft, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createCompanyAction } from "@/actions/company";
 import {
   Select,
@@ -35,24 +34,7 @@ import {
 import Link from "next/link";
 import { toast } from "sonner";
 
-interface CompanyInfoProps {
-  id: string;
-  name: string;
-  about: string | null;
-  email: string;
-  foundationYear: number;
-  website: string | null;
-  industry: string | null;
-  logo_url: string | null;
-}
-
-export default function CompanyInfo({
-  recruiterId,
-  companyInfo,
-}: {
-  recruiterId: string;
-  companyInfo: CompanyInfoProps[];
-}) {
+export default function CompanyInfo({ recruiterId }: { recruiterId: string }) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const selectOptions = companyIndustry.options;
   const form = useForm<z.infer<typeof companyInfoSchema>>({
@@ -68,7 +50,6 @@ export default function CompanyInfo({
       logo_url: "",
     },
   });
-  const router = useRouter();
   return (
     <div className="flex flex-col gap-4 justify-center items-start p-4 w-full h-full md:p-8">
       <Button variant="link" className="font-semibold text-gray-800" asChild>
@@ -102,6 +83,7 @@ export default function CompanyInfo({
                   try {
                     const result = await createCompanyAction(formData);
                     if (result?.errors) toast.error("Invalid inputs");
+                    if (!result?.errors) toast.success("Company Info created");
                   } catch (err) {
                     toast.error("Error creating company");
                   } finally {
