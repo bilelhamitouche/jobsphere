@@ -1,6 +1,6 @@
 "use server";
 import "server-only";
-import { companyInfoSchema } from "@/lib/zod";
+import { companyInfoSchema, updateCompanyInfoSchema } from "@/lib/zod";
 import { createCompany, updateCompany } from "@/lib/queries";
 import { revalidatePath } from "next/cache";
 
@@ -59,7 +59,7 @@ export async function updateCompanyAction(formData: FormData) {
   const headquarters = formData.get("headquarters");
   const recruiterId = formData.get("recruiter_id");
   const logoUrl = formData.get("logo_url");
-  const result = companyInfoSchema.safeParse({
+  const result = updateCompanyInfoSchema.safeParse({
     name,
     email,
     about,
@@ -76,13 +76,12 @@ export async function updateCompanyAction(formData: FormData) {
   }
   try {
     await updateCompany(
-      result.data.name,
-      result.data.email,
-      result.data.about || null,
-      Number(result.data.foundation_year),
-      result.data.headquarters || null,
-      result.data.website || null,
-      result.data.logo_url || null,
+      result.data.name as string,
+      result.data.email as string,
+      result.data.about as string,
+      result.data.headquarters as string,
+      result.data.website as string,
+      result.data.logo_url as string,
       recruiterId as string,
       result.data.industry,
     );
