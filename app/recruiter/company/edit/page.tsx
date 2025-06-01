@@ -9,7 +9,10 @@ export default async function EditCompanyInfo() {
   return (
     <div className="p-6 space-y-4 w-full h-full bg-primary-foreground">
       <h2 className="text-3xl font-bold">Edit Company Information</h2>
-      <EditCompanyInfoForm companyInfo={companyInfo} />
+      <EditCompanyInfoForm
+        recruiterId={user?.id as string}
+        companyInfo={companyInfo[0] as any}
+      />
     </div>
   );
 }
