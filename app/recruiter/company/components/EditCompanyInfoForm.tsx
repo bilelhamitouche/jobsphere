@@ -25,9 +25,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { companyIndustry, companyInfoSchema } from "@/lib/zod";
+import { companyIndustry, updateCompanyInfoSchema } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -40,6 +41,7 @@ interface EditCompanyInfoProps {
   email: string;
   headquarters: string | null;
   industry: z.infer<typeof companyIndustry>;
+  website: string | null;
   foundationYear: number;
   logoUrl: string | null;
 }
@@ -52,16 +54,18 @@ export default function EditCompanyInfoForm({
   companyInfo: EditCompanyInfoProps;
 }) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const router = useRouter();
   const selectOptions = companyIndustry.options;
-  const form = useForm<z.infer<typeof companyInfoSchema>>({
-    resolver: zodResolver(companyInfoSchema),
+  const form = useForm<z.infer<typeof updateCompanyInfoSchema>>({
+    resolver: zodResolver(updateCompanyInfoSchema),
     defaultValues: {
       name: companyInfo.name,
       email: companyInfo.email,
       about: companyInfo.about ?? "",
       headquarters: companyInfo.headquarters ?? "",
-      industry: undefined,
       foundation_year: String(companyInfo.foundationYear),
+      website: companyInfo.website ?? "",
+      industry: companyInfo.industry,
       logo_url: companyInfo.logoUrl ?? "",
     },
   });
@@ -78,22 +82,28 @@ export default function EditCompanyInfoForm({
           <form
             className="grid gap-4 md:grid-cols-2"
             onSubmit={form.handleSubmit(
-              async (data: z.infer<typeof companyInfoSchema>) => {
+              async (data: z.infer<typeof updateCompanyInfoSchema>) => {
                 setIsSubmitting(true);
                 const formData = new FormData();
-                formData.append("name", data.name);
-                formData.append("email", data.email);
+                formData.append("name", data.name as string);
+                formData.append("email", data.email as string);
                 formData.append("about", data.about as string);
-                formData.append("foundation_year", data.foundation_year);
                 formData.append("website", data.website as string);
                 formData.append("headquarters", data.headquarters as string);
-                formData.append("industry", data.industry);
+                formData.append(
+                  "foundation_year",
+                  data.foundation_year as string,
+                );
+                formData.append("industry", data.industry as string);
                 formData.append("logo_url", data.logo_url as string);
                 formData.append("recruiter_id", recruiterId);
                 try {
                   const result = await updateCompanyAction(formData);
                   if (result?.errors) toast.error("Invalid inputs");
-                  if (!result?.errors) toast.success("Company Info created");
+                  if (!result?.errors) {
+                    toast.success("Company Info created");
+                    router.push("/recruiter/company");
+                  }
                 } catch (err) {
                   toast.error("Error creating company");
                 } finally {
@@ -147,7 +157,10 @@ export default function EditCompanyInfoForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Industry</FormLabel>
-                  <Select onValueChange={field.onChange}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={companyInfo.industry}
+                  >
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Enter a industry" />
@@ -172,7 +185,7 @@ export default function EditCompanyInfoForm({
                 <FormItem>
                   <FormLabel>Foundation Year</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input type="number" {...field} disabled />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
