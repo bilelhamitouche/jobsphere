@@ -57,14 +57,23 @@ export async function updateCompany(
   name: string,
   email: string,
   about: string | null,
-  foundationYear: number,
   headquarters: string | null,
   website: string | null,
   logoUrl: string | null,
   recruiterId: string,
-  industry: z.infer<typeof companyIndustry>,
+  industry: z.infer<typeof companyIndustry> | undefined,
 ) {
   await isRecruiterAuthenticated();
+  const updatedData: {
+    name?: string;
+    about?: string;
+    email?: string;
+    foundationYear?: number;
+    headquarters?: string;
+    website?: string;
+    logoUrl?: string;
+    industry?: z.infer<typeof companyIndustry>;
+  } = {};
   try {
     await db
       .update(company)
@@ -72,7 +81,6 @@ export async function updateCompany(
         name,
         email,
         about,
-        foundationYear,
         headquarters,
         website,
         logoUrl,

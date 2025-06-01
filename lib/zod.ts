@@ -68,3 +68,19 @@ export const companyInfoSchema = z.object({
   industry: companyIndustry,
   logo_url: z.string().trim().optional(),
 });
+
+export const updateCompanyInfoSchema = z.object({
+  name: z.string().trim().optional(),
+  email: z
+    .union([
+      z.literal(""),
+      z.string().trim().email({ message: "Must be a valid email adddress" }),
+    ])
+    .optional(),
+  about: z.string().trim().optional(),
+  foundation_year: z.string().trim(),
+  headquarters: z.string().trim().optional(),
+  website: z.string().trim().optional(),
+  industry: companyIndustry.optional(),
+  logo_url: z.string().trim().optional(),
+});
