@@ -19,16 +19,19 @@ export const signUpSchema = z.object({
     .max(20, { message: "Must be at most 20 characters" }),
 });
 
+export const jobType = z.enum(["full", "part", "internship", "remote"]);
+
+export const jobExperienceLevel = z.enum(["none", "entry", "mid", "senior"])
+
 export const jobListingSchema = z.object({
   description: z
     .string()
     .trim()
     .max(400, { message: "Must be at most 400 characters long" }),
   position: z.string().trim().min(1, { message: "Position is required" }),
-  type: z.enum(["full", "part", "internship", "remote"]),
-  experience_level: z.enum(["none", "entry", "mid", "senior"]),
+  type: jobType,
+  experience_level: jobExperienceLevel,
   location: z.string().trim(),
-  industry: z.string().trim(),
 });
 
 export const companyIndustry = z.enum([
