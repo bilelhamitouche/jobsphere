@@ -29,7 +29,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-function RecruiterSidebar() {
+export default function RecruiterSidebar() {
   const { data: session } = authClient.useSession();
   const router = useRouter();
   return (
@@ -152,5 +152,3 @@ function RecruiterSidebar() {
     </Sidebar>
   );
 }
-
-export default RecruiterSidebar;
