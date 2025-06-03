@@ -55,7 +55,7 @@ export default function EditCompanyInfoForm({
 }) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const router = useRouter();
-  const selectOptions = companyIndustry.options;
+  const industryOptions = companyIndustry.options;
   const form = useForm<z.infer<typeof updateCompanyInfoSchema>>({
     resolver: zodResolver(updateCompanyInfoSchema),
     defaultValues: {
@@ -163,11 +163,11 @@ export default function EditCompanyInfoForm({
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Enter a industry" />
+                        <SelectValue placeholder="Select the industry" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {selectOptions.map((option, index) => (
+                      {industryOptions.map((option, index) => (
                         <SelectItem key={index} value={option}>
                           {option}
                         </SelectItem>
