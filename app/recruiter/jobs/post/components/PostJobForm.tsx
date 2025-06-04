@@ -28,8 +28,12 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { createJobAction } from "@/actions/jobs";
+import { Loader2 } from "lucide-react";
 
-export default function PostJobForm() {
+export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const typeOptions = jobType.options;
   const experienceLevelOptions = jobExperienceLevel.options;
   const form = useForm<z.infer<typeof jobListingSchema>>({
@@ -50,7 +54,28 @@ export default function PostJobForm() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form className="grid grid-cols-1 gap-4 space-y-2 md:grid-cols-2">
+          <form
+            className="grid grid-cols-1 gap-4 space-y-2 md:grid-cols-2"
+            onSubmit={form.handleSubmit(
+              async (data: z.infer<typeof jobListingSchema>) => {
+                setIsSubmitting(true);
+                const formData = new FormData();
+                formData.append("position", data.position);
+                formData.append("description", data.description as string);
+                formData.append("location", data.location as string);
+                formData.append("experience_level", data.experience_level);
+                formData.append("type", data.type);
+                formData.append("recruiter_id", recruiterId);
+                try {
+                  await createJobAction(formData);
+                } catch (err) {
+                  console.log(err);
+                } finally {
+                  setIsSubmitting(false);
+                }
+              },
+            )}
+          >
             <FormField
               name="position"
               control={form.control}
@@ -83,7 +108,7 @@ export default function PostJobForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Type</FormLabel>
-                  <Select>
+                  <Select onValueChange={field.onChange} defaultValue="full">
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select the type" />
@@ -107,7 +132,7 @@ export default function PostJobForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Experience Level</FormLabel>
-                  <Select onValueChange={field.onChange}>
+                  <Select onValueChange={field.onChange} defaultValue="none">
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select the experience level" />
@@ -138,7 +163,16 @@ export default function PostJobForm() {
                 </FormItem>
               )}
             />
-            <Button className="md:col-span-2">Save</Button>
+            <Button className="md:col-span-2" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <div className="flex gap-2 items-center">
+                  <Loader2 className="animate-spin" />
+                  <span>Please wait</span>
+                </div>
+              ) : (
+                <span>Save</span>
+              )}
+            </Button>
           </form>
         </Form>
       </CardContent>
