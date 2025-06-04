@@ -82,11 +82,11 @@ export const jobListing = pgTable("job_listing", {
     .primaryKey()
     .notNull()
     .$defaultFn(() => crypto.randomUUID()),
-  description: text("description").notNull(),
+  description: text("description"),
   position: text("position").notNull(),
   type: jobType("job_type").notNull(),
   experienceLevel: experienceLevelEnum().notNull(),
-  location: text("location").notNull(),
+  location: text("location"),
   companyId: text("company_id")
     .notNull()
     .references(() => company.id, { onDelete: "cascade" }),
