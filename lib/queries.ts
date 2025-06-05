@@ -37,13 +37,12 @@ export async function createJobListing(
 ) {
   await isRecruiterAuthenticated();
   try {
-    const companyId = await db
+    const data = await db
       .select({ id: company.id })
       .from(company)
       .where(eq(company.recruiterId, recruiterId));
-    console.log("Hello world");
-    console.log(companyId);
-    const newJobListing = await db
+    const companyId = data[0].id;
+    await db
       .insert(jobListing)
       .values({
         position,
@@ -54,8 +53,10 @@ export async function createJobListing(
         companyId,
       })
       .returning();
-    console.log(newJobListing);
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+    throw new Error("Database Error");
+  }
 }
 
 export async function getCompanyInfoById(recruiterId: string) {

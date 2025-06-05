@@ -11,11 +11,11 @@ export async function createJobAction(formData: FormData) {
   const experienceLevel = formData.get("experience_level");
   const recruiterId = formData.get("recruiter_id");
   const result = jobListingSchema.safeParse({
-    position,
     description,
-    location,
+    position,
     type,
-    experienceLevel,
+    experience_level: experienceLevel,
+    location,
   });
   if (!result.success) {
     return {
