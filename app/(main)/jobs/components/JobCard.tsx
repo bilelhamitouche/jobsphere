@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Clock, MapPin, Star } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 interface JobCardProps {
@@ -21,7 +20,7 @@ interface JobCardProps {
   location: string;
 }
 
-function JobCard({
+export default function JobCard({
   companyImageUrl,
   company,
   position,
@@ -89,5 +88,3 @@ function JobCard({
     </Card>
   );
 }
-
-export default JobCard;

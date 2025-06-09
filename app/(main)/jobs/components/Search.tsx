@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useQueryState } from "nuqs";
 
-function Search() {
+export default function Search() {
   const [search, setSearch] = useQueryState("search", { defaultValue: "" });
   return (
     <Card className="col-span-2 row-start-1 row-end-2">
@@ -19,5 +19,3 @@ function Search() {
     </Card>
   );
 }
-
-export default Search;

@@ -17,7 +17,7 @@ import { FormEvent } from "react";
 
 const types: string[] = ["full", "part", "internship", "remote"];
 
-function Filter() {
+export default function Filter() {
   const [experience, setExperience] = useQueryState("experience", {
     defaultValue: "",
   });
@@ -69,5 +69,3 @@ function Filter() {
     </Card>
   );
 }
-
-export default Filter;
