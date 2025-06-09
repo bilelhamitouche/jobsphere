@@ -1,26 +1,14 @@
-"use client";
-
-import {
-  BriefcaseBusiness,
-  LayoutDashboard,
-  LogOut,
-  Menu,
-  Settings,
-} from "lucide-react";
+import { BriefcaseBusiness, Menu } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./button";
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./dropdown-menu";
-import { authClient } from "@/lib/auth-client";
+import AvatarDropdown from "./avatar-dropdown";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-function Navbar() {
-  const { data: session } = authClient.useSession();
+export default async function Navbar() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   return (
     <header className="container flex justify-between items-center p-4 mx-auto">
       <Link href="/" className="flex gap-2 items-center">
@@ -59,37 +47,7 @@ function Navbar() {
           </Button>
         </div>
       ) : (
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Avatar>
-              <AvatarImage
-                src={session?.user.image as string}
-                alt="user image"
-              />
-              <AvatarFallback>{session?.user.name[0]}</AvatarFallback>
-            </Avatar>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-40">
-            <DropdownMenuItem>{session?.user.email}</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LayoutDashboard />
-              <Link
-                href={`${session.user.role === "recruiter" ? "/recruiter" : "/jobseeker"}`}
-              >
-                Dashboard
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings />
-              <Link href="/settings">Settings</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => authClient.signOut()}>
-              <LogOut className="text-red-500" />
-              <span className="text-red-500">Sign Out</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <AvatarDropdown userInfo={session.user} />
       )}
       <Button variant="outline" className="block md:hidden">
         <Menu />
@@ -97,5 +55,3 @@ function Navbar() {
     </header>
   );
 }
-
-export default Navbar;
