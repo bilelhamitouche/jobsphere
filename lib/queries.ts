@@ -8,7 +8,19 @@ import { companyIndustry, jobExperienceLevel, jobType } from "./zod";
 export async function getJobListings() {
   await isAuthenticated();
   try {
-    const jobListings = await db.select().from(jobListing);
+    const jobListings = await db
+      .select({
+        id: jobListing.id,
+        position: jobListing.position,
+        description: jobListing.description,
+        location: jobListing.location,
+        type: jobListing.type,
+        experienceLevel: jobListing.experienceLevel,
+        postedAt: jobListing.postedAt,
+        company: company.name,
+      })
+      .from(jobListing)
+      .leftJoin(company, eq(jobListing.companyId, company.id));
     return jobListings;
   } catch (err) {
     if (err instanceof DrizzleError) {
@@ -20,6 +32,15 @@ export async function getJobListings() {
 export async function getJobListingsById(recruiterId: string) {
   await isRecruiterAuthenticated();
   try {
+    const companyId = await db
+      .selectDistinct({ id: company.id })
+      .from(company)
+      .where(eq(company.recruiterId, recruiterId));
+    const jobListings = await db
+      .select()
+      .from(jobListing)
+      .where(eq(jobListing.companyId, companyId[0].id));
+    return jobListings;
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
