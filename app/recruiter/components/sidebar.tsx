@@ -7,17 +7,16 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import {
-  BriefcaseBusiness,
-  Factory,
-  Home,
-  Send,
-} from "lucide-react";
+import { BriefcaseBusiness, Factory, Home, Send } from "lucide-react";
 import Link from "next/link";
 import AvatarDropdown from "./avatar-dropdown";
-import { Suspense } from "react";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export default async function RecruiterSidebar() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   return (
     <Sidebar>
       <SidebarHeader>
@@ -71,9 +70,7 @@ export default async function RecruiterSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <Suspense>
-              <AvatarDropdown />
-            </Suspense>
+            <AvatarDropdown user={session?.user} />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
