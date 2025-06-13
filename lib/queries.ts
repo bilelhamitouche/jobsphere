@@ -18,6 +18,7 @@ export async function getJobListings() {
         experienceLevel: jobListing.experienceLevel,
         postedAt: jobListing.postedAt,
         company: company.name,
+        companyLogo: company.logoUrl,
       })
       .from(jobListing)
       .leftJoin(company, eq(jobListing.companyId, company.id));
