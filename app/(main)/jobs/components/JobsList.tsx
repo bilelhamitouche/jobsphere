@@ -15,6 +15,7 @@ export default async function JobsList() {
           type={job.type}
           experienceLevel={job.experienceLevel}
           location={job.location as string}
+          postedAt={job.postedAt}
         />
       ))}
     </ul>
