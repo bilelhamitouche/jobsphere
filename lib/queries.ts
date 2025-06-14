@@ -12,7 +12,6 @@ export async function getJobListings() {
       .select({
         id: jobListing.id,
         position: jobListing.position,
-        description: jobListing.description,
         location: jobListing.location,
         type: jobListing.type,
         experienceLevel: jobListing.experienceLevel,
@@ -42,6 +41,32 @@ export async function getJobListingsById(recruiterId: string) {
       .from(jobListing)
       .where(eq(jobListing.companyId, companyId[0].id));
     return jobListings;
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function getJobListingById(id: string) {
+  await isAuthenticated();
+  try {
+    const job = await db
+      .selectDistinct({
+        id: jobListing.id,
+        description: jobListing.description,
+        position: jobListing.position,
+        type: jobListing.type,
+        experienceLevel: jobListing.experienceLevel,
+        postedAt: jobListing.postedAt,
+        company: company.name,
+        companyLogo: company.logoUrl,
+        companyAbout: company.about,
+      })
+      .from(jobListing)
+      .leftJoin(company, eq(jobListing.companyId, company.id))
+      .where(eq(jobListing.id, id));
+    return job;
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
@@ -89,6 +114,17 @@ export async function getCompanyInfoById(recruiterId: string) {
       .from(company)
       .where(eq(company.recruiterId, recruiterId));
     return companyInfo;
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function getCompanies() {
+  try {
+    const companies = await db.select().from(company);
+    return companies;
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
