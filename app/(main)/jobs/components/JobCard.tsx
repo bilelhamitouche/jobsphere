@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Clock, MapPin, Star } from "lucide-react";
 import Link from "next/link";
+import { formatDistance } from "date-fns";
 
 interface JobCardProps {
   companyImageUrl: string | null;
@@ -18,6 +19,7 @@ interface JobCardProps {
   type: string;
   experienceLevel: string;
   location: string;
+  postedAt: Date;
 }
 
 export default function JobCard({
@@ -27,6 +29,7 @@ export default function JobCard({
   type,
   experienceLevel,
   location,
+  postedAt,
 }: JobCardProps) {
   return (
     <Card className="w-full">
@@ -47,7 +50,7 @@ export default function JobCard({
             </div>
           )}
           <div className="flex flex-col gap-1">
-            <span className="text-lg">{position}</span>
+            <span className="text-lg font-medium">{position}</span>
             <Link
               href="/companies/${companyId}"
               className="text-sm font-semibold text-gray-500"
@@ -57,7 +60,7 @@ export default function JobCard({
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex gap-8 items-center text-sm font-bold text-gray-500">
+      <CardContent className="flex gap-8 items-center text-sm font-medium text-gray-500">
         <div className="flex gap-2 items-center">
           <MapPin size="15" />
           <span className="capitalize">
@@ -74,11 +77,13 @@ export default function JobCard({
         </div>
         <div className="flex gap-2 items-center">
           <Clock size="15" />
-          <span>{new Date().getUTCDate()}</span>
+          <span>
+            {formatDistance(postedAt, new Date(), { addSuffix: true })}
+          </span>
         </div>
       </CardContent>
       <CardFooter className="flex justify-between items-center">
-        <Badge className="capitalize" variant="secondary">
+        <Badge className="font-medium capitalize" variant="secondary">
           {type} {type === "part" || type === "full" ? "time" : ""}
         </Badge>
         <Button variant="outline" asChild>
