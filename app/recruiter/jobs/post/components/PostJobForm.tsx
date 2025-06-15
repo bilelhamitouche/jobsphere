@@ -31,8 +31,11 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { createJobAction } from "@/actions/jobs";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const typeOptions = jobType.options;
   const experienceLevelOptions = jobExperienceLevel.options;
@@ -67,9 +70,13 @@ export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
                 formData.append("type", data.type);
                 formData.append("recruiter_id", recruiterId);
                 try {
-                  await createJobAction(formData);
+                  const result = await createJobAction(formData);
+                  if (!result?.errors && !result?.message) {
+                    toast.success("Job posted sucessfully");
+                    router.push("/recruiter/jobs");
+                  }
                 } catch (err) {
-                  console.log(err);
+                  toast.error(err as string);
                 } finally {
                   setIsSubmitting(false);
                 }
