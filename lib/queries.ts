@@ -101,8 +101,19 @@ export async function createJobListing(
       })
       .returning();
   } catch (err) {
-    console.log(err);
-    throw new Error("Database Error");
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function deleteJobListing(id: string) {
+  try {
+    await db.delete(jobListing).where(eq(jobListing.id, id));
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
   }
 }
 

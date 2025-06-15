@@ -1,6 +1,7 @@
 "use server";
-import { createJobListing } from "@/lib/queries";
+import { createJobListing, deleteJobListing } from "@/lib/queries";
 import { jobListingSchema } from "@/lib/zod";
+import { revalidatePath } from "next/cache";
 import "server-only";
 
 export async function createJobAction(formData: FormData) {
@@ -36,4 +37,15 @@ export async function createJobAction(formData: FormData) {
       message: err,
     };
   }
+}
+
+export async function deleteJobListingAction(id: string) {
+  try {
+    await deleteJobListing(id);
+  } catch (err) {
+    return {
+      message: err,
+    };
+  }
+  revalidatePath("/recruiter/jobs");
 }
