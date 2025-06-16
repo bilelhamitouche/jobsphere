@@ -58,6 +58,7 @@ export async function getJobListingById(id: string) {
         position: jobListing.position,
         type: jobListing.type,
         experienceLevel: jobListing.experienceLevel,
+        location: jobListing.location,
         postedAt: jobListing.postedAt,
         company: company.name,
         companyLogo: company.logoUrl,
@@ -107,7 +108,29 @@ export async function createJobListing(
   }
 }
 
+export async function updateJobListing(
+  id: string,
+  position: string,
+  description: string,
+  location: string,
+  type: "full" | "part" | "internship" | "remote",
+  experienceLevel: "none" | "entry" | "mid" | "senior",
+) {
+  await isRecruiterAuthenticated();
+  try {
+    await db
+      .update(jobListing)
+      .set({ position, description, location, type, experienceLevel })
+      .where(eq(jobListing.id, id));
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
 export async function deleteJobListing(id: string) {
+  await isRecruiterAuthenticated();
   try {
     await db.delete(jobListing).where(eq(jobListing.id, id));
   } catch (err) {
