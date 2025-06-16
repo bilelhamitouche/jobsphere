@@ -9,9 +9,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreVertical, Trash } from "lucide-react";
+import { Edit, MoreVertical, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import Link from "next/link";
 
 export type Job = {
   id: string;
@@ -42,6 +43,7 @@ export const columns: ColumnDef<Job>[] = [
   },
   {
     id: "actions",
+    header: "Actions",
     cell: ({ row }) => {
       const job = row.original;
       return (
@@ -66,6 +68,12 @@ export const columns: ColumnDef<Job>[] = [
             >
               <Trash className="text-red-500" />
               <span className="text-red-500">Delete</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/recruiter/jobs/${job.id}/edit`}>
+                <Edit />
+                <span>Edit</span>
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
