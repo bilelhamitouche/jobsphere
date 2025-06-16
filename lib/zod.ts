@@ -21,7 +21,7 @@ export const signUpSchema = z.object({
 
 export const jobType = z.enum(["full", "part", "internship", "remote"]);
 
-export const jobExperienceLevel = z.enum(["none", "entry", "mid", "senior"])
+export const jobExperienceLevel = z.enum(["none", "entry", "mid", "senior"]);
 
 export const jobListingSchema = z.object({
   description: z
@@ -32,6 +32,22 @@ export const jobListingSchema = z.object({
   type: jobType,
   experience_level: jobExperienceLevel,
   location: z.string().trim(),
+});
+
+export const updateJobListingSchema = z.object({
+  description: z
+    .string()
+    .trim()
+    .max(400, { message: "Must be at most 400 characters long" })
+    .optional(),
+  position: z
+    .string()
+    .trim()
+    .min(1, { message: "Position is required" })
+    .optional(),
+  type: jobType.optional(),
+  experience_level: jobExperienceLevel.optional(),
+  location: z.string().trim().optional(),
 });
 
 export const companyIndustry = z.enum([
