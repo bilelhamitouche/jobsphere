@@ -1,6 +1,10 @@
 "use server";
-import { createJobListing, deleteJobListing } from "@/lib/queries";
-import { jobListingSchema } from "@/lib/zod";
+import {
+  createJobListing,
+  deleteJobListing,
+  updateJobListing,
+} from "@/lib/queries";
+import { jobListingSchema, updateJobListingSchema } from "@/lib/zod";
 import { revalidatePath } from "next/cache";
 import "server-only";
 
@@ -31,6 +35,43 @@ export async function createJobAction(formData: FormData) {
       result.data.experience_level,
       result.data.description,
       recruiterId as string,
+    );
+  } catch (err) {
+    return {
+      message: err,
+    };
+  }
+}
+
+export async function updateJobListingAction(formData: FormData) {
+  const id = formData.get("id");
+  const position = formData.get("position");
+  const description = formData.get("description");
+  const location = formData.get("location");
+  const type = formData.get("type");
+  const experienceLevel = formData.get("experience_level");
+  console.log(id, position, description, location, type, experienceLevel);
+  const result = updateJobListingSchema.safeParse({
+    description,
+    position,
+    type,
+    experience_level: experienceLevel,
+    location,
+  });
+  console.log(result.error, result.data);
+  if (!result.success) {
+    return {
+      errors: result.error.flatten().fieldErrors,
+    };
+  }
+  try {
+    await updateJobListing(
+      id as string,
+      result.data.position as string,
+      result.data.description as string,
+      result.data.location as string,
+      result.data.type as "full" | "part" | "internship" | "remote",
+      result.data.experience_level as "none" | "entry" | "mid" | "senior",
     );
   } catch (err) {
     return {
