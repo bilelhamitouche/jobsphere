@@ -15,10 +15,7 @@ export default async function CompanyInfoPage() {
   if (companyInfo.length > 0) redirect("/recruiter");
   return (
     <div className="w-full h-full">
-      <CompanyInfo
-        recruiterId={session.user.id as string}
-        companyInfo={companyInfo}
-      />
+      <CompanyInfo recruiterId={session.user.id as string} />
     </div>
   );
 }
