@@ -33,9 +33,11 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function CompanyInfo({ recruiterId }: { recruiterId: string }) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const router = useRouter();
   const selectOptions = companyIndustry.options;
   const form = useForm<z.infer<typeof companyInfoSchema>>({
     resolver: zodResolver(companyInfoSchema),
@@ -89,6 +91,7 @@ export default function CompanyInfo({ recruiterId }: { recruiterId: string }) {
                   } finally {
                     setIsSubmitting(false);
                   }
+                  if (!isSubmitting) router.push("/recruiter");
                 },
               )}
             >
