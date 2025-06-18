@@ -57,12 +57,12 @@ export default function CompanyCard({
           <Factory size="18" />
           <span>{industry}</span>
         </div>
+      </CardContent>
+      <CardFooter className="flex justify-between items-center">
         <div className="flex gap-1 font-semibold">
           <span>{count}</span>
           <span>{`Job Offer${count === 1 ? "" : "s"}`}</span>
         </div>
-      </CardContent>
-      <CardFooter>
         <Button variant="outline" asChild>
           <Link href={`/companies/${id}`}>View company</Link>
         </Button>
