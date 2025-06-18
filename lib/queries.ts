@@ -1,6 +1,6 @@
 import "server-only";
 import { company, db, jobListing } from "./drizzle";
-import { DrizzleError, eq } from "drizzle-orm";
+import { count, DrizzleError, eq } from "drizzle-orm";
 import { isAuthenticated, isRecruiterAuthenticated } from "@/actions/auth";
 import { z } from "zod";
 import { companyIndustry, jobExperienceLevel, jobType } from "./zod";
@@ -157,7 +157,18 @@ export async function getCompanyInfoById(recruiterId: string) {
 
 export async function getCompanies() {
   try {
-    const companies = await db.select().from(company);
+    const companies = await db
+      .select({
+        count: count(jobListing.id),
+        id: company.id,
+        name: company.name,
+        industry: company.industry,
+        headquarters: company.headquarters,
+        logoUrl: company.logoUrl,
+      })
+      .from(company)
+      .leftJoin(jobListing, eq(company.id, jobListing.companyId))
+      .groupBy(company.id);
     return companies;
   } catch (err) {
     if (err instanceof DrizzleError) {

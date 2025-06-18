@@ -1,47 +1,72 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Factory, MapPin } from "lucide-react";
+import Link from "next/link";
 
 interface CompanyCardProps {
   id: string;
   name: string;
   imageUrl: string | null;
   industry: string;
-  foundationYear: number;
-  website: string | null;
+  headquarters: string | null;
+  count: number;
 }
 
-function CompanyCard({
+export default function CompanyCard({
   id,
   name,
   imageUrl,
   industry,
-  foundationYear,
-  website,
+  headquarters,
+  count,
 }: CompanyCardProps) {
   return (
     <Card className="w-full">
-      <CardHeader className="flex flex-col gap-4 items-start">
-        <CardTitle className="flex gap-4 items-center">
+      <CardHeader className="flex flex-col gap-4 items-center">
+        <CardTitle className="flex flex-col gap-2 items-center">
           {imageUrl ? (
             <Avatar>
               <AvatarImage
                 src={imageUrl}
                 alt="${company} url"
-                width="18"
-                height="18"
+                width="20"
+                height="20"
               />
             </Avatar>
           ) : (
-            <div className="flex justify-center items-center text-xl size-18 bg-primary-foreground">
+            <div className="flex justify-center items-center text-2xl size-20 bg-primary-foreground">
               {name.toUpperCase()[0]}
             </div>
           )}
-          <span className="text-lg font-medium">{name}</span>
+          <span className="text-xl font-medium">{name}</span>
         </CardTitle>
       </CardHeader>
-      <CardContent></CardContent>
+      <CardContent className="flex flex-col gap-2 items-start">
+        <div className="flex gap-2 items-center text-sm text-gray-600">
+          <MapPin size="18" />
+          <span>{headquarters}</span>
+        </div>
+        <div className="flex gap-2 items-center text-sm text-gray-600">
+          <Factory size="18" />
+          <span>{industry}</span>
+        </div>
+        <div className="flex gap-1 font-semibold">
+          <span>{count}</span>
+          <span>{`Job Offer${count === 1 ? "" : "s"}`}</span>
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Button variant="outline" asChild>
+          <Link href={`/companies/${id}`}>View company</Link>
+        </Button>
+      </CardFooter>
     </Card>
   );
 }
-
-export default CompanyCard;
