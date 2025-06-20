@@ -1,7 +1,10 @@
 "use server";
 import {
+  acceptJobListingApplication,
+  createJobApplication,
   createJobListing,
   deleteJobListing,
+  rejectJobListingApplication,
   updateJobListing,
 } from "@/lib/queries";
 import { jobListingSchema, updateJobListingSchema } from "@/lib/zod";
@@ -89,4 +92,42 @@ export async function deleteJobListingAction(id: string) {
     };
   }
   revalidatePath("/recruiter/jobs");
+}
+
+export async function createJobListingApplicationAction(
+  userId: string,
+  jobId: string,
+) {
+  try {
+    await createJobApplication(userId, jobId);
+  } catch (err) {
+    return {
+      message: err,
+    };
+  }
+}
+
+export async function acceptJobListingApplicationAction(
+  userId: string,
+  jobId: string,
+) {
+  try {
+    await acceptJobListingApplication(userId, jobId);
+  } catch (err) {
+    return {
+      message: err,
+    };
+  }
+}
+export async function rejectJobListingApplicationAction(
+  userId: string,
+  jobId: string,
+) {
+  try {
+    await rejectJobListingApplication(userId, jobId);
+  } catch (err) {
+    return {
+      message: err,
+    };
+  }
 }
