@@ -152,8 +152,8 @@ export const jobListingApplication = pgTable(
     jobListingId: text("job_listing_id")
       .notNull()
       .references(() => jobListing.id, { onDelete: "cascade" }),
-    appliedAt: timestamp("applied_at").notNull().defaultNow(),
     status: jobApplicationStatus().default("pending"),
+    appliedAt: timestamp("applied_at").notNull().defaultNow(),
   },
   (table) => [primaryKey({ columns: [table.userId, table.jobListingId] })],
 );
