@@ -5,7 +5,7 @@ export default async function CompaniesList() {
   const companies = await getCompanies();
   if (!companies)
     return (
-      <div className="p-8 text-lg font-medium text-gray-500">
+      <div className="p-8 text-lg font-medium text-gray-700">
         No companies found
       </div>
     );

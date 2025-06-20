@@ -49,11 +49,11 @@ export default function CompanyCard({
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-2 items-start">
-        <div className="flex gap-2 items-center text-sm text-gray-600">
+        <div className="flex gap-2 items-center text-sm text-gray-700">
           <MapPin size="18" />
           <span>{headquarters}</span>
         </div>
-        <div className="flex gap-2 items-center text-sm text-gray-600">
+        <div className="flex gap-2 items-center text-sm text-gray-700">
           <Factory size="18" />
           <span>{industry}</span>
         </div>

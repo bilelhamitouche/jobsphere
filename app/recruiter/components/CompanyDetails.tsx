@@ -24,15 +24,15 @@ export default async function CompanyDetails() {
               <CardTitle className="text-2xl tracking-tight">
                 {companyData.name}
               </CardTitle>
-              <CardDescription className="flex items-center text-sm font-medium">
+              <CardDescription className="flex items-center text-sm font-medium text-gray-700">
                 {companyData.industry}
                 <Dot size={22} />
                 {companyData.headquarters}
               </CardDescription>
             </div>
-            {companyData.logo_url ? (
+            {companyData.logoUrl ? (
               <Image
-                src={companyData.logo_url}
+                src={companyData.logoUrl}
                 alt={`${companyData.name} image`}
                 width={16}
                 height={16}
@@ -48,22 +48,22 @@ export default async function CompanyDetails() {
           <div className="flex flex-col gap-2 items-start w-full">
             <h3 className="text-lg font-medium">Company Details</h3>
             <div className="flex justify-between items-center w-full">
-              <span className="text-gray-500">Industry</span>
+              <span className="text-gray-700">Industry</span>
               <span>{companyData.industry}</span>
             </div>
             <div className="flex justify-between items-center w-full">
-              <span className="text-gray-500">Founded</span>
+              <span className="text-gray-700">Founded</span>
               <span>{companyData.foundationYear}</span>
             </div>
           </div>
           <div className="flex flex-col gap-2 items-start w-full">
             <h3 className="text-lg font-medium">Company Contact</h3>
             <div className="flex justify-between items-center w-full">
-              <span className="text-gray-500">Email</span>
+              <span className="text-gray-700">Email</span>
               <span>{companyData.email}</span>
             </div>
             <div className="flex justify-between items-center w-full">
-              <span className="text-gray-500">Website</span>
+              <span className="text-gray-700">Website</span>
               <Link
                 href={`https://${companyData.website as string}`}
                 className="text-blue-500 hover:underline"

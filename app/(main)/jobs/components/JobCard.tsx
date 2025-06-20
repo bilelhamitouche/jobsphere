@@ -13,6 +13,7 @@ import Link from "next/link";
 import { formatDistance } from "date-fns";
 
 interface JobCardProps {
+  id: string;
   companyImageUrl: string | null;
   company: string;
   position: string;
@@ -23,6 +24,7 @@ interface JobCardProps {
 }
 
 export default function JobCard({
+  id,
   companyImageUrl,
   company,
   position,
@@ -53,14 +55,14 @@ export default function JobCard({
             <span className="text-lg font-medium">{position}</span>
             <Link
               href="/companies/${companyId}"
-              className="text-sm font-semibold text-gray-500"
+              className="text-sm font-semibold text-gray-700"
             >
               {company}
             </Link>
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex gap-8 items-center text-sm font-medium text-gray-500">
+      <CardContent className="flex gap-8 items-center text-sm font-medium text-gray-700">
         <div className="flex gap-2 items-center">
           <MapPin size="15" />
           <span className="capitalize">
@@ -87,7 +89,7 @@ export default function JobCard({
           {type} {type === "part" || type === "full" ? "time" : ""}
         </Badge>
         <Button variant="outline" asChild>
-          <Link href={`/jobs/jobId`}>View Job</Link>
+          <Link href={`/jobs/${id}`}>View Job</Link>
         </Button>
       </CardFooter>
     </Card>
