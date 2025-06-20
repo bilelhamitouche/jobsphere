@@ -1,12 +1,11 @@
 import "server-only";
-import { company, db, jobListing } from "./drizzle";
-import { count, DrizzleError, eq } from "drizzle-orm";
+import { company, db, jobListing, jobListingApplication } from "./drizzle";
+import { and, count, DrizzleError, eq } from "drizzle-orm";
 import { isAuthenticated, isRecruiterAuthenticated } from "@/actions/auth";
 import { z } from "zod";
 import { companyIndustry, jobExperienceLevel, jobType } from "./zod";
 
 export async function getJobListings() {
-  await isAuthenticated();
   try {
     const jobListings = await db
       .select({
@@ -49,7 +48,6 @@ export async function getJobListingsById(recruiterId: string) {
 }
 
 export async function getJobListingById(id: string) {
-  await isAuthenticated();
   try {
     const job = await db
       .selectDistinct({
@@ -60,9 +58,11 @@ export async function getJobListingById(id: string) {
         experienceLevel: jobListing.experienceLevel,
         location: jobListing.location,
         postedAt: jobListing.postedAt,
+        companyId: company.id,
         company: company.name,
         companyLogo: company.logoUrl,
-        companyAbout: company.about,
+        companyFoundationYear: company.foundationYear,
+        companyIndustry: company.industry,
       })
       .from(jobListing)
       .leftJoin(company, eq(jobListing.companyId, company.id))
@@ -133,6 +133,61 @@ export async function deleteJobListing(id: string) {
   await isRecruiterAuthenticated();
   try {
     await db.delete(jobListing).where(eq(jobListing.id, id));
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function createJobApplication(userId: string, jobId: string) {
+  await isAuthenticated();
+  try {
+    await db
+      .insert(jobListingApplication)
+      .values({ userId, jobListingId: jobId });
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function acceptJobListingApplication(
+  userId: string,
+  jobId: string,
+) {
+  try {
+    await db
+      .update(jobListingApplication)
+      .set({ status: "accepted" })
+      .where(
+        and(
+          eq(jobListingApplication.userId, userId),
+          eq(jobListingApplication.jobListingId, jobId),
+        ),
+      );
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function rejectJobListingApplication(
+  userId: string,
+  jobId: string,
+) {
+  try {
+    await db
+      .update(jobListingApplication)
+      .set({ status: "rejected" })
+      .where(
+        and(
+          eq(jobListingApplication.userId, userId),
+          eq(jobListingApplication.jobListingId, jobId),
+        ),
+      );
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
