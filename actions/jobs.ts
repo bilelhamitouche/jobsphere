@@ -3,6 +3,7 @@ import {
   acceptJobListingApplication,
   createJobApplication,
   createJobListing,
+  createSavedJob,
   deleteJobListing,
   rejectJobListingApplication,
   updateJobListing,
@@ -124,6 +125,16 @@ export async function rejectJobListingApplicationAction(
 ) {
   try {
     await rejectJobListingApplication(userId, jobId);
+  } catch (err) {
+    return {
+      message: err,
+    };
+  }
+}
+
+export async function createSavedJobListing(userId: string, jobId: string) {
+  try {
+    await createSavedJob(userId, jobId);
   } catch (err) {
     return {
       message: err,
