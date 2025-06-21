@@ -61,7 +61,6 @@ export async function updateJobListingAction(formData: FormData) {
     experience_level: experienceLevel,
     location,
   });
-  console.log(result.error, result.data);
   if (!result.success) {
     return {
       errors: result.error.flatten().fieldErrors,
