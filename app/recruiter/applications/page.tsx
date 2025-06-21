@@ -6,7 +6,9 @@ import { getJobApplicationsByRecruiterId } from "@/lib/queries";
 
 export default async function RecruiterApplications() {
   const user = await getUserInfo();
-  const jobApplications = await getJobApplicationsByRecruiterId(user.id);
+  const jobApplications = await getJobApplicationsByRecruiterId(
+    user?.id as string,
+  );
   return (
     <div className="p-6 space-y-4 w-full h-full">
       <h2 className="text-3xl font-semibold">All Applications</h2>

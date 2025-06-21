@@ -12,12 +12,14 @@ import { MoreVertical, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import Link from "next/link";
+import { z } from "zod";
 
 export type JobApplication = {
   id: string;
   username: string;
   position: string;
   location: string | null;
+  status: "pending" | "accepted" | "rejected";
   appliedAt: Date;
 };
 
@@ -33,6 +35,10 @@ export const columns: ColumnDef<JobApplication>[] = [
   {
     accessorKey: "location",
     header: "Location",
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
   },
   {
     accessorFn: (props) => format(props.appliedAt, "MMMM dd yyyy"),
