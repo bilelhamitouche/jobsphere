@@ -1,4 +1,5 @@
 "use client";
+import { createJobListingApplicationAction } from "@/actions/jobs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -9,6 +10,8 @@ import Link from "next/link";
 import { z } from "zod";
 
 interface JobDetailsSidebarProps {
+  id: string;
+  userId: string;
   companyId: string;
   companyName: string | null;
   companyLogo: string | null;
@@ -16,6 +19,8 @@ interface JobDetailsSidebarProps {
 }
 
 export default function JobDetailsSidebar({
+  id,
+  userId,
   companyId,
   companyName,
   companyLogo,
@@ -24,8 +29,21 @@ export default function JobDetailsSidebar({
   return (
     <Card className="sticky">
       <CardHeader className="space-y-2">
-        <Button size="lg">Apply To Job</Button>
-        <Button variant="outline" size="lg">
+        <Button
+          size="lg"
+          onClick={() => {
+            createJobListingApplicationAction(userId, id);
+          }}
+        >
+          Apply To Job
+        </Button>
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={() => {
+            saveJobListingApplicationAction();
+          }}
+        >
           Save Job
         </Button>
       </CardHeader>
