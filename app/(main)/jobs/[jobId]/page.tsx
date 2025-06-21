@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { companyIndustry, jobType } from "@/lib/zod";
 import JobDetailsSidebar from "../components/JobDetailsSidebar";
 import { z } from "zod";
+import { getUserInfo } from "@/actions/auth";
 
 export default async function JobListing({
   params,
@@ -11,6 +12,7 @@ export default async function JobListing({
   params: Promise<{ jobId: string }>;
 }) {
   const { jobId } = await params;
+  const user = await getUserInfo();
   const data = await getJobListingById(jobId);
   if (!data || data.length === 0) notFound();
   const jobListing = data[0];
@@ -28,6 +30,8 @@ export default async function JobListing({
         companyIndustry={jobListing.companyIndustry as any}
       />
       <JobDetailsSidebar
+        id={jobListing.id as string}
+        userId={user?.id as string}
         companyId={jobListing.companyId as string}
         companyName={jobListing.company}
         companyLogo={jobListing.companyLogo}

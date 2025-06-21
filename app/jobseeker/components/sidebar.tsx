@@ -58,11 +58,7 @@ export default async function JobseekerSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton size="lg">
-              <AvatarDropdown user={user} />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
+          <AvatarDropdown user={user} />
         </DropdownMenu>
       </SidebarFooter>
     </Sidebar>
