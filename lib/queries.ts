@@ -1,5 +1,11 @@
 import "server-only";
-import { company, db, jobListing, jobListingApplication } from "./drizzle";
+import {
+  company,
+  db,
+  jobListing,
+  jobListingApplication,
+  jobListingSaved,
+} from "./drizzle";
 import { and, count, DrizzleError, eq } from "drizzle-orm";
 import { isAuthenticated, isRecruiterAuthenticated } from "@/actions/auth";
 import { z } from "zod";
@@ -140,6 +146,44 @@ export async function deleteJobListing(id: string) {
   }
 }
 
+export async function getJobApplicationsByUserId(userId: string) {
+  await isAuthenticated();
+  try {
+    const jobApplications = await db
+      .select()
+      .from(jobListingApplication)
+      .where(eq(jobListingApplication.userId, userId));
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function getJobApplicationsByRecruiterId(recruiterId: string) {
+  await isRecruiterAuthenticated();
+  try {
+    const companyId = await db
+      .selectDistinct({ id: company.id })
+      .from(company)
+      .where(eq(company.recruiterId, recruiterId));
+    const jobApplications = await db
+      .select()
+      .from(jobListingApplication)
+      .leftJoin(
+        jobListing,
+        eq(jobListingApplication.jobListingId, jobListing.id),
+      )
+      .leftJoin(company, eq(jobListing.companyId, company.id))
+      .where(eq(company.id, companyId[0].id));
+    return jobApplications;
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
 export async function createJobApplication(userId: string, jobId: string) {
   await isAuthenticated();
   try {
@@ -188,6 +232,32 @@ export async function rejectJobListingApplication(
           eq(jobListingApplication.jobListingId, jobId),
         ),
       );
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function getSavedJobsById(userId: string) {
+  await isAuthenticated();
+  try {
+    const jobsSaved = await db
+      .select()
+      .from(jobListingSaved)
+      .where(eq(jobListingSaved.userId, userId));
+    return jobsSaved;
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function createSavedJob(userId: string, jobId: string) {
+  await isAuthenticated();
+  try {
+    await db.insert(jobListingSaved).values({ userId, jobListingId: jobId });
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
