@@ -372,3 +372,20 @@ export async function updateCompany(
     }
   }
 }
+
+export async function deleteSavedJob(userId: string, jobId: string) {
+  try {
+    await db
+      .delete(jobListingSaved)
+      .where(
+        and(
+          eq(jobListingSaved.userId, userId),
+          eq(jobListingSaved.jobListingId, jobId),
+        ),
+      );
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
