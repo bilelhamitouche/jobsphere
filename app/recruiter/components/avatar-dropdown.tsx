@@ -1,7 +1,6 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
-import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth-client";
 import {
   DropdownMenu,
