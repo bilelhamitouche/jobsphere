@@ -5,6 +5,7 @@ import {
   jobListing,
   jobListingApplication,
   jobListingSaved,
+  user,
 } from "./drizzle";
 import { and, count, DrizzleError, eq } from "drizzle-orm";
 import { isAuthenticated, isRecruiterAuthenticated } from "@/actions/auth";
@@ -168,13 +169,21 @@ export async function getJobApplicationsByRecruiterId(recruiterId: string) {
       .from(company)
       .where(eq(company.recruiterId, recruiterId));
     const jobApplications = await db
-      .select()
+      .select({
+        id: jobListing.id,
+        username: user.name,
+        position: jobListing.position,
+        location: jobListing.location,
+        status: jobListingApplication.status,
+        appliedAt: jobListingApplication.appliedAt,
+      })
       .from(jobListingApplication)
       .leftJoin(
         jobListing,
         eq(jobListingApplication.jobListingId, jobListing.id),
       )
       .leftJoin(company, eq(jobListing.companyId, company.id))
+      .leftJoin(user, eq(jobListingApplication.userId, user.id))
       .where(eq(company.id, companyId[0].id));
     return jobApplications;
   } catch (err) {
