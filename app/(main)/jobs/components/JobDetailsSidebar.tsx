@@ -1,7 +1,9 @@
 "use client";
 import {
   createJobListingApplicationAction,
+  createSavedJobListing,
   deleteJobListingAction,
+  deleteSavedJobListing,
 } from "@/actions/jobs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -18,6 +20,7 @@ interface JobDetailsSidebarProps {
   id: string;
   userId: string;
   hasApplied: boolean;
+  wasSaved: boolean;
   companyId: string;
   companyName: string | null;
   companyLogo: string | null;
@@ -28,13 +31,16 @@ export default function JobDetailsSidebar({
   id,
   userId,
   hasApplied,
+  wasSaved,
   companyId,
   companyName,
   companyLogo,
   companyIndustry,
 }: JobDetailsSidebarProps) {
   const [isApplied, setIsApplied] = useState<boolean>(hasApplied);
+  const [isSaved, setIsSaved] = useState<boolean>(wasSaved);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
   return (
     <Card className="sticky">
       <CardHeader className="space-y-2">
@@ -65,8 +71,30 @@ export default function JobDetailsSidebar({
         >
           {isApplied ? "Already Applied" : "Apply To Job"}
         </Button>
-        <Button variant="outline" size="lg">
-          Save Job
+        <Button
+          variant="outline"
+          size="lg"
+          disabled={isSaveLoading}
+          onClick={async () => {
+            setIsSaveLoading(true);
+            try {
+              if (isSaved) {
+                const result = await deleteSavedJobListing(userId, id);
+                setIsSaved(false);
+                if (result?.message) toast.error(result?.message as string);
+              } else {
+                const result = await createSavedJobListing(userId, id);
+                setIsSaved(true);
+                if (result?.message) toast.error(result?.message as string);
+              }
+            } catch (err) {
+              toast.error("Something wrong happened");
+            } finally {
+              setIsSaveLoading(false);
+            }
+          }}
+        >
+          {isSaved ? "Already Saved" : "Save Job"}
         </Button>
       </CardHeader>
       <Separator className="px-2" />

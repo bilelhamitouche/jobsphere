@@ -1,5 +1,5 @@
 import JobDetailsCard from "../components/JobDetailsCard";
-import { getJobListingById, hasApplied } from "@/lib/queries";
+import { getJobListingById, hasApplied, wasSaved } from "@/lib/queries";
 import { notFound } from "next/navigation";
 import { companyIndustry, jobType } from "@/lib/zod";
 import JobDetailsSidebar from "../components/JobDetailsSidebar";
@@ -17,6 +17,7 @@ export default async function JobListing({
   if (!data || data.length === 0) notFound();
   const jobListing = data[0];
   const applied = await hasApplied(user?.id as string, jobListing.id);
+  const saved = await wasSaved(user?.id as string, jobListing.id);
   return (
     <div className="grid grid-cols-1 gap-8 p-8 w-full h-full bg-primary-foreground md:grid-cols-[1fr_0.5fr]">
       <JobDetailsCard
@@ -34,6 +35,7 @@ export default async function JobListing({
         id={jobListing.id as string}
         userId={user?.id as string}
         hasApplied={applied as boolean}
+        wasSaved={saved as boolean}
         companyId={jobListing.companyId as string}
         companyName={jobListing.company}
         companyLogo={jobListing.companyLogo}

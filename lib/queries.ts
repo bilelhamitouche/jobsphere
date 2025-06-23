@@ -312,6 +312,26 @@ export async function createSavedJob(userId: string, jobId: string) {
   }
 }
 
+export async function wasSaved(userId: string, jobId: string) {
+  await isAuthenticated();
+  try {
+    const application = await db
+      .select()
+      .from(jobListingSaved)
+      .where(
+        and(
+          eq(jobListingApplication.userId, userId),
+          eq(jobListingApplication.jobListingId, jobId),
+        ),
+      );
+    return application.length > 0;
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
 export async function getCompanyInfoById(recruiterId: string) {
   await isRecruiterAuthenticated();
   try {

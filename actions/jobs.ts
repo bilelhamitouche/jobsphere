@@ -5,6 +5,7 @@ import {
   createJobListing,
   createSavedJob,
   deleteJobApplication,
+  deleteSavedJob,
   rejectJobListingApplication,
   updateJobListing,
 } from "@/lib/queries";
@@ -135,6 +136,16 @@ export async function rejectJobListingApplicationAction(
 export async function createSavedJobListing(userId: string, jobId: string) {
   try {
     await createSavedJob(userId, jobId);
+  } catch (err) {
+    return {
+      message: err,
+    };
+  }
+}
+
+export async function deleteSavedJobListing(userId: string, jobId: string) {
+  try {
+    await deleteSavedJob(userId, jobId);
   } catch (err) {
     return {
       message: err,
