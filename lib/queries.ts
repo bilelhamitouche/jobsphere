@@ -154,6 +154,7 @@ export async function getJobApplicationsByUserId(userId: string) {
       .select()
       .from(jobListingApplication)
       .where(eq(jobListingApplication.userId, userId));
+    return jobApplications;
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
@@ -194,7 +195,6 @@ export async function getJobApplicationsByRecruiterId(recruiterId: string) {
 }
 
 export async function hasApplied(userId: string, jobId: string) {
-  await isAuthenticated();
   try {
     const application = await db
       .select()
@@ -248,6 +248,7 @@ export async function acceptJobListingApplication(
   userId: string,
   jobId: string,
 ) {
+  await isRecruiterAuthenticated();
   try {
     await db
       .update(jobListingApplication)
@@ -269,6 +270,7 @@ export async function rejectJobListingApplication(
   userId: string,
   jobId: string,
 ) {
+  await isRecruiterAuthenticated();
   try {
     await db
       .update(jobListingApplication)
@@ -321,7 +323,6 @@ export async function createSavedJob(userId: string, jobId: string) {
 }
 
 export async function wasSaved(userId: string, jobId: string) {
-  await isAuthenticated();
   try {
     const application = await db
       .select()
