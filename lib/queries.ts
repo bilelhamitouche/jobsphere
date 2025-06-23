@@ -290,8 +290,16 @@ export async function getSavedJobsById(userId: string) {
   await isAuthenticated();
   try {
     const jobsSaved = await db
-      .select()
+      .select({
+        id: jobListingSaved.jobListingId,
+        userId: jobListingSaved.userId,
+        position: jobListing.position,
+        location: jobListing.location,
+        type: jobListing.type,
+        experienceLevel: jobListing.experienceLevel,
+      })
       .from(jobListingSaved)
+      .leftJoin(jobListing, eq(jobListingSaved.jobListingId, jobListing.id))
       .where(eq(jobListingSaved.userId, userId));
     return jobsSaved;
   } catch (err) {

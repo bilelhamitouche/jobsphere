@@ -1,8 +1,5 @@
 import { getUserInfo } from "@/actions/auth";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -20,6 +17,7 @@ import { redirect } from "next/navigation";
 export default async function JobseekerSidebar() {
   const user = await getUserInfo();
   if (!user) redirect("/");
+  if (user.role === "recruiter") redirect("/");
   return (
     <Sidebar>
       <SidebarHeader>
@@ -42,7 +40,7 @@ export default async function JobseekerSidebar() {
             <SidebarMenuButton asChild>
               <Link href="/jobseeker/jobs">
                 <BriefcaseBusiness />
-                <span>Jobs</span>
+                <span>Jobs Saved</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
