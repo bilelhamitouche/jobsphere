@@ -1,5 +1,8 @@
 "use client";
-import { createJobListingApplicationAction } from "@/actions/jobs";
+import {
+  createJobListingApplicationAction,
+  deleteJobListingAction,
+} from "@/actions/jobs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -7,11 +10,14 @@ import { companyIndustry } from "@/lib/zod";
 import { Building2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { toast } from "sonner";
 import { z } from "zod";
 
 interface JobDetailsSidebarProps {
   id: string;
   userId: string;
+  hasApplied: boolean;
   companyId: string;
   companyName: string | null;
   companyLogo: string | null;
@@ -21,29 +27,45 @@ interface JobDetailsSidebarProps {
 export default function JobDetailsSidebar({
   id,
   userId,
+  hasApplied,
   companyId,
   companyName,
   companyLogo,
   companyIndustry,
 }: JobDetailsSidebarProps) {
+  const [isApplied, setIsApplied] = useState<boolean>(hasApplied);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   return (
     <Card className="sticky">
       <CardHeader className="space-y-2">
         <Button
           size="lg"
-          onClick={() => {
-            createJobListingApplicationAction(userId, id);
+          disabled={isLoading}
+          onClick={async () => {
+            setIsLoading(true);
+            try {
+              if (isApplied) {
+                const result = await deleteJobListingAction(userId, id);
+                setIsApplied(false);
+                if (result?.message) toast.error(result?.message as string);
+              } else {
+                const result = await createJobListingApplicationAction(
+                  userId,
+                  id,
+                );
+                setIsApplied(true);
+                if (result?.message) toast.error(result?.message as string);
+              }
+            } catch (err) {
+              toast.error("Something wrong happened");
+            } finally {
+              setIsLoading(false);
+            }
           }}
         >
-          Apply To Job
+          {isApplied ? "Already Applied" : "Apply To Job"}
         </Button>
-        <Button
-          variant="outline"
-          size="lg"
-          onClick={() => {
-            saveJobListingApplicationAction();
-          }}
-        >
+        <Button variant="outline" size="lg">
           Save Job
         </Button>
       </CardHeader>

@@ -4,7 +4,7 @@ import {
   createJobApplication,
   createJobListing,
   createSavedJob,
-  deleteJobListing,
+  deleteJobApplication,
   rejectJobListingApplication,
   updateJobListing,
 } from "@/lib/queries";
@@ -83,9 +83,9 @@ export async function updateJobListingAction(formData: FormData) {
   }
 }
 
-export async function deleteJobListingAction(id: string) {
+export async function deleteJobListingAction(userId: string, jobId: string) {
   try {
-    await deleteJobListing(id);
+    await deleteJobApplication(userId, jobId);
   } catch (err) {
     return {
       message: err,

@@ -193,12 +193,50 @@ export async function getJobApplicationsByRecruiterId(recruiterId: string) {
   }
 }
 
+export async function hasApplied(userId: string, jobId: string) {
+  await isAuthenticated();
+  try {
+    const application = await db
+      .select()
+      .from(jobListingApplication)
+      .where(
+        and(
+          eq(jobListingApplication.userId, userId),
+          eq(jobListingApplication.jobListingId, jobId),
+        ),
+      );
+    return application.length > 0;
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
 export async function createJobApplication(userId: string, jobId: string) {
   await isAuthenticated();
   try {
     await db
       .insert(jobListingApplication)
       .values({ userId, jobListingId: jobId });
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function deleteJobApplication(userId: string, jobId: string) {
+  await isAuthenticated();
+  try {
+    await db
+      .delete(jobListingApplication)
+      .where(
+        and(
+          eq(jobListingApplication.userId, userId),
+          eq(jobListingApplication.jobListingId, jobId),
+        ),
+      );
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
