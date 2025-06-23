@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "./dropdown-menu";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface AvatarDropdownProps {
   id: string;
@@ -27,6 +28,7 @@ export default function AvatarDropdown({
 }: {
   userInfo: AvatarDropdownProps;
 }) {
+  const router = useRouter();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -53,7 +55,15 @@ export default function AvatarDropdown({
           <Settings />
           <Link href="/settings">Settings</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => authClient.signOut()}>
+        <DropdownMenuItem
+          onClick={() =>
+            authClient.signOut({
+              fetchOptions: {
+                onSuccess: () => router.refresh(),
+              },
+            })
+          }
+        >
           <LogOut className="text-red-500" />
           <span className="text-red-500">Sign Out</span>
         </DropdownMenuItem>
