@@ -15,6 +15,7 @@ export default async function JobsList() {
           id={job.id}
           companyImageUrl={job.companyLogo}
           company={job.company as string}
+          companyId={job.companyId as string}
           position={job.position}
           type={job.type}
           experienceLevel={job.experienceLevel}

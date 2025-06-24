@@ -16,6 +16,7 @@ interface JobCardProps {
   id: string;
   companyImageUrl: string | null;
   company: string;
+  companyId: string;
   position: string;
   type: string;
   experienceLevel: string;
@@ -27,6 +28,7 @@ export default function JobCard({
   id,
   companyImageUrl,
   company,
+  companyId,
   position,
   type,
   experienceLevel,
@@ -54,7 +56,7 @@ export default function JobCard({
           <div className="flex flex-col gap-1">
             <span className="text-lg font-medium">{position}</span>
             <Link
-              href="/companies/${companyId}"
+              href={`/companies/${companyId}`}
               className="text-sm font-semibold text-gray-700"
             >
               {company}
