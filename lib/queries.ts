@@ -22,6 +22,7 @@ export async function getJobListings() {
         type: jobListing.type,
         experienceLevel: jobListing.experienceLevel,
         postedAt: jobListing.postedAt,
+        companyId: company.id,
         company: company.name,
         companyLogo: company.logoUrl,
       })
@@ -349,6 +350,22 @@ export async function getCompanyInfoById(recruiterId: string) {
       .from(company)
       .where(eq(company.recruiterId, recruiterId));
     return companyInfo;
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function getCompanyById(id: string) {
+  try {
+    const companyDetails = await db
+      .select({ company: company, count: count(jobListing.id) })
+      .from(company)
+      .leftJoin(jobListing, eq(company.id, jobListing.companyId))
+      .where(eq(company.id, id))
+      .groupBy(company.id);
+    return companyDetails;
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
