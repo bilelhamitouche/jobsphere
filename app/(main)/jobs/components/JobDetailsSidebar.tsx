@@ -97,7 +97,7 @@ export default function JobDetailsSidebar({
           {isSaved ? "Already Saved" : "Save Job"}
         </Button>
       </CardHeader>
-      <Separator className="px-2" />
+      <Separator />
       <CardContent className="space-y-4">
         <div>
           <h4 className="flex gap-2 items-center">
