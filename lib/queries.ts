@@ -55,6 +55,30 @@ export async function getJobListingsById(recruiterId: string) {
   }
 }
 
+export async function getJobListingsByCompanyId(companyId: string) {
+  try {
+    const jobListings = await db
+      .select({
+        id: jobListing.id,
+        position: jobListing.position,
+        location: jobListing.location,
+        experienceLevel: jobListing.experienceLevel,
+        type: jobListing.type,
+        postedAt: jobListing.postedAt,
+        company: company.name,
+        companyLogo: company.logoUrl,
+      })
+      .from(jobListing)
+      .leftJoin(company, eq(jobListing.companyId, company.id))
+      .where(eq(jobListing.companyId, companyId));
+    return jobListings;
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
 export async function getJobListingById(id: string) {
   try {
     const job = await db
