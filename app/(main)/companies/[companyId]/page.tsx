@@ -1,5 +1,7 @@
 import { getCompanyById } from "@/lib/queries";
 import { notFound } from "next/navigation";
+import CompanyDetails from "../components/CompanyDetails";
+import CompanyJobsList from "../components/CompanyJobsList";
 
 export default async function Company({
   params,
@@ -9,5 +11,10 @@ export default async function Company({
   const { companyId } = await params;
   const companyDetails = await getCompanyById(companyId);
   if (!companyDetails || companyDetails.length === 0) notFound();
-  return <div className="p-6 w-full h-full bg-primary-foreground"></div>;
+  return (
+    <div className="p-6 w-full h-full bg-primary-foreground">
+      <CompanyDetails companyId={companyId} />
+      <CompanyJobsList />
+    </div>
+  );
 }
