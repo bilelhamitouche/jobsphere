@@ -176,8 +176,19 @@ export async function getJobApplicationsByUserId(userId: string) {
   await isAuthenticated();
   try {
     const jobApplications = await db
-      .select()
+      .select({
+        id: jobListingApplication.jobListingId,
+        userId: jobListingApplication.userId,
+        position: jobListing.position,
+        location: jobListing.location,
+        postedAt: jobListing.postedAt,
+        status: jobListingApplication.status,
+      })
       .from(jobListingApplication)
+      .leftJoin(
+        jobListing,
+        eq(jobListingApplication.jobListingId, jobListing.id),
+      )
       .where(eq(jobListingApplication.userId, userId));
     return jobApplications;
   } catch (err) {
