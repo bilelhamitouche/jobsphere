@@ -10,7 +10,7 @@ export default async function CompanyJobsList({
   console.log(jobs);
   if (!jobs || jobs.length === 0)
     return (
-      <div className="w-full h-full">
+      <div className="py-16 w-full h-full text-center">
         <div className="text-lg text-gray-700">No Jobs Posted</div>
       </div>
     );

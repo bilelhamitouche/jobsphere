@@ -16,6 +16,7 @@ export default async function CompaniesList() {
           key={company.id}
           id={company.id}
           name={company.name}
+          size={company.size}
           imageUrl={company.logoUrl}
           industry={company.industry}
           headquarters={company.headquarters}

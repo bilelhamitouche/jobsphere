@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCompanyById } from "@/lib/queries";
-import { Calendar, LinkIcon, MapPin } from "lucide-react";
+import { Calendar, LinkIcon, MapPin, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -47,6 +47,18 @@ export default async function CompanyDetails({
               <Calendar className="text-gray-500" />
               <span>Founded {company.company.foundationYear}</span>
             </div>
+            <div className="flex gap-2 items-center text-gray-600">
+              <Users className="text-gray-500" />
+              <span>
+                Size{" "}
+                {company.company.size === "small"
+                  ? "1-99"
+                  : company.company.size === "mid"
+                    ? "100-999"
+                    : "More than 1000"}{" "}
+                employees
+              </span>
+            </div>
           </div>
         </div>
         <div className="flex flex-col gap-4">
@@ -70,7 +82,7 @@ export default async function CompanyDetails({
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-2">
         <h2 className="text-xl font-semibold">About {company.company.name}</h2>
         <p className="text-gray-700">{company.company.about}</p>
       </CardContent>

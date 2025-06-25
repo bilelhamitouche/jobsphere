@@ -188,6 +188,8 @@ export const industry = pgEnum("industry", [
   "E-Commerce",
 ]);
 
+export const companySize = pgEnum("company_size", ["small", "mid", "large"]);
+
 export const company = pgTable("company", {
   id: text("id")
     .primaryKey()
@@ -195,7 +197,8 @@ export const company = pgTable("company", {
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  about: text("about"),
+  about: text("about").notNull(),
+  size: text("size").notNull(),
   foundationYear: integer("foundation_year").notNull(),
   headquarters: text("headquarters"),
   website: text("website"),

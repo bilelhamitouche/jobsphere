@@ -7,7 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { companyIndustry, companyInfoSchema } from "@/lib/zod";
+import { companyIndustry, companyInfoSchema, companySize } from "@/lib/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,13 +38,15 @@ import { useRouter } from "next/navigation";
 export default function CompanyInfo({ recruiterId }: { recruiterId: string }) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const router = useRouter();
-  const selectOptions = companyIndustry.options;
+  const industryOptions = companyIndustry.options;
+  const sizeOptions = companySize.options;
   const form = useForm<z.infer<typeof companyInfoSchema>>({
     resolver: zodResolver(companyInfoSchema),
     defaultValues: {
       name: "",
       email: "",
       about: "",
+      size: undefined,
       foundation_year: "2000",
       headquarters: "",
       website: "",
@@ -76,6 +78,7 @@ export default function CompanyInfo({ recruiterId }: { recruiterId: string }) {
                   formData.append("name", data.name);
                   formData.append("email", data.email);
                   formData.append("about", data.about as string);
+                  formData.append("size", data.size);
                   formData.append("foundation_year", data.foundation_year);
                   formData.append("website", data.website as string);
                   formData.append("headquarters", data.headquarters as string);
@@ -147,7 +150,7 @@ export default function CompanyInfo({ recruiterId }: { recruiterId: string }) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {selectOptions.map((option, index) => (
+                        {industryOptions.map((option, index) => (
                           <SelectItem key={index} value={option}>
                             {option}
                           </SelectItem>
@@ -188,11 +191,39 @@ export default function CompanyInfo({ recruiterId }: { recruiterId: string }) {
                 name="logo_url"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItem className="md:col-span-2">
+                  <FormItem>
                     <FormLabel>Logo Url</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="size"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Size</FormLabel>
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Enter a size" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {sizeOptions.map((option, index) => (
+                          <SelectItem
+                            key={index}
+                            value={option}
+                            className="capitalize"
+                          >
+                            {option}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

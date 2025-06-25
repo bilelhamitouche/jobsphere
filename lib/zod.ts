@@ -66,6 +66,8 @@ export const companyIndustry = z.enum([
   "E-Commerce",
 ]);
 
+export const companySize = z.enum(["small", "mid", "large"]);
+
 export const companyInfoSchema = z.object({
   name: z.string().trim().min(1, { message: "Name is required" }),
   email: z
@@ -73,7 +75,8 @@ export const companyInfoSchema = z.object({
     .trim()
     .email({ message: "Must be a valid email adddress" })
     .min(1, { message: "Email is required" }),
-  about: z.string().trim().optional(),
+  about: z.string().trim().min(1, { message: "About is required" }),
+  size: companySize,
   foundation_year: z
     .string()
     .refine((value) => Number(value) > 1000, {
@@ -97,6 +100,7 @@ export const updateCompanyInfoSchema = z.object({
     ])
     .optional(),
   about: z.string().trim().optional(),
+  size: companySize.optional(),
   foundation_year: z.string().trim(),
   headquarters: z.string().trim().optional(),
   website: z.string().trim().optional(),

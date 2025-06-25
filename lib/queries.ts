@@ -10,7 +10,12 @@ import {
 import { and, count, DrizzleError, eq } from "drizzle-orm";
 import { isAuthenticated, isRecruiterAuthenticated } from "@/actions/auth";
 import { z } from "zod";
-import { companyIndustry, jobExperienceLevel, jobType } from "./zod";
+import {
+  companyIndustry,
+  companySize,
+  jobExperienceLevel,
+  jobType,
+} from "./zod";
 
 export async function getJobListings() {
   try {
@@ -415,6 +420,7 @@ export async function getCompanies() {
         count: count(jobListing.id),
         id: company.id,
         name: company.name,
+        size: company.size,
         industry: company.industry,
         headquarters: company.headquarters,
         logoUrl: company.logoUrl,
@@ -433,7 +439,8 @@ export async function getCompanies() {
 export async function createCompany(
   name: string,
   email: string,
-  about: string | null,
+  about: string,
+  size: z.infer<typeof companySize>,
   foundationYear: number,
   headquarters: string | null,
   website: string | null,
@@ -447,6 +454,7 @@ export async function createCompany(
       name,
       email,
       about,
+      size,
       foundationYear,
       headquarters,
       website,
@@ -464,7 +472,8 @@ export async function createCompany(
 export async function updateCompany(
   name: string,
   email: string,
-  about: string | null,
+  about: string,
+  size: z.infer<typeof companySize> | undefined,
   headquarters: string | null,
   website: string | null,
   logoUrl: string | null,
@@ -479,6 +488,7 @@ export async function updateCompany(
         name,
         email,
         about,
+        size,
         headquarters,
         website,
         logoUrl,

@@ -8,6 +8,7 @@ export async function createCompanyAction(formData: FormData) {
   const name = formData.get("name");
   const email = formData.get("email");
   const about = formData.get("about");
+  const size = formData.get("size");
   const foundationYear = formData.get("foundation_year");
   const website = formData.get("website");
   const industry = formData.get("industry");
@@ -18,6 +19,7 @@ export async function createCompanyAction(formData: FormData) {
     name,
     email,
     about,
+    size,
     foundation_year: foundationYear,
     headquarters,
     website,
@@ -33,7 +35,8 @@ export async function createCompanyAction(formData: FormData) {
     await createCompany(
       result.data.name,
       result.data.email,
-      result.data.about || null,
+      result.data.about,
+      result.data.size,
       Number(result.data.foundation_year),
       result.data.headquarters || null,
       result.data.website || null,
@@ -53,6 +56,7 @@ export async function updateCompanyAction(formData: FormData) {
   const name = formData.get("name");
   const email = formData.get("email");
   const about = formData.get("about");
+  const size = formData.get("size");
   const foundationYear = formData.get("foundation_year");
   const website = formData.get("website");
   const industry = formData.get("industry");
@@ -63,6 +67,7 @@ export async function updateCompanyAction(formData: FormData) {
     name,
     email,
     about,
+    size,
     foundation_year: foundationYear,
     headquarters,
     website,
@@ -79,6 +84,7 @@ export async function updateCompanyAction(formData: FormData) {
       result.data.name as string,
       result.data.email as string,
       result.data.about as string,
+      result.data.size,
       result.data.headquarters as string,
       result.data.website as string,
       result.data.logo_url as string,

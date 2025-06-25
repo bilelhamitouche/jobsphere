@@ -25,7 +25,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { companyIndustry, updateCompanyInfoSchema } from "@/lib/zod";
+import {
+  companyIndustry,
+  companySize,
+  updateCompanyInfoSchema,
+} from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -37,7 +41,8 @@ import { z } from "zod";
 interface EditCompanyInfoProps {
   id: string;
   name: string;
-  about: string | null;
+  about: string;
+  size: z.infer<typeof companySize>;
   email: string;
   headquarters: string | null;
   industry: z.infer<typeof companyIndustry>;
@@ -56,12 +61,14 @@ export default function EditCompanyInfoForm({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const router = useRouter();
   const industryOptions = companyIndustry.options;
+  const sizeOptions = companySize.options;
   const form = useForm<z.infer<typeof updateCompanyInfoSchema>>({
     resolver: zodResolver(updateCompanyInfoSchema),
     defaultValues: {
       name: companyInfo.name,
       email: companyInfo.email,
-      about: companyInfo.about ?? "",
+      about: companyInfo.about,
+      size: companyInfo.size,
       headquarters: companyInfo.headquarters ?? "",
       foundation_year: String(companyInfo.foundationYear),
       website: companyInfo.website ?? "",
@@ -88,6 +95,7 @@ export default function EditCompanyInfoForm({
                 formData.append("name", data.name as string);
                 formData.append("email", data.email as string);
                 formData.append("about", data.about as string);
+                formData.append("size", data.size as string);
                 formData.append("website", data.website as string);
                 formData.append("headquarters", data.headquarters as string);
                 formData.append(
@@ -213,6 +221,37 @@ export default function EditCompanyInfoForm({
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="size"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Size</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={companyInfo.size}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select the size" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {sizeOptions.map((option, index) => (
+                        <SelectItem
+                          key={index}
+                          value={option}
+                          className="capitalize"
+                        >
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

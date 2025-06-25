@@ -7,12 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Factory, MapPin } from "lucide-react";
+import { Factory, MapPin, Users } from "lucide-react";
 import Link from "next/link";
 
 interface CompanyCardProps {
   id: string;
   name: string;
+  size: string;
   imageUrl: string | null;
   industry: string;
   headquarters: string | null;
@@ -22,6 +23,7 @@ interface CompanyCardProps {
 export default function CompanyCard({
   id,
   name,
+  size,
   imageUrl,
   industry,
   headquarters,
@@ -49,6 +51,16 @@ export default function CompanyCard({
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-2 items-start">
+        <div className="flex gap-2 items-center text-sm text-gray-700">
+          <Users size="18" />
+          <span>
+            {size === "small"
+              ? "1-99"
+              : size === "mid"
+                ? "100-999"
+                : "More than 1000"}
+          </span>
+        </div>
         <div className="flex gap-2 items-center text-sm text-gray-700">
           <MapPin size="18" />
           <span>{headquarters}</span>
