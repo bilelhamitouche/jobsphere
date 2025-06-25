@@ -5,6 +5,7 @@ import {
   createJobListing,
   createSavedJob,
   deleteJobApplication,
+  deleteJobListing,
   deleteSavedJob,
   rejectJobListingApplication,
   updateJobListing,
@@ -84,9 +85,9 @@ export async function updateJobListingAction(formData: FormData) {
   }
 }
 
-export async function deleteJobListingAction(userId: string, jobId: string) {
+export async function deleteJobListingAction(jobId: string) {
   try {
-    await deleteJobApplication(userId, jobId);
+    await deleteJobListing(jobId);
   } catch (err) {
     return {
       message: err,

@@ -82,7 +82,7 @@ export const jobListing = pgTable("job_listing", {
     .primaryKey()
     .notNull()
     .$defaultFn(() => crypto.randomUUID()),
-  description: text("description"),
+  description: text("description").notNull(),
   position: text("position").notNull(),
   type: jobType("job_type").notNull(),
   experienceLevel: experienceLevelEnum().notNull(),

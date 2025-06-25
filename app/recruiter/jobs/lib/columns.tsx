@@ -16,7 +16,7 @@ import Link from "next/link";
 
 export type Job = {
   id: string;
-  description: string | null;
+  description: string;
   position: string;
   type: "full" | "part" | "internship" | "remote";
   location: string | null;

@@ -8,7 +8,7 @@ import { z } from "zod";
 
 interface JobDetailsCardProps {
   position: string;
-  description: string | null;
+  description: string;
   location: string | null;
   type: z.infer<typeof jobType>;
   postedAt: Date;
@@ -88,7 +88,7 @@ export default async function JobDetailsCard({
       <CardContent>
         <div className="flex flex-col gap-2">
           <h3 className="text-xl font-semibold">Job Description</h3>
-          <p className="text-gray-700">{description}</p>
+          <p className="leading-7 text-gray-700">{description}</p>
         </div>
       </CardContent>
     </Card>

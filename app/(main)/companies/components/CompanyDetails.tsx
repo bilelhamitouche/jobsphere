@@ -84,7 +84,7 @@ export default async function CompanyDetails({
       </CardHeader>
       <CardContent className="space-y-2">
         <h2 className="text-xl font-semibold">About {company.company.name}</h2>
-        <p className="text-gray-700">{company.company.about}</p>
+        <p className="leading-7 text-gray-700">{company.company.about}</p>
       </CardContent>
     </Card>
   );

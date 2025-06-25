@@ -64,7 +64,7 @@ export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
                 setIsSubmitting(true);
                 const formData = new FormData();
                 formData.append("position", data.position);
-                formData.append("description", data.description as string);
+                formData.append("description", data.description);
                 formData.append("location", data.location as string);
                 formData.append("experience_level", data.experience_level);
                 formData.append("type", data.type);

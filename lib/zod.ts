@@ -27,6 +27,7 @@ export const jobListingSchema = z.object({
   description: z
     .string()
     .trim()
+    .min(1, { message: "Description is required" })
     .max(400, { message: "Must be at most 400 characters long" }),
   position: z.string().trim().min(1, { message: "Position is required" }),
   type: jobType,
@@ -40,11 +41,7 @@ export const updateJobListingSchema = z.object({
     .trim()
     .max(400, { message: "Must be at most 400 characters long" })
     .optional(),
-  position: z
-    .string()
-    .trim()
-    .min(1, { message: "Position is required" })
-    .optional(),
+  position: z.string().trim().optional(),
   type: jobType.optional(),
   experience_level: jobExperienceLevel.optional(),
   location: z.string().trim().optional(),
