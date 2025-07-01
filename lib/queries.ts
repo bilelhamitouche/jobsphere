@@ -112,12 +112,27 @@ export async function getJobListingById(id: string) {
   }
 }
 
+export async function getJobListingCountByRecruiterId(recruiterId: string) {
+  await isRecruiterAuthenticated();
+  try {
+    const companyId = await db
+      .select({ id: company.id })
+      .from(company)
+      .where(eq(company.recruiterId, recruiterId));
+    const jobListingCount = await db
+      .select({ count: count() })
+      .from(jobListing)
+      .where(eq(jobListing.companyId, companyId[0].id));
+    return jobListingCount[0].count;
+  } catch (err) {}
+}
+
 export async function createJobListing(
   position: string,
-  location: string | null,
+  location: string,
   type: z.infer<typeof jobType>,
   experience_level: z.infer<typeof jobExperienceLevel>,
-  description: string | null,
+  description: string,
   recruiterId: string,
 ) {
   await isRecruiterAuthenticated();
@@ -235,6 +250,56 @@ export async function getJobApplicationsByRecruiterId(recruiterId: string) {
   }
 }
 
+export async function getJobApplicationsCountByRecruiterId(
+  recruiterId: string,
+) {
+  await isRecruiterAuthenticated();
+  try {
+    const companyId = await db
+      .selectDistinct({ id: company.id })
+      .from(company)
+      .where(eq(company.recruiterId, recruiterId));
+    const jobApplicationsCount = await db
+      .select({
+        count: count(),
+      })
+      .from(jobListingApplication)
+      .leftJoin(
+        jobListing,
+        eq(jobListingApplication.jobListingId, jobListing.id),
+      )
+      .leftJoin(company, eq(jobListing.companyId, company.id))
+      .leftJoin(user, eq(jobListingApplication.userId, user.id))
+      .where(eq(company.id, companyId[0].id));
+    return jobApplicationsCount[0].count;
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function getJobApplicationsCountByUserId(userId: string) {
+  await isAuthenticated();
+  try {
+    const jobApplications = await db
+      .select({
+        count: count(),
+      })
+      .from(jobListingApplication)
+      .leftJoin(
+        jobListing,
+        eq(jobListingApplication.jobListingId, jobListing.id),
+      )
+      .where(eq(jobListingApplication.userId, userId));
+    return jobApplications[0].count;
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
 export async function hasApplied(userId: string, jobId: string) {
   try {
     const application = await db
@@ -345,6 +410,24 @@ export async function getSavedJobsById(userId: string) {
       .leftJoin(jobListing, eq(jobListingSaved.jobListingId, jobListing.id))
       .where(eq(jobListingSaved.userId, userId));
     return jobsSaved;
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function getSavedJobsCountById(userId: string) {
+  await isAuthenticated();
+  try {
+    const jobsSaved = await db
+      .select({
+        count: count(),
+      })
+      .from(jobListingSaved)
+      .leftJoin(jobListing, eq(jobListingSaved.jobListingId, jobListing.id))
+      .where(eq(jobListingSaved.userId, userId));
+    return jobsSaved[0].count;
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");

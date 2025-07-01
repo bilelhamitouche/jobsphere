@@ -24,11 +24,7 @@ export const jobType = z.enum(["full", "part", "internship", "remote"]);
 export const jobExperienceLevel = z.enum(["none", "entry", "mid", "senior"]);
 
 export const jobListingSchema = z.object({
-  description: z
-    .string()
-    .trim()
-    .min(1, { message: "Description is required" })
-    .max(400, { message: "Must be at most 400 characters long" }),
+  description: z.string().trim().min(1, { message: "Description is required" }),
   position: z.string().trim().min(1, { message: "Position is required" }),
   type: jobType,
   experience_level: jobExperienceLevel,
