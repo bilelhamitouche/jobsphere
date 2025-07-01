@@ -134,6 +134,19 @@ export async function rejectJobListingApplicationAction(
   }
 }
 
+export async function deleteJobListingApplicationAction(
+  userId: string,
+  jobId: string,
+) {
+  try {
+    await deleteJobApplication(userId, jobId);
+  } catch (err) {
+    return {
+      message: err,
+    };
+  }
+}
+
 export async function createSavedJobListing(userId: string, jobId: string) {
   try {
     await createSavedJob(userId, jobId);

@@ -2,7 +2,7 @@
 import {
   createJobListingApplicationAction,
   createSavedJobListing,
-  deleteJobListingAction,
+  deleteJobListingApplicationAction,
   deleteSavedJobListing,
 } from "@/actions/jobs";
 import { Button } from "@/components/ui/button";
@@ -51,7 +51,10 @@ export default function JobDetailsSidebar({
             setIsLoading(true);
             try {
               if (isApplied) {
-                const result = await deleteJobListingAction(userId, id);
+                const result = await deleteJobListingApplicationAction(
+                  userId,
+                  id,
+                );
                 setIsApplied(false);
                 if (result?.message) toast.error(result?.message as string);
               } else {

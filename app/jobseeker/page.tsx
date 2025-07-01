@@ -1,3 +1,4 @@
+import Analytics from "./components/Analytics";
 import Navbar from "./components/navbar";
 
 export default function JobSeeker() {
@@ -6,6 +7,7 @@ export default function JobSeeker() {
       <Navbar />
       <div className="p-6 space-y-6">
         <h2 className="text-3xl font-bold">Dashboard</h2>
+        <Analytics />
       </div>
     </div>
   );

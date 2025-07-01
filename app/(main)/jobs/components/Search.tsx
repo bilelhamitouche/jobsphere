@@ -12,7 +12,7 @@ export default function Search() {
         <Input
           type="text"
           placeholder="Search for jobs"
-          value={search}
+          value={search || ""}
           onChange={(e) => setSearch(e.target.value)}
         />
       </CardContent>
