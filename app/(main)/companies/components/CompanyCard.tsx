@@ -43,7 +43,7 @@ export default function CompanyCard({
               />
             </Avatar>
           ) : (
-            <div className="flex justify-center items-center text-2xl size-20 bg-primary-foreground">
+            <div className="flex justify-center items-center text-2xl size-20 bg-primary text-primary-foreground">
               {name.toUpperCase()[0]}
             </div>
           )}

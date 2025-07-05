@@ -112,7 +112,7 @@ export default function JobDetailsSidebar({
           {companyLogo ? (
             <Image src={companyLogo} alt={`${companyName} image`} />
           ) : (
-            <div className="flex justify-center items-center text-3xl font-bold bg-primary-foreground size-20">
+            <div className="flex justify-center items-center text-3xl font-bold text-primary-foreground bg-primary size-20">
               {companyName?.toUpperCase()[0]}
             </div>
           )}

@@ -22,7 +22,7 @@ export default async function RecruiterSidebar() {
       <SidebarHeader>
         <h1 className="flex gap-2 justify-center items-center p-4 text-2xl font-bold text-primary">
           <BriefcaseBusiness size="25" />
-          <span>Jobsphere</span>
+          <Link href="/">Jobsphere</Link>
         </h1>
       </SidebarHeader>
       <SidebarContent>

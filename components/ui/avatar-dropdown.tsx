@@ -40,7 +40,7 @@ export default function AvatarDropdown({
           <AvatarFallback>{userInfo.name[0].toUpperCase()}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-40">
+      <DropdownMenuContent align="end" className="min-w-48 mix-w-fit">
         <DropdownMenuItem>{userInfo.email}</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>

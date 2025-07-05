@@ -27,7 +27,7 @@ export default async function CompanyDetails({
                 height="20"
               />
             ) : (
-              <div className="flex justify-center items-center text-3xl font-bold size-20 bg-primary-foreground">
+              <div className="flex justify-center items-center text-3xl font-bold size-20 text-primary-foreground bg-primary">
                 {company.company.name.toUpperCase()[0]}
               </div>
             )}

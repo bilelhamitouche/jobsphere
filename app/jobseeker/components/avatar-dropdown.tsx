@@ -52,7 +52,7 @@ export default function AvatarDropdown({
           </div>
         </SidebarMenuButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-60">
+      <DropdownMenuContent className="min-w-60">
         <DropdownMenuItem>
           <Avatar>
             <AvatarImage

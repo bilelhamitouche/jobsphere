@@ -49,7 +49,7 @@ export default function JobCard({
               />
             </Avatar>
           ) : (
-            <div className="flex justify-center items-center text-xl size-18 bg-primary-foreground">
+            <div className="flex justify-center items-center text-xl text-primary-foreground size-18 bg-primary">
               {company.toUpperCase()[0]}
             </div>
           )}
