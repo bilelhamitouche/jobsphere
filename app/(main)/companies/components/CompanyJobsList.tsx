@@ -7,7 +7,6 @@ export default async function CompanyJobsList({
   companyId: string;
 }) {
   const jobs = await getJobListingsByCompanyId(companyId);
-  console.log(jobs);
   if (!jobs || jobs.length === 0)
     return (
       <div className="py-16 w-full h-full text-center">
