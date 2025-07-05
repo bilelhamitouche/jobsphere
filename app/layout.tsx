@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full light">
+    <html lang="en" className="h-full">
       <ClientProvider>
         <body className={`${inter.className} h-full antialiased`}>
           <NuqsAdapter>{children}</NuqsAdapter>
