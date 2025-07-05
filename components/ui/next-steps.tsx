@@ -12,7 +12,11 @@ function NextSteps() {
         get notified about new opportunities.
       </p>
       <div className="space-x-4">
-        <Button variant="outline" className="text-black" asChild>
+        <Button
+          variant="outline"
+          className="text-primary hover:text-primary-foreground hover:bg-primary"
+          asChild
+        >
           <Link href="/signup">Create an account</Link>
         </Button>
         <Button
