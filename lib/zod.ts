@@ -29,6 +29,12 @@ export const jobListingSchema = z.object({
   type: jobType,
   experience_level: jobExperienceLevel,
   location: z.string().trim(),
+  requirements: z
+    .array(z.string().min(1, { message: "Requirement is required" }))
+    .min(1, { message: "At least 1 requirement" }),
+  responsibilities: z
+    .array(z.string().min(1, { message: "Responsibility is required" }))
+    .min(1, { message: "At least 1 responsibility" }),
 });
 
 export const updateJobListingSchema = z.object({
@@ -41,6 +47,12 @@ export const updateJobListingSchema = z.object({
   type: jobType.optional(),
   experience_level: jobExperienceLevel.optional(),
   location: z.string().trim().optional(),
+  requirements: z
+    .array(z.string().min(1, { message: "Requirement is required" }))
+    .min(1, { message: "At least 1 requirement" }),
+  responsibilities: z
+    .array(z.string().min(1, { message: "Responsibility is required" }))
+    .min(1, { message: "At least 1 responsibility" }),
 });
 
 export const companyIndustry = z.enum([

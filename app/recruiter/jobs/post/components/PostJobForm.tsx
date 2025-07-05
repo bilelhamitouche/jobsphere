@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { z } from "zod";
 import { jobListingSchema, jobType, jobExperienceLevel } from "@/lib/zod";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import {
@@ -47,42 +47,67 @@ export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
       description: "",
       experience_level: "none",
       location: "",
+      requirements: [],
+      responsibilities: [],
     },
   });
+  const {
+    fields: requirementFields,
+    append: requirementAppend,
+    remove: requirementRemove,
+  } = useFieldArray({
+    name: "requirements" as never,
+    control: form.control,
+  });
+  const {
+    fields: responsibilityFields,
+    append: responsibilityAppend,
+    remove: responsibilityRemove,
+  } = useFieldArray({
+    name: "responsibilities" as never,
+    control: form.control,
+  });
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-xl">Job Details</CardTitle>
-        <CardDescription>Fill in the form to post a job</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form
-            className="grid grid-cols-1 gap-4 space-y-2 md:grid-cols-2"
-            onSubmit={form.handleSubmit(
-              async (data: z.infer<typeof jobListingSchema>) => {
-                setIsSubmitting(true);
-                const formData = new FormData();
-                formData.append("position", data.position);
-                formData.append("description", data.description);
-                formData.append("location", data.location as string);
-                formData.append("experience_level", data.experience_level);
-                formData.append("type", data.type);
-                formData.append("recruiter_id", recruiterId);
-                try {
-                  const result = await createJobAction(formData);
-                  if (!result?.errors && !result?.message) {
-                    toast.success("Job posted sucessfully");
-                    router.push("/recruiter/jobs");
-                  }
-                } catch (err) {
-                  toast.error(err as string);
-                } finally {
-                  setIsSubmitting(false);
-                }
-              },
-            )}
-          >
+    <Form {...form}>
+      <form
+        className="flex flex-col gap-8"
+        onSubmit={form.handleSubmit(
+          async (data: z.infer<typeof jobListingSchema>) => {
+            setIsSubmitting(true);
+            const formData = new FormData();
+            formData.append("position", data.position);
+            formData.append("description", data.description);
+            formData.append("location", data.location as string);
+            formData.append("experience_level", data.experience_level);
+            formData.append("type", data.type);
+            formData.append("recruiter_id", recruiterId);
+            formData.append("requirements", JSON.stringify(data.requirements));
+            formData.append(
+              "responsibilities",
+              JSON.stringify(data.responsibilities),
+            );
+            try {
+              const result = await createJobAction(formData);
+              if (!result?.errors && !result?.message) {
+                toast.success("Job posted sucessfully");
+                router.push("/recruiter/jobs");
+              }
+            } catch (err) {
+              toast.error(err as string);
+            } finally {
+              setIsSubmitting(false);
+            }
+          },
+        )}
+      >
+        <Card className="p-8">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold">Job Details</CardTitle>
+            <CardDescription>
+              Fill in job details and information
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <FormField
               name="position"
               control={form.control}
@@ -161,7 +186,7 @@ export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
               name="description"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="md:col-span-2">
+                <FormItem className="col-span-2">
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea {...field}></Textarea>
@@ -170,19 +195,105 @@ export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
                 </FormItem>
               )}
             />
-            <Button className="md:col-span-2" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <div className="flex gap-2 items-center">
-                  <Loader2 className="animate-spin" />
-                  <span>Please wait</span>
-                </div>
-              ) : (
-                <span>Save</span>
-              )}
+          </CardContent>
+        </Card>
+        <Card className="p-8">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold">
+              Job Requirements
+            </CardTitle>
+            <CardDescription>Add at least 1 requirement</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            {requirementFields.map((field, index) => (
+              <FormField
+                key={field.id}
+                name={`requirements.${index}`}
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Requirement {index + 1}</FormLabel>
+                    <FormControl>
+                      <div className="flex gap-2">
+                        <Input {...field} placeholder="Enter requirement" />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          onClick={() => requirementRemove(index)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => requirementAppend("")}
+            >
+              Add Requirement
             </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
+        <Card className="p-8">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold">
+              Job Responsibilities
+            </CardTitle>
+            <CardDescription>Add at least 1 responsibility</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            {responsibilityFields.map((field, index) => (
+              <FormField
+                key={field.id}
+                name={`responsibilities.${index}`}
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Requirement {index + 1}</FormLabel>
+                    <FormControl>
+                      <div className="flex gap-2">
+                        <Input {...field} placeholder="Enter responsibility" />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          onClick={() => responsibilityRemove(index)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => responsibilityAppend("")}
+            >
+              Add Responsibility
+            </Button>
+          </CardContent>
+        </Card>
+        <Button type="submit" className="md:col-span-2" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <div className="flex gap-2 items-center">
+              <Loader2 className="animate-spin" />
+              <span>Please wait</span>
+            </div>
+          ) : (
+            <span>Save</span>
+          )}
+        </Button>
+      </form>
+    </Form>
   );
 }

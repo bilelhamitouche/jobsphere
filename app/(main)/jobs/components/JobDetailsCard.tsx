@@ -11,6 +11,8 @@ interface JobDetailsCardProps {
   description: string;
   location: string | null;
   type: z.infer<typeof jobType>;
+  requirements: { requirement: string }[];
+  responsibilities: { responsibility: string }[];
   postedAt: Date;
   companyId: string;
   company: string;
@@ -33,6 +35,8 @@ export default async function JobDetailsCard({
   description,
   location,
   type,
+  requirements,
+  responsibilities,
   postedAt,
   companyId,
   company,
@@ -85,10 +89,30 @@ export default async function JobDetailsCard({
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-8">
         <div className="flex flex-col gap-2">
           <h3 className="text-xl font-semibold">Job Description</h3>
           <p className="leading-7 text-gray-700">{description}</p>
+        </div>
+        <div className="flex flex-col gap-4">
+          <h3 className="text-xl font-semibold">Job Requirements</h3>
+          <ul className="flex flex-col gap-2 pl-4">
+            {requirements.map((requirement, index) => (
+              <li key={index} className="list-disc">
+                {requirement.requirement}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="flex flex-col gap-4">
+          <h3 className="text-xl font-semibold">Job Responbilility</h3>
+          <ul className="flex flex-col gap-2 pl-4">
+            {responsibilities.map((responsibility, index) => (
+              <li key={index} className="list-disc">
+                {responsibility.responsibility}
+              </li>
+            ))}
+          </ul>
         </div>
       </CardContent>
     </Card>

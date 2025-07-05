@@ -15,9 +15,8 @@ export default async function JobListing({
 }) {
   const { jobId } = await params;
   const user = await getUserInfo();
-  const data = await getJobListingById(jobId);
-  if (!data || data.length === 0) notFound();
-  const jobListing = data[0];
+  const jobListing = await getJobListingById(jobId);
+  if (!jobListing) notFound();
   const applied = await hasApplied(user?.id as string, jobListing.id);
   const saved = await wasSaved(user?.id as string, jobListing.id);
   return (
@@ -26,12 +25,14 @@ export default async function JobListing({
         <ArrowLeft className="text-primary" />
         <span className="text-primary">Back to Jobs</span>
       </Link>
-      <div className="grid grid-cols-1 gap-8 w-full h-full md:grid-cols-[1fr_0.5fr]">
+      <div className="flex flex-col gap-8 w-full h-full md:flex-row">
         <JobDetailsCard
           position={jobListing.position}
           description={jobListing.description}
           location={jobListing.location}
           type={jobListing.type as z.infer<typeof jobType>}
+          requirements={jobListing.requirements}
+          responsibilities={jobListing.responsibilities}
           postedAt={jobListing.postedAt}
           companyId={jobListing.companyId as string}
           company={jobListing.company as any}

@@ -17,7 +17,6 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull(),
   image: text("image"),
-  resumeUrl: text("resume_url"),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
   role: text("role"),
@@ -93,49 +92,27 @@ export const jobListing = pgTable("job_listing", {
   postedAt: timestamp("posted_at").notNull().defaultNow(),
 });
 
-export const requirement = pgTable("requirement", {
+export const jobListingRequirement = pgTable("job_listing_requirement", {
   id: text("id")
     .primaryKey()
     .notNull()
     .$defaultFn(() => crypto.randomUUID()),
-  name: text("name").notNull().unique(),
+  requirement: text("requirement").notNull(),
+  jobListingId: text("job_listing_id")
+    .notNull()
+    .references(() => jobListing.id, { onDelete: "cascade" }),
 });
 
-export const jobListingRequirement = pgTable(
-  "job_listing_requirement",
-  {
-    jobListingId: text("job_listing_id")
-      .notNull()
-      .references(() => jobListing.id, { onDelete: "cascade" }),
-    requirementId: text("requirement_id")
-      .notNull()
-      .references(() => requirement.id, { onDelete: "cascade" }),
-  },
-  (table) => [
-    primaryKey({ columns: [table.jobListingId, table.requirementId] }),
-  ],
-);
-
-export const skill = pgTable("skill", {
-  id: text("id")
+export const jobListingResponsibility = pgTable("job_listing_responsibility", {
+  id: text("responsibility_id")
     .primaryKey()
     .notNull()
     .$defaultFn(() => crypto.randomUUID()),
-  name: text("name").notNull().unique(),
+  responsibility: text("responsiblity").notNull(),
+  jobListingId: text("job_listing_id")
+    .notNull()
+    .references(() => jobListing.id, { onDelete: "cascade" }),
 });
-
-export const jobListingSkill = pgTable(
-  "job_listing_skill",
-  {
-    jobListingId: text("job_listing_id")
-      .notNull()
-      .references(() => jobListing.id, { onDelete: "cascade" }),
-    skillId: text("skill_id")
-      .notNull()
-      .references(() => skill.id, { onDelete: "cascade" }),
-  },
-  (table) => [primaryKey({ columns: [table.jobListingId, table.skillId] })],
-);
 
 export const jobApplicationStatus = pgEnum("job_application_status", [
   "pending",

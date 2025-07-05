@@ -20,6 +20,10 @@ export async function createJobAction(formData: FormData) {
   const location = formData.get("location");
   const type = formData.get("type");
   const experienceLevel = formData.get("experience_level");
+  const requirements = JSON.parse(formData.get("requirements") as string);
+  const responsibilities = JSON.parse(
+    formData.get("responsibilities") as string,
+  );
   const recruiterId = formData.get("recruiter_id");
   const result = jobListingSchema.safeParse({
     description,
@@ -27,7 +31,10 @@ export async function createJobAction(formData: FormData) {
     type,
     experience_level: experienceLevel,
     location,
+    requirements,
+    responsibilities,
   });
+  console.log(result.data, result.error);
   if (!result.success) {
     return {
       errors: result.error.flatten().fieldErrors,
@@ -40,6 +47,8 @@ export async function createJobAction(formData: FormData) {
       result.data.type,
       result.data.experience_level,
       result.data.description,
+      result.data.requirements,
+      result.data.responsibilities,
       recruiterId as string,
     );
   } catch (err) {
@@ -56,13 +65,18 @@ export async function updateJobListingAction(formData: FormData) {
   const location = formData.get("location");
   const type = formData.get("type");
   const experienceLevel = formData.get("experience_level");
-  console.log(id, position, description, location, type, experienceLevel);
+  const requirements = JSON.parse(formData.get("requirements") as string);
+  const responsibilities = JSON.parse(
+    formData.get("responsibilities") as string,
+  );
   const result = updateJobListingSchema.safeParse({
     description,
     position,
     type,
     experience_level: experienceLevel,
     location,
+    requirements,
+    responsibilities,
   });
   if (!result.success) {
     return {
@@ -77,6 +91,8 @@ export async function updateJobListingAction(formData: FormData) {
       result.data.location as string,
       result.data.type as "full" | "part" | "internship" | "remote",
       result.data.experience_level as "none" | "entry" | "mid" | "senior",
+      result.data.requirements,
+      result.data.responsibilities,
     );
   } catch (err) {
     return {

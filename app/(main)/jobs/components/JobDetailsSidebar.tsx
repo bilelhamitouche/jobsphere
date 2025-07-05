@@ -42,7 +42,7 @@ export default function JobDetailsSidebar({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
   return (
-    <Card className="sticky">
+    <Card className="sticky max-h-[400px] min-w-1/3">
       <CardHeader className="space-y-2">
         <Button
           size="lg"

@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { updateJobListingAction } from "@/actions/jobs";
@@ -41,6 +41,8 @@ interface EditJobFormProps {
   location: string | null;
   type: z.infer<typeof jobType>;
   experienceLevel: z.infer<typeof jobExperienceLevel>;
+  requirements: { requirement: string }[];
+  responsibilities: { responsibility: string }[];
 }
 
 export default function EditJobForm({ job }: { job: EditJobFormProps }) {
@@ -56,47 +58,72 @@ export default function EditJobForm({ job }: { job: EditJobFormProps }) {
       location: job.location ?? "",
       experience_level: job.experienceLevel,
       type: job.type,
+      requirements: job.requirements.map(
+        (requirement) => requirement.requirement,
+      ),
+      responsibilities: job.responsibilities.map(
+        (responsibility) => responsibility.responsibility,
+      ),
     },
   });
+  const {
+    fields: requirementFields,
+    append: requirementAppend,
+    remove: requirementRemove,
+  } = useFieldArray({
+    name: "requirements" as never,
+    control: form.control,
+  });
+  const {
+    fields: responsibilityFields,
+    append: responsibilityAppend,
+    remove: responsibilityRemove,
+  } = useFieldArray({
+    name: "responsibilities" as never,
+    control: form.control,
+  });
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-xl">Update Job Details</CardTitle>
-        <CardDescription>
-          Fill in the form to update the job info
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form
-            className="grid grid-cols-1 gap-4 space-y-2 md:grid-cols-2"
-            onSubmit={form.handleSubmit(
-              async (data: z.infer<typeof updateJobListingSchema>) => {
-                setIsSubmitting(true);
-                const formData = new FormData();
-                formData.append("position", data.position as string);
-                formData.append("description", data.description as string);
-                formData.append("location", data.location as string);
-                formData.append(
-                  "experience_level",
-                  data.experience_level as string,
-                );
-                formData.append("type", data.type as string);
-                formData.append("id", job.id);
-                try {
-                  const result = await updateJobListingAction(formData);
-                  if (!result?.errors && !result?.message) {
-                    toast.success("Job updated sucessfully");
-                    router.push("/recruiter/jobs");
-                  }
-                } catch (err) {
-                  toast.error(err as string);
-                } finally {
-                  setIsSubmitting(false);
-                }
-              },
-            )}
-          >
+    <Form {...form}>
+      <form
+        className="flex flex-col gap-4 space-y-2"
+        onSubmit={form.handleSubmit(
+          async (data: z.infer<typeof updateJobListingSchema>) => {
+            setIsSubmitting(true);
+            const formData = new FormData();
+            formData.append("position", data.position as string);
+            formData.append("description", data.description as string);
+            formData.append("location", data.location as string);
+            formData.append(
+              "experience_level",
+              data.experience_level as string,
+            );
+            formData.append("type", data.type as string);
+            formData.append("requirements", JSON.stringify(data.requirements));
+            formData.append(
+              "responsibilities",
+              JSON.stringify(data.responsibilities),
+            );
+            formData.append("id", job.id);
+            try {
+              const result = await updateJobListingAction(formData);
+              if (!result?.errors && !result?.message) {
+                toast.success("Job updated sucessfully");
+                router.push("/recruiter/jobs");
+              }
+            } catch (err) {
+              toast.error(err as string);
+            } finally {
+              setIsSubmitting(false);
+            }
+          },
+        )}
+      >
+        <Card className="p-8">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold">Job Details</CardTitle>
+            <CardDescription>Fill in to edit job details</CardDescription>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <FormField
               name="position"
               control={form.control}
@@ -190,19 +217,107 @@ export default function EditJobForm({ job }: { job: EditJobFormProps }) {
                 </FormItem>
               )}
             />
-            <Button className="md:col-span-2" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <div className="flex gap-2 items-center">
-                  <Loader2 className="animate-spin" />
-                  <span>Please wait</span>
-                </div>
-              ) : (
-                <span>Save</span>
-              )}
+          </CardContent>
+        </Card>
+        <Card className="p-8">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold">
+              Job Requirements
+            </CardTitle>
+            <CardDescription>Fill in to change requirements</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {requirementFields.map((field, index) => (
+              <FormField
+                key={field.id}
+                name={`requirements.${index}`}
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Requirement {index + 1}</FormLabel>
+                    <FormControl>
+                      <div className="flex gap-2">
+                        <Input {...field} placeholder="Enter requirement" />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          onClick={() => requirementRemove(index)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => requirementAppend("")}
+            >
+              Add Requirement
             </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl font-bold">
+              Job responsibilities
+            </CardTitle>
+            <CardDescription>
+              Fill in to edit job responsibilities
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {responsibilityFields.map((field, index) => (
+              <FormField
+                key={field.id}
+                name={`responsibilities.${index}`}
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Requirement {index + 1}</FormLabel>
+                    <FormControl>
+                      <div className="flex gap-2">
+                        <Input {...field} placeholder="Enter responsibility" />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          onClick={() => responsibilityRemove(index)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => responsibilityAppend("")}
+            >
+              Add Responsibility
+            </Button>
+          </CardContent>
+        </Card>
+        <Button className="md:col-span-2" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <div className="flex gap-2 items-center">
+              <Loader2 className="animate-spin" />
+              <span>Please wait</span>
+            </div>
+          ) : (
+            <span>Save</span>
+          )}
+        </Button>
+      </form>
+    </Form>
   );
 }

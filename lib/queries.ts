@@ -4,6 +4,8 @@ import {
   db,
   jobListing,
   jobListingApplication,
+  jobListingRequirement,
+  jobListingResponsibility,
   jobListingSaved,
   user,
 } from "./drizzle";
@@ -103,8 +105,24 @@ export async function getJobListingById(id: string) {
       })
       .from(jobListing)
       .leftJoin(company, eq(jobListing.companyId, company.id))
+      .leftJoin(
+        jobListingRequirement,
+        eq(jobListing.id, jobListingRequirement.jobListingId),
+      )
+      .leftJoin(
+        jobListingResponsibility,
+        eq(jobListing.id, jobListingResponsibility.jobListingId),
+      )
       .where(eq(jobListing.id, id));
-    return job;
+    const requirements = await db
+      .select({ requirement: jobListingRequirement.requirement })
+      .from(jobListingRequirement)
+      .where(eq(jobListingRequirement.jobListingId, id));
+    const responsibilities = await db
+      .select({ responsibility: jobListingResponsibility.responsibility })
+      .from(jobListingResponsibility)
+      .where(eq(jobListingResponsibility.jobListingId, id));
+    return { ...job[0], requirements, responsibilities };
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
@@ -133,26 +151,44 @@ export async function createJobListing(
   type: z.infer<typeof jobType>,
   experience_level: z.infer<typeof jobExperienceLevel>,
   description: string,
+  requirements: string[],
+  responsibilities: string[],
   recruiterId: string,
 ) {
   await isRecruiterAuthenticated();
   try {
-    const data = await db
-      .select({ id: company.id })
-      .from(company)
-      .where(eq(company.recruiterId, recruiterId));
-    const companyId = data[0].id;
-    await db
-      .insert(jobListing)
-      .values({
-        position,
-        description,
-        type,
-        experienceLevel: experience_level,
-        location,
-        companyId,
-      })
-      .returning();
+    await db.transaction(async (tx) => {
+      const data = await tx
+        .select({ id: company.id })
+        .from(company)
+        .where(eq(company.recruiterId, recruiterId));
+      const companyId = data[0].id;
+      const id = await tx
+        .insert(jobListing)
+        .values({
+          position,
+          description,
+          type,
+          experienceLevel: experience_level,
+          location,
+          companyId,
+        })
+        .returning({ id: jobListing.id });
+      requirements.map(
+        async (requirement) =>
+          await tx.insert(jobListingRequirement).values({
+            requirement,
+            jobListingId: id[0].id,
+          }),
+      );
+      responsibilities.map(
+        async (responsibility) =>
+          await tx.insert(jobListingResponsibility).values({
+            jobListingId: id[0].id,
+            responsibility,
+          }),
+      );
+    });
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
@@ -167,13 +203,33 @@ export async function updateJobListing(
   location: string,
   type: "full" | "part" | "internship" | "remote",
   experienceLevel: "none" | "entry" | "mid" | "senior",
+  requirements: string[],
+  responsibilities: string[],
 ) {
   await isRecruiterAuthenticated();
   try {
-    await db
-      .update(jobListing)
-      .set({ position, description, location, type, experienceLevel })
-      .where(eq(jobListing.id, id));
+    await db.transaction(async (tx) => {
+      await tx
+        .update(jobListing)
+        .set({ position, description, location, type, experienceLevel })
+        .where(eq(jobListing.id, id));
+      await tx
+        .delete(jobListingRequirement)
+        .where(eq(jobListingRequirement.jobListingId, id));
+      await tx
+        .delete(jobListingResponsibility)
+        .where(eq(jobListingResponsibility.jobListingId, id));
+      requirements.map(async (requirement) => {
+        await tx
+          .insert(jobListingRequirement)
+          .values({ requirement: requirement, jobListingId: id });
+      });
+      responsibilities.map(async (responsibility) => {
+        await tx
+          .insert(jobListingResponsibility)
+          .values({ responsibility: responsibility, jobListingId: id });
+      });
+    });
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
