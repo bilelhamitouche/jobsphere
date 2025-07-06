@@ -4,6 +4,9 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ClientProvider } from "@/components/QueryClientProvider";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { ourFileRouter } from "./api/uploadthing/core";
+import { extractRouterConfig } from "uploadthing/server";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -25,6 +28,7 @@ export default function RootLayout({
     <html lang="en" className="h-full">
       <ClientProvider>
         <body className={`${inter.className} h-full antialiased`}>
+          <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
           <NuqsAdapter>{children}</NuqsAdapter>
           <Toaster richColors closeButton theme="light" />
         </body>

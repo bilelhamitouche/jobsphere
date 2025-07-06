@@ -9,7 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { BriefcaseBusiness, Home, Send } from "lucide-react";
+import { BriefcaseBusiness, DownloadCloud, Home, Send } from "lucide-react";
 import Link from "next/link";
 import AvatarDropdown from "./avatar-dropdown";
 import { redirect } from "next/navigation";
@@ -49,6 +49,14 @@ export default async function JobseekerSidebar() {
               <Link href="/jobseeker/applications">
                 <Send />
                 <span>Applications</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link href="/jobseeker/resume">
+                <DownloadCloud />
+                <span>Resume</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
