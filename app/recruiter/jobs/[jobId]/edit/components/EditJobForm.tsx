@@ -279,7 +279,7 @@ export default function EditJobForm({ job }: { job: EditJobFormProps }) {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Requirement {index + 1}</FormLabel>
+                    <FormLabel>Responsibility {index + 1}</FormLabel>
                     <FormControl>
                       <div className="flex gap-2">
                         <Input {...field} placeholder="Enter responsibility" />
