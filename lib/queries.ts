@@ -504,16 +504,16 @@ export async function createSavedJob(userId: string, jobId: string) {
 
 export async function wasSaved(userId: string, jobId: string) {
   try {
-    const application = await db
+    const saved = await db
       .select()
       .from(jobListingSaved)
       .where(
         and(
-          eq(jobListingApplication.userId, userId),
-          eq(jobListingApplication.jobListingId, jobId),
+          eq(jobListingSaved.userId, userId),
+          eq(jobListingSaved.jobListingId, jobId),
         ),
       );
-    return application.length > 0;
+    return saved.length > 0;
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
