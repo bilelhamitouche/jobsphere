@@ -64,9 +64,13 @@ export default async function CompanyDetails({
         <div className="flex flex-col gap-4">
           <Button variant="outline" asChild>
             <Link
+              target="_blank"
               href={
                 company.company.website
-                  ? company.company.website
+                  ? company.company.website.includes("http://") ||
+                    company.company.website.includes("https://")
+                    ? company.company.website
+                    : `https://${company.company.website}`
                   : "https://linkedin.com/" + company.company.name
               }
             >
