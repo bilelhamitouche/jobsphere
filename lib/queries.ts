@@ -19,6 +19,28 @@ import {
   jobType,
 } from "./zod";
 
+export async function createResumeUrl(url: string) {
+  await isAuthenticated();
+  try {
+    await db.insert(user).values({ resumeUrl: url });
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function updateResumeUrl(url: string, userId: string) {
+  await isAuthenticated();
+  try {
+    await db.update(user).set({ resumeUrl: url }).where(eq(user.id, userId));
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
 export async function getJobListings() {
   try {
     const jobListings = await db

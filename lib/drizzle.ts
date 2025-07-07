@@ -20,6 +20,7 @@ export const user = pgTable("user", {
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
   role: text("role"),
+  resumeUrl: text("resume_url"),
 });
 
 export const session = pgTable("session", {
