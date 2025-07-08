@@ -1,4 +1,5 @@
 import { getUserInfo } from "@/actions/auth";
+import { updateResumeUrl } from "@/lib/queries";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
@@ -17,11 +18,7 @@ export const ourFileRouter = {
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log("Upload complete for userId:", metadata.userId);
-
-      console.log("file url", file.ufsUrl);
-
-      // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
+      await updateResumeUrl(file.ufsUrl, metadata.userId);
       return { uploadedBy: metadata.userId, uploaded: file.ufsUrl };
     }),
 } satisfies FileRouter;

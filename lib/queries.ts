@@ -19,10 +19,13 @@ import {
   jobType,
 } from "./zod";
 
-export async function createResumeUrl(url: string) {
-  await isAuthenticated();
+export async function getResumeUrl(userId: string) {
   try {
-    await db.insert(user).values({ resumeUrl: url });
+    const resumeUrl = await db
+      .select({ resumeUrl: user.resumeUrl })
+      .from(user)
+      .where(eq(user.id, userId));
+    return resumeUrl[0].resumeUrl;
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");
@@ -31,7 +34,6 @@ export async function createResumeUrl(url: string) {
 }
 
 export async function updateResumeUrl(url: string, userId: string) {
-  await isAuthenticated();
   try {
     await db.update(user).set({ resumeUrl: url }).where(eq(user.id, userId));
   } catch (err) {
