@@ -7,6 +7,7 @@ import { toast } from "sonner";
 export default function UploaderButton() {
   return (
     <UploadButton
+      className="ut-button:text-primary-foreground ut-button:bg-primary"
       endpoint="pdfUploader"
       onClientUploadComplete={(res) => {
         toast.success("Resume uploaded successfully");
