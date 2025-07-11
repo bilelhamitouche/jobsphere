@@ -15,7 +15,7 @@ interface JobDetailsCardProps {
   responsibilities: { responsibility: string }[];
   postedAt: Date;
   companyId: string;
-  company: string;
+  company: string | null;
   companyLogo: string | null;
   companyIndustry: z.infer<typeof companyIndustry>;
 }
