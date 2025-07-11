@@ -11,7 +11,7 @@ export default async function EditCompanyInfo() {
       <h2 className="text-3xl font-bold">Edit Company Information</h2>
       <EditCompanyInfoForm
         recruiterId={user?.id as string}
-        companyInfo={companyInfo[0] as any}
+        companyInfo={companyInfo[0]}
       />
     </div>
   );

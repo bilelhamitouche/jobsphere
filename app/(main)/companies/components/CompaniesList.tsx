@@ -4,8 +4,10 @@ import { notFound } from "next/navigation";
 
 export default async function CompaniesList({ search }: { search: string }) {
   const companies = await getCompanies();
-  if(!companies) notFound();
-  const filteredCompanies = companies.filter((company) => company.name.includes(search));
+  if (!companies) notFound();
+  const filteredCompanies = companies.filter((company) =>
+    company.name.toLowerCase().includes(search.toLowerCase()),
+  );
   if (filteredCompanies.length === 0) {
     return (
       <div className="p-8 text-lg font-medium text-gray-700">

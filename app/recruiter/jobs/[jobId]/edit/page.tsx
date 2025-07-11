@@ -12,7 +12,7 @@ export default async function EditJob({
   return (
     <div className="p-6 space-y-4 w-full h-full">
       <h2 className="text-3xl font-bold">Update Job</h2>
-      <EditJobForm job={job as any} />
+      <EditJobForm job={job} />
     </div>
   );
 }

@@ -8,6 +8,7 @@ import Navbar from "../components/navbar";
 export default async function Jobs() {
   const user = await getUserInfo();
   const jobs = await getSavedJobsById(user?.id as string);
+  if (!jobs) throw new Error("Something went wrong");
   return (
     <div className="w-full h-full">
       <Navbar />
@@ -15,7 +16,7 @@ export default async function Jobs() {
         <h2 className="text-3xl font-bold">Jobs Saved</h2>
         <Card>
           <CardContent>
-            <DataTable columns={columns} data={jobs as any} />
+            <DataTable columns={columns} data={jobs} />
           </CardContent>
         </Card>
       </div>

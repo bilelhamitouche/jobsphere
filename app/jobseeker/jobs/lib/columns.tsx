@@ -8,17 +8,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { jobExperienceLevel, jobType } from "@/lib/zod";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreVertical, Trash } from "lucide-react";
 import { toast } from "sonner";
+import { z } from "zod";
 
 export type Job = {
   id: string;
   userId: string;
-  position: string;
+  position: string | null;
   location: string | null;
-  type: "full" | "part" | "internship" | "remote";
-  experienceLevel: "none" | "entry" | "mid" | "senior";
+  type: z.infer<typeof jobType> | null;
+  experienceLevel: z.infer<typeof jobExperienceLevel> | null;
 };
 
 export const columns: ColumnDef<Job>[] = [

@@ -90,7 +90,7 @@ export default function CompanyInfo({ recruiterId }: { recruiterId: string }) {
                     if (result?.errors) toast.error("Invalid inputs");
                     if (!result?.errors) toast.success("Company Info created");
                   } catch (err) {
-                    toast.error("Error creating company");
+                    toast.error(err as string);
                   } finally {
                     setIsSubmitting(false);
                   }

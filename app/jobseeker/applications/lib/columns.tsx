@@ -5,10 +5,10 @@ import { ColumnDef } from "@tanstack/react-table";
 export type Job = {
   id: string;
   userId: string;
-  position: string;
+  position: string | null;
   location: string | null;
-  postedAt: Date;
-  status: "pending" | "accepted" | "rejected";
+  postedAt: Date | null;
+  status: "pending" | "accepted" | "rejected" | null;
 };
 
 export const columns: ColumnDef<Job>[] = [
@@ -22,7 +22,7 @@ export const columns: ColumnDef<Job>[] = [
   },
   {
     cell: (props) =>
-      formatDistance(props.row.original.postedAt, new Date(), {
+      formatDistance(props.row.original.postedAt as Date, new Date(), {
         addSuffix: true,
       }),
     header: "Posted At",

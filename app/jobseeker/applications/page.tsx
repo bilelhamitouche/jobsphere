@@ -17,7 +17,7 @@ export default async function Applications() {
         <h2 className="text-3xl font-bold">Job Applications</h2>
         <Card>
           <CardContent>
-            <DataTable columns={columns} data={jobApplications as any} />
+            <DataTable columns={columns} data={jobApplications} />
           </CardContent>
         </Card>
       </div>

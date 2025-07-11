@@ -35,9 +35,11 @@ export default async function JobListing({
           responsibilities={jobListing.responsibilities}
           postedAt={jobListing.postedAt}
           companyId={jobListing.companyId as string}
-          company={jobListing.company as any}
+          company={jobListing.company}
           companyLogo={jobListing.companyLogo}
-          companyIndustry={jobListing.companyIndustry as any}
+          companyIndustry={
+            jobListing.companyIndustry as z.infer<typeof companyIndustry>
+          }
         />
         <JobDetailsSidebar
           id={jobListing.id as string}

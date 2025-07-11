@@ -16,14 +16,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { deleteJobListingApplicationAction } from "@/actions/jobs";
 
 export type JobApplication = {
-  id: string;
-  userId: string;
-  username: string;
-  userImage: string;
-  resume: string;
-  position: string;
+  id: string | null;
+  userId: string | null;
+  username: string | null;
+  image: string | null;
+  resume: string | null;
+  position: string | null;
   location: string | null;
-  status: "pending" | "accepted" | "rejected";
+  status: "pending" | "accepted" | "rejected" | null;
   appliedAt: Date;
 };
 
@@ -37,11 +37,11 @@ export const columns: ColumnDef<JobApplication>[] = [
         <div className="flex gap-2 items-center">
           <Avatar>
             <AvatarImage
-              src={jobApplication.userImage}
+              src={jobApplication.image as string}
               alt={`${jobApplication.username} image`}
             />
             <AvatarFallback>
-              {jobApplication.username.toUpperCase()[0]}
+              {jobApplication.username?.toUpperCase()[0] || ""}
             </AvatarFallback>
           </Avatar>
           <span>{jobApplication.username}</span>
@@ -82,8 +82,8 @@ export const columns: ColumnDef<JobApplication>[] = [
               onClick={async () => {
                 try {
                   const result = await deleteJobListingApplicationAction(
-                    jobApplication.userId,
-                    jobApplication.id,
+                    jobApplication.userId as string,
+                    jobApplication.id as string,
                   );
                   if (!result?.message) {
                     toast.success("Job deleted successfully");
