@@ -118,7 +118,7 @@ export default function EditJobForm({ job }: { job: EditJobFormProps }) {
           },
         )}
       >
-        <Card className="p-8">
+        <Card>
           <CardHeader>
             <CardTitle className="text-xl font-bold">Job Details</CardTitle>
             <CardDescription>Fill in to edit job details</CardDescription>
@@ -219,7 +219,7 @@ export default function EditJobForm({ job }: { job: EditJobFormProps }) {
             />
           </CardContent>
         </Card>
-        <Card className="p-8">
+        <Card>
           <CardHeader>
             <CardTitle className="text-xl font-bold">
               Job Requirements
