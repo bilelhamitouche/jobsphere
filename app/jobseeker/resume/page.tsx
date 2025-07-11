@@ -3,8 +3,6 @@ import UploaderButton from "@/components/UploadButton";
 import { getResumeUrl } from "@/lib/queries";
 import Navbar from "../components/navbar";
 
-export const dynamic = true;
-
 export default async function Resume() {
   const user = await getUserInfo();
   const resumeUrl = await getResumeUrl(user?.id as string);
