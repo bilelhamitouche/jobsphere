@@ -113,7 +113,7 @@ export default function EditCompanyInfoForm({
                     router.push("/recruiter/company");
                   }
                 } catch (err) {
-                  toast.error("Error creating company");
+                  toast.error(err as string);
                 } finally {
                   setIsSubmitting(false);
                 }
