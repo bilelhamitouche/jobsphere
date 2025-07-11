@@ -9,7 +9,7 @@ export default function UploaderButton() {
     <UploadButton
       className="ut-button:text-primary-foreground ut-button:bg-primary"
       endpoint="pdfUploader"
-      onClientUploadComplete={(res) => {
+      onClientUploadComplete={() => {
         toast.success("Resume uploaded successfully");
         revalidate();
       }}
