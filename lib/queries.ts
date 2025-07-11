@@ -308,7 +308,10 @@ export async function getJobApplicationsByRecruiterId(recruiterId: string) {
     const jobApplications = await db
       .select({
         id: jobListing.id,
+        userId: user.id,
         username: user.name,
+        image: user.image,
+        resume: user.resumeUrl,
         position: jobListing.position,
         location: jobListing.location,
         status: jobListingApplication.status,
