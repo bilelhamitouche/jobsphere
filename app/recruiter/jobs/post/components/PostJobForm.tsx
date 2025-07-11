@@ -100,7 +100,7 @@ export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
           },
         )}
       >
-        <Card className="p-8">
+        <Card>
           <CardHeader>
             <CardTitle className="text-xl font-bold">Job Details</CardTitle>
             <CardDescription>
@@ -197,7 +197,7 @@ export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
             />
           </CardContent>
         </Card>
-        <Card className="p-8">
+        <Card>
           <CardHeader>
             <CardTitle className="text-xl font-bold">
               Job Requirements
