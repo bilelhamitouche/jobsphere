@@ -166,7 +166,11 @@ export async function getJobListingCountByRecruiterId(recruiterId: string) {
       .from(jobListing)
       .where(eq(jobListing.companyId, companyId[0].id));
     return jobListingCount[0].count;
-  } catch (err) {}
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
 }
 
 export async function createJobListing(
