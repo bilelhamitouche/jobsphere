@@ -75,7 +75,7 @@ export default function AvatarDropdown({
             authClient.signOut({
               fetchOptions: {
                 onSuccess: () => {
-                  router.push("/recruiter-signin");
+                  router.push("/signin");
                 },
               },
             })
