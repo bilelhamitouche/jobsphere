@@ -66,7 +66,7 @@ export default function JobDetailsSidebar({
                 if (result?.message) toast.error(result?.message as string);
               }
             } catch (err) {
-              toast.error("Something wrong happened");
+              toast.error(err as string);
             } finally {
               setIsLoading(false);
             }
@@ -91,7 +91,7 @@ export default function JobDetailsSidebar({
                 if (result?.message) toast.error(result?.message as string);
               }
             } catch (err) {
-              toast.error("Something wrong happened");
+              toast.error(err as string);
             } finally {
               setIsSaveLoading(false);
             }
