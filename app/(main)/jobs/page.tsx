@@ -12,7 +12,6 @@ export default async function Jobs({
   }>;
 }) {
   const { search, type, experience } = await searchParams;
-  console.log(search, type, experience);
   return (
     <div className="p-8 space-y-8 h-full bg-primary-foreground">
       <h1 className="text-3xl font-bold">Browse Jobs</h1>
