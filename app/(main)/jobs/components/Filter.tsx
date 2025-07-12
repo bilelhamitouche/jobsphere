@@ -9,6 +9,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Briefcase, Star } from "lucide-react";
@@ -19,12 +20,16 @@ const types: string[] = ["full", "part", "internship", "remote"];
 
 export default function Filter() {
   const [experience, setExperience] = useQueryState("experience", {
-    defaultValue: "",
+    shallow: false,
+  });
+  const [type, setType] = useQueryState("type", {
+    shallow: false,
   });
 
   function resetFilters(e: FormEvent) {
     e.preventDefault();
     setExperience(null);
+    setType(null);
   }
   return (
     <Card className="col-start-1 col-end-3 row-start-2 row-end-3 md:col-end-2 min-w-xs">
@@ -50,14 +55,16 @@ export default function Filter() {
             <span>Experience Level</span>
           </h2>
           <Select
-            value={experience}
+            defaultValue={experience || ""}
             onValueChange={(value) => setExperience(value)}
           >
-            <SelectTrigger className="w-full">Experience</SelectTrigger>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Experience" />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">No Experience</SelectItem>
-              <SelectItem value="junior">Junior</SelectItem>
-              <SelectItem value="intermediate">Intermediate</SelectItem>
+              <SelectItem value="entry">Junior</SelectItem>
+              <SelectItem value="mid">Intermediate</SelectItem>
               <SelectItem value="senior">Senior</SelectItem>
             </SelectContent>
           </Select>

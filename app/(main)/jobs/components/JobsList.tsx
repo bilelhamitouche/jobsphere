@@ -1,7 +1,15 @@
 import JobCard from "./JobCard";
 import { getJobListings } from "@/lib/queries";
 
-export default async function JobsList() {
+export default async function JobsList({
+  search,
+  type,
+  experience,
+}: {
+  search: string;
+  type: string;
+  experience: string;
+}) {
   const jobs = await getJobListings();
   if (!jobs || jobs.length === 0)
     return (
@@ -9,9 +17,17 @@ export default async function JobsList() {
         No jobs found
       </div>
     );
+  const filteredJobs = jobs.filter((job) => {
+    return (
+      job.company?.toLowerCase().includes(search.toLowerCase()) &&
+      (experience === "" || job.experienceLevel === experience) &&
+      (type === "" || job.type === type)
+    );
+  });
+  console.log(jobs, filteredJobs);
   return (
     <ul className="flex flex-col col-start-1 col-end-3 row-start-3 row-end-4 gap-4 w-full md:col-start-2 md:row-start-2 md:row-end-3">
-      {jobs.map((job) => (
+      {filteredJobs.map((job) => (
         <JobCard
           key={job.id}
           id={job.id}
