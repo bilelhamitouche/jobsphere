@@ -16,8 +16,6 @@ import { Briefcase, Star } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { FormEvent } from "react";
 
-const types: string[] = ["full", "part", "internship", "remote"];
-
 export default function Filter() {
   const [experience, setExperience] = useQueryState("experience", {
     shallow: false,
@@ -31,6 +29,7 @@ export default function Filter() {
     setExperience(null);
     setType(null);
   }
+
   return (
     <Card className="col-start-1 col-end-3 row-start-2 row-end-3 md:col-end-2 min-w-xs">
       <CardContent className="flex flex-col items-start space-y-4">
@@ -41,14 +40,20 @@ export default function Filter() {
             <Briefcase size="18" />
             <span>Job Type</span>
           </h2>
-          {types.map((type: string, index: number) => (
-            <div className="flex gap-2" key={index}>
-              <Checkbox id={type} name={type} value={type} />
-              <Label htmlFor={type} className="capitalize">
-                {type} {type === "full" || type === "part" ? "time" : ""}
-              </Label>
-            </div>
-          ))}
+          <Select
+            defaultValue={type || ""}
+            onValueChange={(value) => setType(value)}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="full">Full-Time</SelectItem>
+              <SelectItem value="part">Part-Time</SelectItem>
+              <SelectItem value="internship">Internship</SelectItem>
+              <SelectItem value="remote">Remote</SelectItem>
+            </SelectContent>
+          </Select>
           <Separator />
           <h2 className="flex gap-2 items-center">
             <Star size="18" />
