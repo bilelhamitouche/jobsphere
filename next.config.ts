@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    remotePatterns: [{
+      hostname: "images.unsplash.com"
+    }]
+  }
 };
 
 export default nextConfig;
