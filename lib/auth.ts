@@ -20,6 +20,12 @@ export const auth = betterAuth({
         nullable: false,
       },
     },
+    changeEmail: {
+      enabled: true,
+    },
+    deleteUser: {
+      enabled: true,
+    },
   },
   plugins: [nextCookies()],
 });
