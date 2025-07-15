@@ -53,7 +53,7 @@ export default function AvatarDropdown({
         </DropdownMenuItem>
         <DropdownMenuItem>
           <Settings />
-          <Link href="/settings">Settings</Link>
+          <Link href="/settings/account">Settings</Link>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() =>
