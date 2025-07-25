@@ -24,7 +24,6 @@ export default async function JobsList({
       (type === "" || job.type === type)
     );
   });
-  console.log(jobs, filteredJobs);
   return (
     <ul className="flex flex-col col-start-1 col-end-3 row-start-3 row-end-4 gap-4 w-full md:col-start-2 md:row-start-2 md:row-end-3">
       {filteredJobs.map((job) => (

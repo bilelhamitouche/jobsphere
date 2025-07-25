@@ -1,6 +1,8 @@
+import { Suspense } from "react";
 import Filter from "./components/Filter";
 import JobsList from "./components/JobsList";
 import Search from "./components/Search";
+import { Loader } from "lucide-react";
 
 export default async function Jobs({
   searchParams,
@@ -18,11 +20,19 @@ export default async function Jobs({
       <div className="grid gap-4 grid-rows-[auto_auto_1fr] grid-cols-[auto_1fr]">
         <Search />
         <Filter />
-        <JobsList
-          search={search || ""}
-          type={type || ""}
-          experience={experience || ""}
-        />
+        <Suspense
+          fallback={
+            <div className="flex justify-center items-center p-8 h-full">
+              <Loader size="40" className="text-gray-500 animate-spin" />
+            </div>
+          }
+        >
+          <JobsList
+            search={search || ""}
+            type={type || ""}
+            experience={experience || ""}
+          />
+        </Suspense>
       </div>
     </div>
   );

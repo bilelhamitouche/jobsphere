@@ -7,6 +7,9 @@ import { z } from "zod";
 import { getUserInfo } from "@/actions/auth";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { Suspense } from "react";
+import JobDetailsCardSkeleton from "../components/JobDetailsCardSkeleton";
+import JobDetailsSidebarSkeleton from "../components/JobDetailsSidebarSkeleton";
 
 export default async function JobListing({
   params,
@@ -26,33 +29,37 @@ export default async function JobListing({
         <span className="text-primary">Back to Jobs</span>
       </Link>
       <div className="flex flex-col gap-8 w-full h-full md:flex-row">
-        <JobDetailsCard
-          position={jobListing.position}
-          description={jobListing.description}
-          location={jobListing.location}
-          type={jobListing.type as z.infer<typeof jobType>}
-          requirements={jobListing.requirements}
-          responsibilities={jobListing.responsibilities}
-          postedAt={jobListing.postedAt}
-          companyId={jobListing.companyId as string}
-          company={jobListing.company}
-          companyLogo={jobListing.companyLogo}
-          companyIndustry={
-            jobListing.companyIndustry as z.infer<typeof companyIndustry>
-          }
-        />
-        <JobDetailsSidebar
-          id={jobListing.id as string}
-          userId={user?.id as string}
-          hasApplied={applied as boolean}
-          wasSaved={saved as boolean}
-          companyId={jobListing.companyId as string}
-          companyName={jobListing.company}
-          companyLogo={jobListing.companyLogo}
-          companyIndustry={
-            jobListing.companyIndustry as z.infer<typeof companyIndustry>
-          }
-        />
+        <Suspense fallback={<JobDetailsCardSkeleton />}>
+          <JobDetailsCard
+            position={jobListing.position}
+            description={jobListing.description}
+            location={jobListing.location}
+            type={jobListing.type as z.infer<typeof jobType>}
+            requirements={jobListing.requirements}
+            responsibilities={jobListing.responsibilities}
+            postedAt={jobListing.postedAt}
+            companyId={jobListing.companyId as string}
+            company={jobListing.company}
+            companyLogo={jobListing.companyLogo}
+            companyIndustry={
+              jobListing.companyIndustry as z.infer<typeof companyIndustry>
+            }
+          />
+        </Suspense>
+        <Suspense fallback={<JobDetailsSidebarSkeleton />}>
+          <JobDetailsSidebar
+            id={jobListing.id as string}
+            userId={user?.id as string}
+            hasApplied={applied as boolean}
+            wasSaved={saved as boolean}
+            companyId={jobListing.companyId as string}
+            companyName={jobListing.company}
+            companyLogo={jobListing.companyLogo}
+            companyIndustry={
+              jobListing.companyIndustry as z.infer<typeof companyIndustry>
+            }
+          />
+        </Suspense>
       </div>
     </div>
   );
