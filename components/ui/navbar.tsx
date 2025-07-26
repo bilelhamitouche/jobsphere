@@ -4,6 +4,7 @@ import { Button } from "./button";
 import AvatarDropdown from "./avatar-dropdown";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import MobileMenu from "./mobile-menu";
 
 export default async function Navbar() {
   const session = await auth.api.getSession({
@@ -49,9 +50,7 @@ export default async function Navbar() {
       ) : (
         <AvatarDropdown userInfo={session.user} />
       )}
-      <Button variant="outline" className="block md:hidden">
-        <Menu />
-      </Button>
+      <MobileMenu />
     </header>
   );
 }
