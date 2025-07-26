@@ -31,7 +31,7 @@ export default function AvatarDropdown({
   const router = useRouter();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className="hidden md:block">
         <Avatar>
           <AvatarImage
             src={userInfo.image as string}
