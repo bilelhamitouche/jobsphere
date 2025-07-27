@@ -1,4 +1,4 @@
-import { BriefcaseBusiness, Menu } from "lucide-react";
+import { BriefcaseBusiness } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./button";
 import AvatarDropdown from "./avatar-dropdown";
@@ -50,7 +50,7 @@ export default async function Navbar() {
       ) : (
         <AvatarDropdown userInfo={session.user} />
       )}
-      <MobileMenu />
+      <MobileMenu authenticated={!!session} />
     </header>
   );
 }

@@ -9,7 +9,11 @@ import {
 } from "../ui/sheet";
 import { Menu } from "lucide-react";
 
-export default function MobileMenu() {
+export default function MobileMenu({
+  authenticated,
+}: {
+  authenticated: boolean;
+}) {
   return (
     <Sheet defaultOpen={false}>
       <SheetTrigger asChild>
@@ -32,14 +36,16 @@ export default function MobileMenu() {
             About Us
           </Link>
         </nav>
-        <div className="flex flex-col gap-2 px-4">
-          <Button variant="outline" asChild>
-            <Link href="/signin">Signin</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/recruiter-signin">Recruiter Signin</Link>
-          </Button>
-        </div>
+        {authenticated ? null : (
+          <div className="flex flex-col gap-2 px-4">
+            <Button variant="outline" asChild>
+              <Link href="/signin">Signin</Link>
+            </Button>
+            <Button asChild>
+              <Link href="/recruiter-signin">Recruiter Signin</Link>
+            </Button>
+          </div>
+        )}
       </SheetContent>
     </Sheet>
   );
