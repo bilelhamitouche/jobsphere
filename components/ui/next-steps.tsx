@@ -13,15 +13,13 @@ function NextSteps() {
       </p>
       <div className="space-x-4">
         <Button
-          variant="outline"
-          className="text-primary hover:text-primary-foreground hover:bg-primary"
+          variant="secondary"
           asChild
         >
           <Link href="/signup">Create an account</Link>
         </Button>
         <Button
-          variant="outline"
-          className="text-primary hover:text-primary-foreground hover:bg-primary"
+          variant="secondary"
           asChild
         >
           <Link href="/jobs">Browse Jobs</Link>
