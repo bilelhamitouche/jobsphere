@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800">
+  <!-- Purple rounded square background -->
+  <rect x="100" y="100" width="600" height="600" rx="120" fill="#8a79ab"/>
+  
+  <!-- White briefcase -->
+  <g stroke="white" stroke-width="16" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Handle -->
+    <path d="M 310 260 L 310 240 Q 310 210 340 210 L 460 210 Q 490 210 490 240 L 490 260"/>
+    
+    <!-- Main briefcase body -->
+    <rect x="240" y="260" width="320" height="240" rx="16" fill="white" stroke="white"/>
+    
+    <!-- Middle line detail -->
+    <line x1="240" y1="380" x2="560" y2="380" stroke="#8a79ab" stroke-width="12"/>
+    
+    <!-- Lock -->
+    <circle cx="400" cy="380" r="16" fill="#8a79ab" stroke="none"/>
+    <line x1="400" y1="396" x2="400" y2="430" stroke="#8a79ab" stroke-width="12"/>
+  </g>
+  
+  <!-- Text: JobSphere -->
+  <text x="400" y="840" font-family="Arial, sans-serif" font-size="112" font-weight="600" fill="#8a79ab" text-anchor="middle">JobSphere</text>
+</svg>

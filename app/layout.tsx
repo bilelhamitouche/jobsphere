@@ -25,6 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full light">
+      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       <body className={`${inter.className} h-full antialiased`}>
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <NuqsAdapter>{children}</NuqsAdapter>
