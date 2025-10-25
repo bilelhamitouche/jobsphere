@@ -12,22 +12,18 @@ function PopularCategories() {
         <CategoryCard
           icon={<Code size="48" className="text-primary" />}
           text="Programming"
-          jobs={10}
         />
         <CategoryCard
           icon={<Network size="48" className="text-primary" />}
           text="Networking"
-          jobs={2}
         />
         <CategoryCard
           icon={<Brush size="48" className="text-primary" />}
           text="Design"
-          jobs={4}
         />
         <CategoryCard
           icon={<Database size="48" className="text-primary" />}
           text="Data Science"
-          jobs={10}
         />
       </div>
     </div>
