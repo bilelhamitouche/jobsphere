@@ -18,7 +18,7 @@ function TestimonialCard({
     <Card className="text-left">
       <CardHeader>
         <Avatar>
-          <AvatarImage src={avatarImage} alt={`${name} image`} />
+          <AvatarImage src={avatarImage} alt={`${name} image`} className="object-cover" />
         </Avatar>
       </CardHeader>
       <CardContent>{testimonial}</CardContent>
