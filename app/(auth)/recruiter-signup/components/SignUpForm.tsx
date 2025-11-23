@@ -131,7 +131,7 @@ function SignUpForm() {
         <p className="text-sm">
           <span>Already have an account?</span>
           <Button variant="link" size="sm" asChild>
-            <Link href="/signin">Sign In</Link>
+            <Link href="/recruiter-signin">Sign In</Link>
           </Button>
         </p>
       </CardFooter>
