@@ -5,6 +5,7 @@ import AvatarDropdown from "./avatar-dropdown";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import MobileMenu from "./mobile-menu";
+import Logo from "./logo";
 
 export default async function Navbar() {
   const session = await auth.api.getSession({
@@ -12,10 +13,7 @@ export default async function Navbar() {
   });
   return (
     <header className="container flex justify-between items-center p-4 mx-auto">
-      <Link href="/" className="flex gap-2 items-center">
-        <BriefcaseBusiness size={25} className="text-primary" />
-        <span className="text-2xl font-bold text-primary">JobSphere</span>
-      </Link>
+      <Logo />
       <nav className="hidden gap-4 items-center md:flex">
         <Link
           href="/jobs"
