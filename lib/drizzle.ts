@@ -1,4 +1,3 @@
-import { time } from "console";
 import { drizzle } from "drizzle-orm/node-postgres";
 import {
   pgTable,
@@ -82,15 +81,23 @@ export const jobType = pgEnum("job_type", [
   "remote",
 ]);
 
-export const category = pgTable("job_category", {
-  id: text("id")
-    .primaryKey()
-    .notNull()
-    .$defaultFn(() => crypto.randomUUID()),
-  name: text("name").notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
-});
+export const jobCategory = pgEnum("job_category", [
+  "Information Technology",
+  "Business & Management",
+  "Finance & Accounting",
+  "Sales & Marketing",
+  "Engineering",
+  "Creative & Media",
+  "Healthcare & Medicine",
+  "Education & Training",
+  "Manufacturing & Skilled Trades",
+  "Logistics & Transportation",
+  "Hospitality & Tourism",
+  "Legal",
+  "Government & Public Sector",
+  "Science & Research",
+  "Retail",
+]);
 
 export const jobListing = pgTable("job_listing", {
   id: text("id")
@@ -102,6 +109,7 @@ export const jobListing = pgTable("job_listing", {
   type: jobType("job_type").notNull(),
   experienceLevel: experienceLevelEnum().notNull(),
   location: text("location"),
+  category: jobCategory("category").notNull(),
   companyId: text("company_id")
     .notNull()
     .references(() => company.id, { onDelete: "cascade" }),
@@ -109,23 +117,6 @@ export const jobListing = pgTable("job_listing", {
     .notNull()
     .defaultNow(),
 });
-
-export const jobListingCategory = pgTable(
-  "job_listing_category",
-  {
-    id: text("id")
-      .primaryKey()
-      .notNull()
-      .$defaultFn(() => crypto.randomUUID()),
-    jobListingId: text("job_listing_id")
-      .notNull()
-      .references(() => jobListing.id, { onDelete: "cascade" }),
-    categoryId: text("category_id")
-      .notNull()
-      .references(() => category.id, { onDelete: "cascade" }),
-  },
-  (table) => [primaryKey({ columns: [table.categoryId, table.jobListingId] })],
-);
 
 export const jobListingRequirement = pgTable("job_listing_requirement", {
   id: text("id")
