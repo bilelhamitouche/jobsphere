@@ -1,3 +1,4 @@
+import { time } from "console";
 import { drizzle } from "drizzle-orm/node-postgres";
 import {
   pgTable,
@@ -17,18 +18,18 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull(),
   image: text("image"),
-  createdAt: timestamp("created_at").notNull(),
-  updatedAt: timestamp("updated_at").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull(),
   role: text("role"),
   resumeUrl: text("resume_url"),
 });
 
 export const session = pgTable("session", {
   id: text("id").primaryKey(),
-  expiresAt: timestamp("expires_at").notNull(),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
   token: text("token").notNull().unique(),
-  createdAt: timestamp("created_at").notNull(),
-  updatedAt: timestamp("updated_at").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull(),
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
   userId: text("user_id")
@@ -46,21 +47,25 @@ export const account = pgTable("account", {
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   idToken: text("id_token"),
-  accessTokenExpiresAt: timestamp("access_token_expires_at"),
-  refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
+  accessTokenExpiresAt: timestamp("access_token_expires_at", {
+    withTimezone: true,
+  }),
+  refreshTokenExpiresAt: timestamp("refresh_token_expires_at", {
+    withTimezone: true,
+  }),
   scope: text("scope"),
   password: text("password"),
-  createdAt: timestamp("created_at").notNull(),
-  updatedAt: timestamp("updated_at").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull(),
 });
 
 export const verification = pgTable("verification", {
   id: text("id").primaryKey(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
-  expiresAt: timestamp("expires_at").notNull(),
-  createdAt: timestamp("created_at"),
-  updatedAt: timestamp("updated_at"),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
 });
 
 export const experienceLevelEnum = pgEnum("experience_level", [
@@ -77,6 +82,16 @@ export const jobType = pgEnum("job_type", [
   "remote",
 ]);
 
+export const category = pgTable("job_category", {
+  id: text("id")
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
 export const jobListing = pgTable("job_listing", {
   id: text("id")
     .primaryKey()
@@ -90,8 +105,27 @@ export const jobListing = pgTable("job_listing", {
   companyId: text("company_id")
     .notNull()
     .references(() => company.id, { onDelete: "cascade" }),
-  postedAt: timestamp("posted_at").notNull().defaultNow(),
+  postedAt: timestamp("posted_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });
+
+export const jobListingCategory = pgTable(
+  "job_listing_category",
+  {
+    id: text("id")
+      .primaryKey()
+      .notNull()
+      .$defaultFn(() => crypto.randomUUID()),
+    jobListingId: text("job_listing_id")
+      .notNull()
+      .references(() => jobListing.id, { onDelete: "cascade" }),
+    categoryId: text("category_id")
+      .notNull()
+      .references(() => category.id, { onDelete: "cascade" }),
+  },
+  (table) => [primaryKey({ columns: [table.categoryId, table.jobListingId] })],
+);
 
 export const jobListingRequirement = pgTable("job_listing_requirement", {
   id: text("id")
@@ -131,7 +165,9 @@ export const jobListingApplication = pgTable(
       .notNull()
       .references(() => jobListing.id, { onDelete: "cascade" }),
     status: jobApplicationStatus().default("pending"),
-    appliedAt: timestamp("applied_at").notNull().defaultNow(),
+    appliedAt: timestamp("applied_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
   },
   (table) => [primaryKey({ columns: [table.userId, table.jobListingId] })],
 );
