@@ -8,10 +8,15 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    remotePatterns: [{
-      hostname: "images.unsplash.com"
-    }]
-  }
+    remotePatterns: [
+      {
+        hostname: "images.unsplash.com",
+      },
+    ],
+  },
+  experimental: {
+    reactCompiler: true,
+  },
 };
 
 export default nextConfig;
