@@ -5,7 +5,7 @@ interface CategoryCardProps {
   text: string;
 }
 
-function CategoryCard({ icon, text }: CategoryCardProps) {
+export default function CategoryCard({ icon, text }: CategoryCardProps) {
   return (
     <Card className="shadow-none transition-shadow hover:shadow-md">
       <CardContent className="flex flex-col gap-2 items-center">
@@ -15,5 +15,3 @@ function CategoryCard({ icon, text }: CategoryCardProps) {
     </Card>
   );
 }
-
-export default CategoryCard;
