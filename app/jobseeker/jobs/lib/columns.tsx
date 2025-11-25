@@ -39,6 +39,11 @@ export const columns: ColumnDef<Job>[] = [
   {
     accessorKey: "experienceLevel",
     header: "Experience Level",
+    cell: ({ row }) => {
+      const level = row.getValue("experienceLevel") as string | null;
+
+      return <span className="capitalize">{level ?? "-"}</span>;
+    },
   },
   {
     id: "actions",

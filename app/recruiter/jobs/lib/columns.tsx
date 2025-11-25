@@ -13,14 +13,17 @@ import { Edit, MoreVertical, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import Link from "next/link";
+import { formatJobType } from "@/lib/utils";
+import { jobExperienceLevel, jobType } from "@/lib/zod";
+import { z } from "zod";
 
 export type Job = {
   id: string;
   description: string;
   position: string;
-  type: "full" | "part" | "internship" | "remote";
+  type: z.infer<typeof jobType>;
   location: string | null;
-  experienceLevel: "none" | "entry" | "mid" | "senior";
+  experienceLevel: z.infer<typeof jobExperienceLevel>;
   postedAt: Date;
 };
 
@@ -36,10 +39,20 @@ export const columns: ColumnDef<Job>[] = [
   {
     accessorKey: "type",
     header: "Type",
+    cell: ({ row }) => {
+      const type = row.getValue("type") as z.infer<typeof jobType>;
+
+      return <span className="capitalize">{formatJobType(type)}</span>;
+    },
   },
   {
     accessorKey: "experienceLevel",
     header: "Experience Level",
+    cell: ({ row }) => {
+      const level = row.getValue("experienceLevel") as string | null;
+
+      return <span className="capitalize">{level ?? "-"}</span>;
+    },
   },
   {
     accessorFn: (props) => format(props.postedAt, "MMMM dd yyyy"),
