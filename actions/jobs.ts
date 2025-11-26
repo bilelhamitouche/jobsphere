@@ -1,4 +1,5 @@
 "use server";
+import "server-only";
 import {
   acceptJobListingApplication,
   createJobApplication,
@@ -12,13 +13,13 @@ import {
 } from "@/lib/queries";
 import { jobListingSchema, updateJobListingSchema } from "@/lib/zod";
 import { revalidatePath } from "next/cache";
-import "server-only";
 
 export async function createJobAction(formData: FormData) {
   const position = formData.get("position");
   const description = formData.get("description");
   const location = formData.get("location");
   const type = formData.get("type");
+  const category = formData.get("category");
   const experienceLevel = formData.get("experience_level");
   const requirements = JSON.parse(formData.get("requirements") as string);
   const responsibilities = JSON.parse(
@@ -29,12 +30,12 @@ export async function createJobAction(formData: FormData) {
     description,
     position,
     type,
+    category,
     experience_level: experienceLevel,
     location,
     requirements,
     responsibilities,
   });
-  console.log(result.data, result.error);
   if (!result.success) {
     return {
       errors: result.error.flatten().fieldErrors,
@@ -45,6 +46,7 @@ export async function createJobAction(formData: FormData) {
       result.data.position,
       result.data.location,
       result.data.type,
+      result.data.category,
       result.data.experience_level,
       result.data.description,
       result.data.requirements,
@@ -64,6 +66,7 @@ export async function updateJobListingAction(formData: FormData) {
   const description = formData.get("description");
   const location = formData.get("location");
   const type = formData.get("type");
+  const category = formData.get("category");
   const experienceLevel = formData.get("experience_level");
   const requirements = JSON.parse(formData.get("requirements") as string);
   const responsibilities = JSON.parse(
@@ -73,6 +76,7 @@ export async function updateJobListingAction(formData: FormData) {
     description,
     position,
     type,
+    category,
     experience_level: experienceLevel,
     location,
     requirements,
@@ -89,7 +93,8 @@ export async function updateJobListingAction(formData: FormData) {
       result.data.position as string,
       result.data.description as string,
       result.data.location as string,
-      result.data.type as "full" | "part" | "internship" | "remote",
+      result.data.type,
+      result.data.category,
       result.data.experience_level as "none" | "entry" | "mid" | "senior",
       result.data.requirements,
       result.data.responsibilities,

@@ -97,6 +97,7 @@ export const jobCategory = pgEnum("job_category", [
   "Government & Public Sector",
   "Science & Research",
   "Retail",
+  "Other",
 ]);
 
 export const jobListing = pgTable("job_listing", {

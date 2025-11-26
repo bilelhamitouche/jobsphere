@@ -17,7 +17,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { jobExperienceLevel, jobType, updateJobListingSchema } from "@/lib/zod";
+import {
+  jobCategory,
+  jobExperienceLevel,
+  jobType,
+  updateJobListingSchema,
+} from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Select,
@@ -33,12 +38,14 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { updateJobListingAction } from "@/actions/jobs";
 import { useRouter } from "next/navigation";
+import { formatJobType } from "@/lib/utils";
 
 interface EditJobFormProps {
   id: string;
   description: string | null;
   position: string | null;
   location: string | null;
+  category: z.infer<typeof jobCategory>;
   type: z.infer<typeof jobType>;
   experienceLevel: z.infer<typeof jobExperienceLevel>;
   requirements: { requirement: string }[];
@@ -49,6 +56,7 @@ export default function EditJobForm({ job }: { job: EditJobFormProps }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const typeOptions = jobType.options;
+  const categoryOptions = jobCategory.options;
   const experienceLevelOptions = jobExperienceLevel.options;
   const form = useForm<z.infer<typeof updateJobListingSchema>>({
     resolver: zodResolver(updateJobListingSchema),
@@ -56,6 +64,7 @@ export default function EditJobForm({ job }: { job: EditJobFormProps }) {
       description: job.description ?? "",
       position: job.position ?? "",
       location: job.location ?? "",
+      category: job.category,
       experience_level: job.experienceLevel,
       type: job.type,
       requirements: job.requirements.map(
@@ -93,6 +102,7 @@ export default function EditJobForm({ job }: { job: EditJobFormProps }) {
             formData.append("position", data.position as string);
             formData.append("description", data.description as string);
             formData.append("location", data.location as string);
+            formData.append("category", data.category as string);
             formData.append(
               "experience_level",
               data.experience_level as string,
@@ -167,6 +177,37 @@ export default function EditJobForm({ job }: { job: EditJobFormProps }) {
                     </FormControl>
                     <SelectContent>
                       {typeOptions.map((option, index) => (
+                        <SelectItem
+                          key={index}
+                          value={option}
+                          className="capitalize"
+                        >
+                          {formatJobType(option)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="category"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={job.category}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select the category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {categoryOptions.map((option, index) => (
                         <SelectItem key={index} value={option}>
                           {option}
                         </SelectItem>
@@ -195,7 +236,7 @@ export default function EditJobForm({ job }: { job: EditJobFormProps }) {
                     <SelectContent>
                       {experienceLevelOptions.map((option, index) => (
                         <SelectItem key={index} value={option}>
-                          {option}
+                          <span className="capitalize">{option}</span>
                         </SelectItem>
                       ))}
                     </SelectContent>

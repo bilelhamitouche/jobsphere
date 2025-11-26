@@ -15,7 +15,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { z } from "zod";
-import { jobListingSchema, jobType, jobExperienceLevel } from "@/lib/zod";
+import {
+  jobListingSchema,
+  jobType,
+  jobExperienceLevel,
+  jobCategory,
+} from "@/lib/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
@@ -33,11 +38,13 @@ import { createJobAction } from "@/actions/jobs";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { formatJobType } from "@/lib/utils";
 
 export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const typeOptions = jobType.options;
+  const categoryOptions = jobCategory.options;
   const experienceLevelOptions = jobExperienceLevel.options;
   const form = useForm<z.infer<typeof jobListingSchema>>({
     resolver: zodResolver(jobListingSchema),
@@ -47,6 +54,7 @@ export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
       description: "",
       experience_level: "none",
       location: "",
+      category: undefined,
       requirements: [],
       responsibilities: [],
     },
@@ -78,6 +86,7 @@ export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
             formData.append("position", data.position);
             formData.append("description", data.description);
             formData.append("location", data.location as string);
+            formData.append("category", data.category as string);
             formData.append("experience_level", data.experience_level);
             formData.append("type", data.type);
             formData.append("recruiter_id", recruiterId);
@@ -140,7 +149,7 @@ export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue="full">
+                  <Select onValueChange={field.onChange} defaultValue="">
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select the type" />
@@ -148,6 +157,34 @@ export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
                     </FormControl>
                     <SelectContent>
                       {typeOptions.map((option, index) => (
+                        <SelectItem
+                          key={index}
+                          value={option as string}
+                          className="capitalize"
+                        >
+                          {formatJobType(option)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="category"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={""}>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select the category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {categoryOptions.map((option, index) => (
                         <SelectItem key={index} value={option}>
                           {option}
                         </SelectItem>
@@ -164,7 +201,7 @@ export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Experience Level</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue="none">
+                  <Select onValueChange={field.onChange} defaultValue="">
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select the experience level" />
@@ -172,7 +209,11 @@ export default function PostJobForm({ recruiterId }: { recruiterId: string }) {
                     </FormControl>
                     <SelectContent>
                       {experienceLevelOptions.map((option, index) => (
-                        <SelectItem key={index} value={option}>
+                        <SelectItem
+                          key={index}
+                          value={option}
+                          className="capitalize"
+                        >
                           {option}
                         </SelectItem>
                       ))}

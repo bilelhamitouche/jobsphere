@@ -15,6 +15,7 @@ import { z } from "zod";
 import {
   companyIndustry,
   companySize,
+  jobCategory,
   jobExperienceLevel,
   jobType,
 } from "./zod";
@@ -51,6 +52,7 @@ export async function getJobListings() {
         position: jobListing.position,
         location: jobListing.location,
         type: jobListing.type,
+        category: jobListing.category,
         experienceLevel: jobListing.experienceLevel,
         postedAt: jobListing.postedAt,
         companyId: company.id,
@@ -93,6 +95,7 @@ export async function getJobListingsByCompanyId(companyId: string) {
         id: jobListing.id,
         position: jobListing.position,
         location: jobListing.location,
+        category: jobListing.category,
         experienceLevel: jobListing.experienceLevel,
         type: jobListing.type,
         postedAt: jobListing.postedAt,
@@ -118,6 +121,7 @@ export async function getJobListingById(id: string) {
         description: jobListing.description,
         position: jobListing.position,
         type: jobListing.type,
+        category: jobListing.category,
         experienceLevel: jobListing.experienceLevel,
         location: jobListing.location,
         postedAt: jobListing.postedAt,
@@ -177,6 +181,7 @@ export async function createJobListing(
   position: string,
   location: string,
   type: z.infer<typeof jobType>,
+  category: z.infer<typeof jobCategory>,
   experience_level: z.infer<typeof jobExperienceLevel>,
   description: string,
   requirements: string[],
@@ -197,6 +202,7 @@ export async function createJobListing(
           position,
           description,
           type,
+          category,
           experienceLevel: experience_level,
           location,
           companyId,
@@ -229,8 +235,9 @@ export async function updateJobListing(
   position: string,
   description: string,
   location: string,
-  type: "full" | "part" | "internship" | "remote",
-  experienceLevel: "none" | "entry" | "mid" | "senior",
+  type: z.infer<typeof jobType>,
+  category: z.infer<typeof jobCategory>,
+  experienceLevel: z.infer<typeof jobExperienceLevel>,
   requirements: string[],
   responsibilities: string[],
 ) {
@@ -239,7 +246,14 @@ export async function updateJobListing(
     await db.transaction(async (tx) => {
       await tx
         .update(jobListing)
-        .set({ position, description, location, type, experienceLevel })
+        .set({
+          position,
+          description,
+          location,
+          type,
+          category,
+          experienceLevel,
+        })
         .where(eq(jobListing.id, id));
       await tx
         .delete(jobListingRequirement)

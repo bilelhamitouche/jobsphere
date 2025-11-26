@@ -21,6 +21,25 @@ export const signUpSchema = z.object({
 
 export const jobType = z.enum(["full", "part", "internship", "remote"]);
 
+export const jobCategory = z.enum([
+  "Information Technology",
+  "Business & Management",
+  "Finance & Accounting",
+  "Sales & Marketing",
+  "Engineering",
+  "Creative & Media",
+  "Healthcare & Medicine",
+  "Education & Training",
+  "Manufacturing & Skilled Trades",
+  "Logistics & Transportation",
+  "Hospitality & Tourism",
+  "Legal",
+  "Government & Public Sector",
+  "Science & Research",
+  "Retail",
+  "Other",
+]);
+
 export const jobExperienceLevel = z.enum(["none", "entry", "mid", "senior"]);
 
 export const jobListingSchema = z.object({
@@ -29,6 +48,7 @@ export const jobListingSchema = z.object({
   type: jobType,
   experience_level: jobExperienceLevel,
   location: z.string().trim(),
+  category: jobCategory,
   requirements: z
     .array(z.string().min(1, { message: "Requirement is required" }))
     .min(1, { message: "At least 1 requirement" }),
@@ -40,9 +60,10 @@ export const jobListingSchema = z.object({
 export const updateJobListingSchema = z.object({
   description: z.string().trim().optional(),
   position: z.string().trim().optional(),
-  type: jobType.optional(),
-  experience_level: jobExperienceLevel.optional(),
+  type: jobType,
+  experience_level: jobExperienceLevel,
   location: z.string().trim().optional(),
+  category: jobCategory,
   requirements: z
     .array(z.string().min(1, { message: "Requirement is required" }))
     .min(1, { message: "At least 1 requirement" }),
