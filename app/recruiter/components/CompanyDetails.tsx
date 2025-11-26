@@ -71,16 +71,18 @@ export default async function CompanyDetails() {
               <span className="text-gray-700">Email</span>
               <span>{companyData.email}</span>
             </div>
-            <div className="flex justify-between items-center w-full">
-              <span className="text-gray-700">Website</span>
-              <Link
-                href={`https://${companyData.website as string}`}
-                className="text-blue-500 hover:underline"
-                target="_blank"
-              >
-                {companyData.website}
-              </Link>
-            </div>
+            {companyData.website && (
+              <div className="flex justify-between items-center w-full">
+                <span className="text-gray-700">Website</span>
+                <Link
+                  href={companyData.website}
+                  className="text-blue-500 hover:underline"
+                  target="_blank"
+                >
+                  {companyData.website}
+                </Link>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

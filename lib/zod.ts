@@ -108,7 +108,7 @@ export const companyInfoSchema = z.object({
       message: "Cannot be founded in the future",
     }),
   headquarters: z.string().trim().optional(),
-  website: z.string().trim().optional(),
+  website: z.string().url({ message: "Must be a valid url" }).trim().optional(),
   industry: companyIndustry,
   logo_url: z.string().trim().optional(),
 });
@@ -125,7 +125,7 @@ export const updateCompanyInfoSchema = z.object({
   size: companySize.optional(),
   foundation_year: z.string().trim(),
   headquarters: z.string().trim().optional(),
-  website: z.string().trim().optional(),
+  website: z.string().url({ message: "Must be a valid url" }).trim().optional(),
   industry: companyIndustry.optional(),
   logo_url: z.string().trim().optional(),
 });
