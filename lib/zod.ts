@@ -81,6 +81,7 @@ export const companyIndustry = z.enum([
   "Energy",
   "Telecommunications",
   "Food & Beverage",
+  "Consulting",
   "Manufactoring",
   "Government",
   "Pharmaceuticals",
