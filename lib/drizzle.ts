@@ -204,7 +204,7 @@ export const company = pgTable("company", {
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   about: text("about").notNull(),
-  size: text("size").notNull(),
+  size: companySize("size").notNull(),
   foundationYear: integer("foundation_year").notNull(),
   headquarters: text("headquarters"),
   website: text("website"),
