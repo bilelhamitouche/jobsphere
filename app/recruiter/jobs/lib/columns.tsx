@@ -55,7 +55,7 @@ export const columns: ColumnDef<Job>[] = [
     },
   },
   {
-    accessorFn: (props) => format(props.postedAt, "MMMM dd yyyy"),
+    accessorFn: (props) => format(props.postedAt, "MMM dd yyyy"),
     header: "Posted At",
   },
   {

@@ -15,10 +15,6 @@ export default async function Company({
   const { companyId } = await params;
   const companyDetails = await getCompanyById(companyId);
   if (!companyDetails || companyDetails.length === 0) notFound();
-  function delay() {
-    return new Promise((resolve) => setTimeout(resolve, 1000));
-  }
-  await delay();
   return (
     <div className="p-6 space-y-8 w-full h-full bg-primary-foreground">
       <Link href="/companies" className="flex gap-2 items-center">
@@ -28,9 +24,7 @@ export default async function Company({
       <Suspense fallback={<CompanyDetailsSkeleton />}>
         <CompanyDetails companyId={companyId} />
       </Suspense>
-      <Suspense>
-        <CompanyJobsList companyId={companyId} />
-      </Suspense>
+      <CompanyJobsList companyId={companyId} />
     </div>
   );
 }

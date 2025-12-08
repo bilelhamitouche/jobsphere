@@ -8,7 +8,9 @@ export default async function EditJob({
 }) {
   const { jobId } = await params;
   const job = await getJobListingById(jobId);
-  if (!job) throw new Error("Something wrong happened");
+  if (!job) {
+    throw new Error("Something wrong happened");
+  }
   return (
     <div className="p-6 space-y-4 w-full h-full">
       <h2 className="text-3xl font-bold">Edit Job</h2>

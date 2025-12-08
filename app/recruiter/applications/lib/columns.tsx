@@ -62,7 +62,7 @@ export const columns: ColumnDef<JobApplication>[] = [
     header: "Status",
   },
   {
-    accessorFn: (props) => format(props.appliedAt, "MMMM dd yyyy"),
+    accessorFn: (props) => format(props.appliedAt, "MMM dd yyyy"),
     header: "Applied At",
   },
   {
