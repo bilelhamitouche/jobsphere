@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
 import Link from "next/link";
 import CompanyDetails from "../components/CompanyDetails";
+import { Suspense } from "react";
+import CompanyDetailsSkeleton from "../components/CompanyDetailsSkeleton";
 
 export default function RecruiterCompany() {
   return (
@@ -15,7 +17,9 @@ export default function RecruiterCompany() {
           </Link>
         </Button>
       </div>
-      <CompanyDetails />
+      <Suspense fallback={<CompanyDetailsSkeleton />}>
+        <CompanyDetails />
+      </Suspense>
     </div>
   );
 }
