@@ -5,6 +5,11 @@ import { nextCookies } from "better-auth/next-js";
 import { db, schema } from "./drizzle";
 
 export const auth = betterAuth({
+  session: {
+    cookieCache: {
+      maxAge: 60 * 5,
+    },
+  },
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: schema,
