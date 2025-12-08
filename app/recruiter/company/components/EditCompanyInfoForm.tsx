@@ -216,7 +216,7 @@ export default function EditCompanyInfoForm({
               name="logo_url"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="md:col-span-2">
+                <FormItem>
                   <FormLabel>Logo Url</FormLabel>
                   <FormControl>
                     <Input {...field} />
