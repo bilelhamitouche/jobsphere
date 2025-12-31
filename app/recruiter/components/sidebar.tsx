@@ -4,7 +4,6 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { BriefcaseBusiness, Factory, Home, Send } from "lucide-react";
@@ -12,6 +11,7 @@ import Link from "next/link";
 import AvatarDropdown from "./avatar-dropdown";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import SidebarMenuLink from "@/components/SidebarMenuLink";
 
 export default async function RecruiterSidebar() {
   const session = await auth.api.getSession({
@@ -27,50 +27,32 @@ export default async function RecruiterSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu className="p-2">
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href="/recruiter" className="flex gap-2 items-center">
-                <Home size="15" />
-                <span>Dashboard</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link
-                href="/recruiter/company"
-                className="flex gap-2 items-center"
-              >
-                <Factory size="15" />
-                <span>Company</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href="/recruiter/jobs" className="flex gap-2 items-center">
-                <BriefcaseBusiness size="15" />
-                Jobs
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link
-                href="/recruiter/applications"
-                className="flex gap-2 items-center"
-              >
-                <Send size="15" />
-                Applications
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          <SidebarMenuLink
+            href="/recruiter"
+            text="Dashboard"
+            icon={<Home size="15" />}
+          />
+          <SidebarMenuLink
+            href="/recruiter/company"
+            text="Company"
+            icon={<Factory size="15" />}
+          />
+          <SidebarMenuLink
+            href="/recruiter/jobs"
+            text="Jobs"
+            icon={<BriefcaseBusiness size="15" />}
+          />
+          <SidebarMenuLink
+            href="/recruiter/applications"
+            text="Applications"
+            icon={<Send size="15" />}
+          />
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <AvatarDropdown user={session?.user} />
+            <AvatarDropdown user={session?.user ?? null} />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
