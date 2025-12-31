@@ -14,21 +14,19 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface AvatarDropdownProps {
-  id: string;
-  name: string;
-  email: string;
-  emailVerified: boolean;
-  image?: string | undefined;
-  role: string;
-  createdAt: Date;
-  updatedAt: Date;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    emailVerified: boolean;
+    image?: string | null | undefined;
+    role: string;
+    createdAt: Date;
+    updatedAt: Date;
+  } | null;
 }
 
-export default function AvatarDropdown({
-  user,
-}: {
-  user: AvatarDropdownProps;
-}) {
+export default function AvatarDropdown({ user }: AvatarDropdownProps) {
   const router = useRouter();
   return (
     <DropdownMenu>
@@ -38,14 +36,14 @@ export default function AvatarDropdown({
             <div className="flex gap-1">
               <Avatar>
                 <AvatarImage
-                  src={user.image as string}
-                  alt={`${user.name} image`}
+                  src={user?.image as string}
+                  alt={`${user?.name} image`}
                 />
-                <AvatarFallback>{user.name[0].toUpperCase()}</AvatarFallback>
+                <AvatarFallback>{user?.name[0].toUpperCase()}</AvatarFallback>
               </Avatar>
               <div>
-                <p>{user.name}</p>
-                <p className="text-xs text-gray-700">{user.email}</p>
+                <p>{user?.name}</p>
+                <p className="text-xs text-gray-700">{user?.email}</p>
               </div>
             </div>
             <ChevronsUpDown size="20" />
@@ -56,12 +54,12 @@ export default function AvatarDropdown({
         <DropdownMenuItem>
           <Avatar>
             <AvatarImage
-              src={user.image as string}
-              alt={`${user.image} image`}
+              src={user?.image as string}
+              alt={`${user?.image} image`}
             />
-            <AvatarFallback>{user.name.toUpperCase()[0]}</AvatarFallback>
+            <AvatarFallback>{user?.name.toUpperCase()[0]}</AvatarFallback>
           </Avatar>
-          {user.email}
+          {user?.email}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
