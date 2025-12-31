@@ -3,7 +3,7 @@ import TestimonialCard from "./testimonial-card";
 function Testimonials() {
   return (
     <section className="p-12 space-y-2 text-center">
-      <h2 className="text-3xl font-bold">What People Say</h2>
+      <h2 className="text-2xl font-bold md:text-3xl">What People Say</h2>
       <p className="text-gray-600">
         Success stories from job seekers and employers who connected on our
         platform

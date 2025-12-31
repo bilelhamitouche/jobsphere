@@ -4,7 +4,7 @@ import { Button } from "./button";
 function NextSteps() {
   return (
     <section className="p-12 space-y-4 text-center bg-primary text-primary-foreground">
-      <h2 className="text-3xl font-bold">
+      <h2 className="text-2xl font-bold md:text-3xl">
         Ready to Take the Next Step in Your Career?
       </h2>
       <p className="mx-auto max-w-xl">
@@ -12,16 +12,10 @@ function NextSteps() {
         get notified about new opportunities.
       </p>
       <div className="space-x-4">
-        <Button
-          variant="secondary"
-          asChild
-        >
+        <Button variant="secondary" asChild>
           <Link href="/signup">Create an account</Link>
         </Button>
-        <Button
-          variant="secondary"
-          asChild
-        >
+        <Button variant="secondary" asChild>
           <Link href="/jobs">Browse Jobs</Link>
         </Button>
       </div>

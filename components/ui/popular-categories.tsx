@@ -4,7 +4,7 @@ import CategoryCard from "./category-card";
 function PopularCategories() {
   return (
     <div className="flex flex-col gap-2 text-center">
-      <h2 className="text-3xl font-bold">Browse By Category</h2>
+      <h2 className="text-2xl font-bold md:text-3xl">Browse By Category</h2>
       <p className="text-gray-500">
         Explore job opportunities by industry category
       </p>
