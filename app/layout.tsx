@@ -6,6 +6,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { ourFileRouter } from "./api/uploadthing/core";
 import { extractRouterConfig } from "uploadthing/server";
+import ReactQueryProvider from "@/components/ReactQueryProvider";
 
 const sora = Sora({
   variable: "--font-sora",
@@ -28,7 +29,9 @@ export default function RootLayout({
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       <body className={`${sora.className} h-full antialiased`}>
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-        <NuqsAdapter>{children}</NuqsAdapter>
+        <ReactQueryProvider>
+          <NuqsAdapter>{children}</NuqsAdapter>
+        </ReactQueryProvider>
         <Toaster richColors closeButton theme="light" />
       </body>
     </html>
