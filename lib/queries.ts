@@ -9,7 +9,7 @@ import {
   jobListingSaved,
   user,
 } from "./drizzle";
-import { and, count, DrizzleError, eq } from "drizzle-orm";
+import { and, count, DrizzleError, eq, ilike } from "drizzle-orm";
 import { isAuthenticated, isRecruiterAuthenticated } from "@/actions/auth";
 import { z } from "zod";
 import {
@@ -597,11 +597,27 @@ export async function getCompanyById(id: string) {
   }
 }
 
-export async function getCompanies() {
+export async function getCompanies(
+  skip: number,
+  limit: number,
+  search?: string,
+  industry?: z.infer<typeof companyIndustry>,
+  size?: z.infer<typeof companySize>,
+) {
   try {
+    const conditions = [];
+    if (search) {
+      conditions.push(ilike(company.name, `%${search}%`));
+    }
+    if (size) {
+      conditions.push(eq(company.size, size));
+    }
+    if (industry) {
+      conditions.push(eq(company.industry, industry));
+    }
     const companies = await db
       .select({
-        count: count(jobListing.id),
+        jobCount: count(jobListing.id),
         id: company.id,
         name: company.name,
         size: company.size,
@@ -611,7 +627,10 @@ export async function getCompanies() {
       })
       .from(company)
       .leftJoin(jobListing, eq(company.id, jobListing.companyId))
-      .groupBy(company.id);
+      .where(conditions.length ? and(...conditions) : undefined)
+      .groupBy(company.id)
+      .offset(skip)
+      .limit(limit);
     return companies;
   } catch (err) {
     if (err instanceof DrizzleError) {

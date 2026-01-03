@@ -14,30 +14,30 @@ interface CompanyCardProps {
   id: string;
   name: string;
   size: string;
-  imageUrl: string | null;
+  logoUrl: string | null;
   industry: string;
   headquarters: string | null;
-  count: number;
+  jobCount: number;
 }
 
 export default function CompanyCard({
   id,
   name,
   size,
-  imageUrl,
+  logoUrl,
   industry,
   headquarters,
-  count,
+  jobCount,
 }: CompanyCardProps) {
   return (
     <Card className="w-full">
       <CardHeader className="flex flex-col gap-4 items-center">
         <CardTitle className="flex flex-col gap-2 items-center">
-          {imageUrl ? (
+          {logoUrl ? (
             <Avatar>
               <AvatarImage
-                src={imageUrl}
-                alt="${company} url"
+                src={logoUrl}
+                alt="${name} image"
                 width="20"
                 height="20"
               />
@@ -72,8 +72,8 @@ export default function CompanyCard({
       </CardContent>
       <CardFooter className="flex justify-between items-center">
         <div className="flex gap-1 font-semibold">
-          <span>{count}</span>
-          <span>{`Job Offer${count === 1 ? "" : "s"}`}</span>
+          <span>{jobCount}</span>
+          <span>{`Job Offer${jobCount === 1 ? "" : "s"}`}</span>
         </div>
         <Button variant="outline" asChild>
           <Link href={`/companies/${id}`}>View company</Link>
