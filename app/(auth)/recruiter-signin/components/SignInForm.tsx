@@ -66,7 +66,9 @@ function SignInForm() {
                     router.push("/company-info");
                   }
                 } catch (err) {
-                  console.log(err);
+                  if (err instanceof Error) {
+                    toast.error(err.message);
+                  }
                 } finally {
                   setIsPending(false);
                 }
