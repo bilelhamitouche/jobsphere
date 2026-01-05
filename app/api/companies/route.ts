@@ -1,9 +1,9 @@
 import { COMPANY_LIMIT } from "@/lib/constants";
 import { getCompanies } from "@/lib/queries";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: Request) {
-  const searchParams = new URLSearchParams(req.url);
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
   const search = searchParams.get("search") ?? "";
   const page = Number(searchParams.get("page") as string) || 0;
   const companies = await getCompanies(

@@ -11,22 +11,24 @@ import {
 import { Clock, MapPin, Star } from "lucide-react";
 import Link from "next/link";
 import { formatDistance } from "date-fns";
+import { jobExperienceLevel, jobType } from "@/lib/zod";
+import { z } from "zod";
 
 interface JobCardProps {
   id: string;
-  companyImageUrl: string | null;
+  companyLogo: string | null;
   company: string;
   companyId: string;
   position: string;
-  type: string;
-  experienceLevel: string;
-  location: string;
+  type: z.infer<typeof jobType>;
+  experienceLevel: z.infer<typeof jobExperienceLevel>;
+  location: string | null;
   postedAt: Date;
 }
 
 export default function JobCard({
   id,
-  companyImageUrl,
+  companyLogo,
   company,
   companyId,
   position,
@@ -39,10 +41,10 @@ export default function JobCard({
     <Card className="w-full">
       <CardHeader className="flex flex-col gap-4 items-start">
         <CardTitle className="flex gap-4 items-center">
-          {companyImageUrl ? (
+          {companyLogo ? (
             <Avatar>
               <AvatarImage
-                src={companyImageUrl}
+                src={companyLogo}
                 alt="${company} url"
                 width="18"
                 height="18"

@@ -44,7 +44,27 @@ export async function updateResumeUrl(url: string, userId: string) {
   }
 }
 
-export async function getJobListings() {
+export async function getJobListings(
+  skip: number,
+  limit: number,
+  search?: string,
+  experience?: z.infer<typeof jobExperienceLevel>,
+  type?: z.infer<typeof jobType>,
+  category?: z.infer<typeof jobCategory>,
+) {
+  const conditions = [];
+  if (search) {
+    conditions.push(ilike(jobListing.position, `%${search}%`));
+  }
+  if (experience) {
+    conditions.push(eq(jobListing.experienceLevel, experience));
+  }
+  if (type) {
+    conditions.push(eq(jobListing.type, type));
+  }
+  if (category) {
+    conditions.push(eq(jobListing.category, category));
+  }
   try {
     const jobListings = await db
       .select({
@@ -60,7 +80,10 @@ export async function getJobListings() {
         companyLogo: company.logoUrl,
       })
       .from(jobListing)
-      .leftJoin(company, eq(jobListing.companyId, company.id));
+      .leftJoin(company, eq(jobListing.companyId, company.id))
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .offset(skip)
+      .limit(limit);
     return jobListings;
   } catch (err) {
     if (err instanceof DrizzleError) {
@@ -604,17 +627,17 @@ export async function getCompanies(
   industry?: z.infer<typeof companyIndustry>,
   size?: z.infer<typeof companySize>,
 ) {
+  const conditions = [];
+  if (search) {
+    conditions.push(ilike(company.name, `%${search}%`));
+  }
+  if (size) {
+    conditions.push(eq(company.size, size));
+  }
+  if (industry) {
+    conditions.push(eq(company.industry, industry));
+  }
   try {
-    const conditions = [];
-    if (search) {
-      conditions.push(ilike(company.name, `%${search}%`));
-    }
-    if (size) {
-      conditions.push(eq(company.size, size));
-    }
-    if (industry) {
-      conditions.push(eq(company.industry, industry));
-    }
     const companies = await db
       .select({
         jobCount: count(jobListing.id),

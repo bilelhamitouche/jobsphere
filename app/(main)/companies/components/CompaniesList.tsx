@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { COMPANY_LIMIT } from "@/lib/constants";
 import { companyIndustry, companySize } from "@/lib/zod";
 import { z } from "zod";
+import CompaniesListSkeleton from "./CompaniesListSkeleton";
 
 interface CompanyReponse {
   companies: Company[];
@@ -44,17 +45,19 @@ export default function CompaniesList() {
     const data = (await res.json()) as CompanyReponse;
     return data;
   }
-  const { data } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ["companies", search, page, size, industry],
     queryFn: () =>
       getCompanies(search ?? undefined, page, size ?? null, industry ?? null),
     placeholderData: keepPreviousData,
   });
   const companies = data?.companies ?? [];
-  if (companies.length === 0) {
+  if (!isPending && companies.length === 0) {
     return <div className="text-gray-700">No Companies Found</div>;
   }
-  console.log(companies[0].jobCount);
+  if (isPending) {
+    return <CompaniesListSkeleton />;
+  }
   return (
     <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {companies.map((company) => (
