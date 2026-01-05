@@ -65,9 +65,9 @@ export default function Filter() {
               <SelectValue placeholder="Select Experience" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="none">No Experience</SelectItem>
-              <SelectItem value="entry">Junior</SelectItem>
-              <SelectItem value="mid">Intermediate</SelectItem>
+              <SelectItem value="none">None</SelectItem>
+              <SelectItem value="entry">Entry</SelectItem>
+              <SelectItem value="mid">Mid</SelectItem>
               <SelectItem value="senior">Senior</SelectItem>
             </SelectContent>
           </Select>
