@@ -10,22 +10,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Briefcase, Star } from "lucide-react";
+import { companyIndustry, companySize } from "@/lib/zod";
+import { Factory, Users2 } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { FormEvent } from "react";
 
 export default function Filter() {
-  const [experience, setExperience] = useQueryState("experience", {
+  const [size, setSize] = useQueryState("size", {
     shallow: false,
   });
-  const [type, setType] = useQueryState("type", {
+  const [industry, setIndustry] = useQueryState("industry", {
     shallow: false,
   });
+  const sizeOptions = companySize.options;
+  const industryOptions = companyIndustry.options;
 
   function resetFilters(e: FormEvent) {
     e.preventDefault();
-    setExperience(null);
-    setType(null);
+    setSize(null);
+    setIndustry(null);
   }
 
   return (
@@ -35,40 +38,42 @@ export default function Filter() {
         <form className="space-y-4 w-full">
           <Separator />
           <h2 className="flex gap-2 items-center">
-            <Briefcase size="18" />
-            <span>Job Type</span>
+            <Factory size="18" />
+            <span>Industry</span>
           </h2>
           <Select
-            defaultValue={type || ""}
-            onValueChange={(value) => setType(value)}
+            defaultValue={industry || ""}
+            onValueChange={(value) => setIndustry(value)}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select Type" />
+              <SelectValue placeholder="Select Industry" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="full">Full-Time</SelectItem>
-              <SelectItem value="part">Part-Time</SelectItem>
-              <SelectItem value="internship">Internship</SelectItem>
-              <SelectItem value="remote">Remote</SelectItem>
+              {industryOptions.map((option) => (
+                <SelectItem key={option} value={option} className="capitalize">
+                  {option}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <Separator />
           <h2 className="flex gap-2 items-center">
-            <Star size="18" />
-            <span>Experience Level</span>
+            <Users2 size="18" />
+            <span>Size</span>
           </h2>
           <Select
-            defaultValue={experience || ""}
-            onValueChange={(value) => setExperience(value)}
+            defaultValue={size || ""}
+            onValueChange={(value) => setSize(value)}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select Experience" />
+              <SelectValue placeholder="Select Size" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="none">No Experience</SelectItem>
-              <SelectItem value="entry">Junior</SelectItem>
-              <SelectItem value="mid">Intermediate</SelectItem>
-              <SelectItem value="senior">Senior</SelectItem>
+              {sizeOptions.map((option) => (
+                <SelectItem key={option} value={option} className="capitalize">
+                  {option}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <Button type="submit" className="mt-2 w-full" onClick={resetFilters}>

@@ -21,7 +21,6 @@ interface Company {
   industry: z.infer<typeof companyIndustry>;
   foundationYear: number;
   headquarters: string | null;
-  website: string | null;
   createdAt: Date | null;
   updatedAt: Date | null;
   jobCount: number;
@@ -31,8 +30,8 @@ export default function CompaniesList() {
   const searchParams = useSearchParams();
   const search = searchParams.get("search");
   const size = searchParams.get("size");
-  const page = Number(searchParams.get("page")) || 0;
   const industry = searchParams.get("industry");
+  const page = Number(searchParams.get("page")) || 0;
   async function getCompanies(
     search: string = "",
     page: number = 0,
