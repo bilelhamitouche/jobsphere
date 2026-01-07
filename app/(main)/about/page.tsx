@@ -14,7 +14,7 @@ export default function About() {
         </h2>
         <p className="max-w-3xl text-lg text-center text-gray-700 md:text-xl">
           At JobSphere, we believe everyone deserves to find work they love.
-          We're building the future of recruitment by creating meaningful
+          We&apos;re building the future of recruitment by creating meaningful
           connections between talented individuals and forward-thinking
           companies.
         </p>
@@ -38,9 +38,9 @@ export default function About() {
             <p>
               We set out to change that by building a platform that goes beyond
               traditional job boards. Using advanced matching algorithms,
-              personalized recommendations, and human-centered design, we're
-              making job searching more efficient, effective, and enjoyable for
-              everyone involved.
+              personalized recommendations, and human-centered design,
+              we&apos;re making job searching more efficient, effective, and
+              enjoyable for everyone involved.
             </p>
           </div>
         </div>
