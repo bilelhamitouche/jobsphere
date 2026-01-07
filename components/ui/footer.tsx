@@ -34,7 +34,7 @@ function Footer() {
         <div className="flex flex-col gap-4">
           <h4 className="text-sm font-medium">For Employers</h4>
           <Link href="/jobs" className="text-sm text-gray-600">
-            Post a Jobs
+            Post a Job
           </Link>
           <Link href="/employer-resources" className="text-sm text-gray-600">
             Employer Resources
