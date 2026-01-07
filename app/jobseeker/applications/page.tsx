@@ -14,7 +14,7 @@ export default async function Applications() {
     <div className="w-full h-full">
       <Navbar />
       <div className="p-6 space-y-6">
-        <h2 className="text-3xl font-bold">Job Applications</h2>
+        <h2 className="text-2xl font-bold md:text-3xl">Job Applications</h2>
         <Card>
           <CardContent>
             <DataTable columns={columns} data={jobApplications} />

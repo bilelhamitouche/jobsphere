@@ -16,7 +16,7 @@ export default async function RecruiterJobs() {
   return (
     <div className="p-6 space-y-4 w-full h-full">
       <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-semibold">All Jobs</h2>
+        <h2 className="text-2xl font-semibold md:text-3xl">Jobs</h2>
         <Button asChild>
           <Link href="/recruiter/jobs/post">
             <PlusCircle />

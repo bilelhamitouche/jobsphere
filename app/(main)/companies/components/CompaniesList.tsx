@@ -58,7 +58,7 @@ export default function CompaniesList() {
     return <CompaniesListSkeleton />;
   }
   return (
-    <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <ul className="grid gap-4 lg:grid-cols-2">
       {companies.map((company) => (
         <CompanyCard
           key={company.id}

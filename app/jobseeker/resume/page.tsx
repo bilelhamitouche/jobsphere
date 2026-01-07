@@ -10,7 +10,7 @@ export default async function Resume() {
     <div className="flex flex-col gap-4 space-y-2 w-full h-screen">
       <Navbar />
       <div className="pl-6 space-y-8 w-full h-screen">
-        <h2 className="text-3xl font-bold">Resume</h2>
+        <h2 className="text-2xl font-bold md:text-3xl">Resume</h2>
         <UploaderButton />
         {resumeUrl ? (
           <embed

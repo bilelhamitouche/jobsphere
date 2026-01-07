@@ -6,7 +6,7 @@ export default function JobSeeker() {
     <div className="w-full h-full">
       <Navbar />
       <div className="p-6 space-y-6">
-        <h2 className="text-3xl font-bold">Dashboard</h2>
+        <h2 className="text-2xl font-bold md:text-3xl">Dashboard</h2>
         <Analytics />
       </div>
     </div>
