@@ -1,6 +1,8 @@
+import { Suspense } from "react";
 import Filter from "./components/Filter";
 import JobsList from "./components/JobsList";
 import Search from "./components/Search";
+import JobListSkeleton from "./components/JobListSkeleton";
 
 export default async function Jobs() {
   return (
@@ -9,7 +11,9 @@ export default async function Jobs() {
       <div className="grid gap-4 grid-rows-[auto_auto_1fr] grid-cols-[auto_1fr]">
         <Search />
         <Filter />
-        <JobsList />
+        <Suspense fallback={<JobListSkeleton />}>
+          <JobsList />
+        </Suspense>
       </div>
     </div>
   );
