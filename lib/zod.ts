@@ -153,3 +153,11 @@ export const accountChangeSchema = z.object({
   name: z.string().trim().min(1, { message: "Name is required" }),
   email: z.string().trim().email({ message: "Must be a valid Email address" }),
 });
+
+export const accountDeleteSchema = z.object({
+  password: z
+    .string()
+    .trim()
+    .min(8, { message: "Must be 8 characters long" })
+    .max(20, { message: "Must be at most 20 characters long" }),
+});

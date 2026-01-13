@@ -23,6 +23,7 @@ export const auth = betterAuth({
         type: "string",
         defaultValue: "jobseeker",
         nullable: false,
+        input: false,
       },
     },
     changeEmail: {

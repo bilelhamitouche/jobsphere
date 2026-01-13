@@ -1,7 +1,7 @@
 "use server";
 
 import { APIError } from "better-auth/api";
-import { accountChangeSchema } from "../lib/zod";
+import { accountChangeSchema, accountDeleteSchema } from "../lib/zod";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
@@ -31,6 +31,34 @@ export async function accountChangeAction(formData: FormData) {
       headers: await headers(),
     });
   } catch (err) {
+    if (err instanceof APIError) {
+      return {
+        message: err.message,
+      };
+    }
+  }
+}
+
+export async function accountDeleteAction(formData: FormData) {
+  const password = formData.get("password");
+  const accountDeleteValidation = accountDeleteSchema.safeParse({
+    password,
+  });
+  if (!accountDeleteValidation.success) {
+    console.log(accountDeleteValidation.error);
+    return {
+      errors: accountDeleteValidation.error,
+    };
+  }
+  try {
+    await auth.api.deleteUser({
+      body: {
+        password: accountDeleteValidation.data.password,
+      },
+      headers: await headers(),
+    });
+  } catch (err) {
+    console.log(err);
     if (err instanceof APIError) {
       return {
         message: err.message,
