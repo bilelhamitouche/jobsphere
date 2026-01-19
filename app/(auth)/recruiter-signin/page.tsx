@@ -1,7 +1,7 @@
 import Logo from "@/components/ui/logo";
 import SignInForm from "./components/SignInForm";
 
-function SignIn() {
+export default function SignIn() {
   return (
     <div className="flex flex-col gap-8 items-center py-20 h-full">
       <Logo />
@@ -9,5 +9,3 @@ function SignIn() {
     </div>
   );
 }
-
-export default SignIn;
