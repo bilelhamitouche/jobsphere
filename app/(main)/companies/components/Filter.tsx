@@ -31,7 +31,7 @@ export default function Filter() {
   }
 
   return (
-    <Card className="col-start-1 col-end-3 row-start-2 row-end-3 md:col-end-2 min-w-xs">
+    <Card className="col-start-1 col-end-3 row-start-2 row-end-3 md:col-end-2 min-w-xs max-h-[340]">
       <CardContent className="flex flex-col items-start space-y-4">
         <CardTitle>Filters</CardTitle>
         <form className="space-y-4 w-full">
