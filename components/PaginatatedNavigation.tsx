@@ -47,7 +47,7 @@ export default function PaginatedNavigation({
         )}
         {paginationRange.map((item, index) => {
           if (item === "...") {
-            return <PaginationEllipsis />;
+            return <PaginationEllipsis key={index} />;
           } else {
             return (
               <PaginationItem key={index}>
