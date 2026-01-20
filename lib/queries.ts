@@ -92,6 +92,40 @@ export async function getJobListings(
   }
 }
 
+export async function getJobListingsCount(
+  search?: string,
+  experience?: z.infer<typeof jobExperienceLevel>,
+  type?: z.infer<typeof jobType>,
+  category?: z.infer<typeof jobCategory>,
+) {
+  const conditions = [];
+  if (search) {
+    conditions.push(ilike(jobListing.position, `%${search}%`));
+  }
+  if (experience) {
+    conditions.push(eq(jobListing.experienceLevel, experience));
+  }
+  if (type) {
+    conditions.push(eq(jobListing.type, type));
+  }
+  if (category) {
+    conditions.push(eq(jobListing.category, category));
+  }
+  try {
+    const [jobListingsCount] = await db
+      .select({
+        count: count(jobListing.id),
+      })
+      .from(jobListing)
+      .where(conditions.length > 0 ? and(...conditions) : undefined);
+    return jobListingsCount.count;
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
 export async function getJobListingsById(recruiterId: string) {
   await isRecruiterAuthenticated();
   try {
@@ -655,6 +689,37 @@ export async function getCompanies(
       .offset(skip)
       .limit(limit);
     return companies;
+  } catch (err) {
+    if (err instanceof DrizzleError) {
+      throw new Error("Database Error");
+    }
+  }
+}
+
+export async function getCompaniesCount(
+  search?: string,
+  industry?: z.infer<typeof companyIndustry>,
+  size?: z.infer<typeof companySize>,
+) {
+  const conditions = [];
+  if (search) {
+    conditions.push(ilike(company.name, `%${search}%`));
+  }
+  if (size) {
+    conditions.push(eq(company.size, size));
+  }
+  if (industry) {
+    conditions.push(eq(company.industry, industry));
+  }
+  try {
+    const [companiesCount] = await db
+      .select({
+        count: count(company.id),
+      })
+      .from(company)
+      .where(conditions.length ? and(...conditions) : undefined)
+      .groupBy(company.id);
+    return companiesCount.count;
   } catch (err) {
     if (err instanceof DrizzleError) {
       throw new Error("Database Error");

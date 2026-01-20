@@ -1,5 +1,5 @@
 import { JOB_LIMIT } from "@/lib/constants";
-import { getJobListings } from "@/lib/queries";
+import { getJobListings, getJobListingsCount } from "@/lib/queries";
 import { jobCategory, jobExperienceLevel, jobType } from "@/lib/zod";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -17,10 +17,17 @@ export async function GET(req: NextRequest) {
     : undefined;
   const type = typeResult.success ? typeResult.data : undefined;
   const category = categoryResult.success ? categoryResult.data : undefined;
-  const page = Number(searchParams.get("page") as string) || 0;
+  const page =
+    Number(searchParams.get("page")) > 0 ? Number(searchParams.get("page")) : 1;
   const jobs = await getJobListings(
-    page * JOB_LIMIT,
+    (page - 1) * JOB_LIMIT,
     JOB_LIMIT,
+    searchParam ?? undefined,
+    experience,
+    type,
+    category,
+  );
+  const totalCount = await getJobListingsCount(
     searchParam ?? undefined,
     experience,
     type,
@@ -29,5 +36,6 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({
     jobs,
     hasMore: jobs && jobs?.length < JOB_LIMIT,
+    totalPages: totalCount ? Math.ceil(totalCount / JOB_LIMIT) : 0,
   });
 }

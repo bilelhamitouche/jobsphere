@@ -12,9 +12,11 @@ export default async function Jobs() {
         <Suspense fallback={<JobControlsFallback />}>
           <Controls />
         </Suspense>
-        <Suspense fallback={<JobListSkeleton />}>
-          <JobsList />
-        </Suspense>
+        <div className="space-y-8">
+          <Suspense fallback={<JobListSkeleton />}>
+            <JobsList />
+          </Suspense>
+        </div>
       </div>
     </div>
   );

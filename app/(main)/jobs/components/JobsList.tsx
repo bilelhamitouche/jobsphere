@@ -7,10 +7,13 @@ import { JOB_LIMIT } from "@/lib/constants";
 import { jobExperienceLevel, jobType } from "@/lib/zod";
 import { z } from "zod";
 import JobListSkeleton from "./JobListSkeleton";
+import PaginatedNavigation from "@/components/PaginatatedNavigation";
+import NoJobs from "./NoJobs";
 
 interface JobResponse {
   jobs: Job[];
   hasMore: boolean;
+  totalPages: number;
 }
 
 interface Job {
@@ -31,12 +34,13 @@ export default function JobsList() {
   const search = searchParams.get("search");
   const experience = searchParams.get("experience");
   const type = searchParams.get("type");
-  const page = Number(searchParams.get("page")) || 0;
+  const page =
+    Number(searchParams.get("page")) > 0 ? Number(searchParams.get("page")) : 1;
   async function getJobs(
     search: string = "",
     experience: string | null,
     type: string | null,
-    page: number = 0,
+    page: number = 1,
   ) {
     const res = await fetch(
       `/api/jobs?search=${search}&experience=${experience}&type=${type}&page=${page}&limit=${JOB_LIMIT}`,
@@ -54,31 +58,30 @@ export default function JobsList() {
   });
   const jobs = data?.jobs ?? [];
   if (!isPending && jobs.length === 0) {
-    return (
-      <div className="py-16 text-lg font-medium text-center text-gray-700">
-        No jobs found
-      </div>
-    );
+    return <NoJobs />;
   }
   if (isPending) {
     return <JobListSkeleton />;
   }
   return (
-    <ul className="flex flex-col col-start-1 col-end-3 row-start-3 row-end-4 gap-4 w-full md:col-start-2 md:row-start-2 md:row-end-3">
-      {jobs.map((job) => (
-        <JobCard
-          key={job.id}
-          id={job.id}
-          position={job.position}
-          location={job.location}
-          type={job.type}
-          experienceLevel={job.experienceLevel}
-          postedAt={job.postedAt}
-          company={job.company}
-          companyId={job.companyId}
-          companyLogo={job.companyLogoUrl}
-        />
-      ))}
-    </ul>
+    <>
+      <ul className="flex flex-col col-start-1 col-end-3 row-start-3 row-end-4 gap-4 w-full md:col-start-2 md:row-start-2 md:row-end-3">
+        {jobs.map((job) => (
+          <JobCard
+            key={job.id}
+            id={job.id}
+            position={job.position}
+            location={job.location}
+            type={job.type}
+            experienceLevel={job.experienceLevel}
+            postedAt={job.postedAt}
+            company={job.company}
+            companyId={job.companyId}
+            companyLogo={job.companyLogoUrl}
+          />
+        ))}
+      </ul>
+      <PaginatedNavigation totalPages={data?.totalPages ?? 0} />
+    </>
   );
 }
