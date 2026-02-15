@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -6,7 +8,6 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Clock, MapPin, Star } from "lucide-react";
 import Link from "next/link";
@@ -38,61 +39,62 @@ export default function JobCard({
   postedAt,
 }: JobCardProps) {
   return (
-    <Card className="w-full">
-      <CardHeader className="flex flex-col gap-4 items-start">
-        <CardTitle className="flex gap-4 items-center">
-          {companyLogo ? (
-            <Avatar>
-              <AvatarImage
-                src={companyLogo}
-                alt="${company} url"
-                width="18"
-                height="18"
-              />
-            </Avatar>
-          ) : (
-            <div className="flex justify-center items-center text-xl text-primary-foreground size-18 bg-primary">
-              {company.toUpperCase()[0]}
-            </div>
-          )}
-          <div className="flex flex-col gap-1">
-            <span className="text-lg font-medium">{position}</span>
-            <Link
-              href={`/companies/${companyId}`}
-              className="text-sm font-semibold text-gray-700"
-            >
-              {company}
-            </Link>
+    <Card className="w-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-2 hover:border-primary/20 group">
+      <CardHeader className="flex flex-row gap-4 items-start pb-2">
+        {companyLogo ? (
+          <Avatar className="size-14 border-2 border-muted">
+            <AvatarImage
+              src={companyLogo}
+              alt="${company} logo"
+              width="56"
+              height="56"
+              className="object-cover"
+            />
+          </Avatar>
+        ) : (
+          <div className="flex justify-center items-center text-lg font-bold size-14 rounded-xl bg-gradient-to-br from-primary to-primary/70 text-white">
+            {company.toUpperCase()[0]}
           </div>
-        </CardTitle>
+        )}
+        <div className="flex flex-col gap-1 flex-1">
+          <h3 className="text-lg font-semibold group-hover:text-primary transition-colors line-clamp-1">
+            {position}
+          </h3>
+          <Link
+            href={`/companies/${companyId}`}
+            className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+          >
+            {company}
+          </Link>
+        </div>
       </CardHeader>
-      <CardContent className="flex gap-8 items-center text-sm font-medium text-gray-700">
-        <div className="flex gap-2 items-center">
-          <MapPin size="15" />
+      <CardContent className="flex flex-wrap gap-4 items-center text-sm pb-2">
+        <div className="flex items-center gap-1.5 text-muted-foreground">
+          <MapPin size={14} />
           <span className="capitalize">
-            {type.toLowerCase() === "remote" ? "remote" : location}
+            {type.toLowerCase() === "remote" ? "Remote" : location}
           </span>
         </div>
-        <div className="flex gap-2 items-center">
-          <Star size="15" />
+        <div className="flex items-center gap-1.5 text-muted-foreground">
+          <Star size={14} />
           <span className="capitalize">
             {experienceLevel !== "none"
               ? experienceLevel + " Level"
               : "No experience"}
           </span>
         </div>
-        <div className="flex gap-2 items-center">
-          <Clock size="15" />
+        <div className="flex items-center gap-1.5 text-muted-foreground">
+          <Clock size={14} />
           <span>
             {formatDistance(postedAt, new Date(), { addSuffix: true })}
           </span>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between items-center">
+      <CardFooter className="flex justify-between items-center pt-2">
         <Badge className="font-medium capitalize" variant="secondary">
           {type} {type === "part" || type === "full" ? "time" : ""}
         </Badge>
-        <Button variant="outline" asChild>
+        <Button variant="outline" size="sm" asChild className="group-hover:bg-primary group-hover:text-primary-foreground transition-all">
           <Link href={`/jobs/${id}`}>View Job</Link>
         </Button>
       </CardFooter>

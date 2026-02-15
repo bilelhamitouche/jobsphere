@@ -1,32 +1,39 @@
+"use client";
+
 import { Brush, Code, Database, Network } from "lucide-react";
 import CategoryCard from "./category-card";
 
 function PopularCategories() {
+  const categories = [
+    { icon: <Code size="32" />, text: "Programming" },
+    { icon: <Network size="32" />, text: "Networking" },
+    { icon: <Brush size="32" />, text: "Design" },
+    { icon: <Database size="32" />, text: "Data Science" },
+  ];
+
   return (
-    <div className="flex flex-col gap-2 text-center">
-      <h2 className="text-2xl font-bold md:text-3xl">Browse By Category</h2>
-      <p className="text-gray-500">
-        Explore job opportunities by industry category
-      </p>
-      <div className="grid grid-cols-1 gap-4 p-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        <CategoryCard
-          icon={<Code size="48" className="text-primary" />}
-          text="Programming"
-        />
-        <CategoryCard
-          icon={<Network size="48" className="text-primary" />}
-          text="Networking"
-        />
-        <CategoryCard
-          icon={<Brush size="48" className="text-primary" />}
-          text="Design"
-        />
-        <CategoryCard
-          icon={<Database size="48" className="text-primary" />}
-          text="Data Science"
-        />
+    <section className="py-20 px-4">
+      <div className="container mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold md:text-4xl mb-3">Browse By Category</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            Explore job opportunities by industry category and find your perfect fit
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {categories.map((category, index) => (
+            <div
+              key={category.text}
+              className="opacity-0 animate-fade-in-up"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <CategoryCard icon={category.icon} text={category.text} />
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 
