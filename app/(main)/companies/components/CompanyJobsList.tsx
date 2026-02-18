@@ -1,5 +1,6 @@
 import { getJobListingsByCompanyId } from "@/lib/queries";
 import JobCard from "../../jobs/components/JobCard";
+import NoJobs from "../../jobs/components/NoJobs";
 
 export default async function CompanyJobsList({
   companyId,
@@ -7,12 +8,7 @@ export default async function CompanyJobsList({
   companyId: string;
 }) {
   const jobs = await getJobListingsByCompanyId(companyId);
-  if (!jobs || jobs.length === 0)
-    return (
-      <div className="py-16 w-full h-full text-center">
-        <div className="text-lg text-gray-700">No Jobs Posted</div>
-      </div>
-    );
+  if (!jobs || jobs.length === 0) return <NoJobs />;
   return (
     <ul className="flex flex-col gap-4 w-full">
       {jobs.map((job) => (
@@ -26,7 +22,7 @@ export default async function CompanyJobsList({
           postedAt={job.postedAt}
           company={job.company as string}
           companyId={companyId}
-          companyImageUrl={job.companyLogo}
+          companyLogo={job.companyLogo}
         />
       ))}
     </ul>
