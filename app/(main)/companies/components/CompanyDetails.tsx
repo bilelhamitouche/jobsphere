@@ -16,7 +16,7 @@ export default async function CompanyDetails({
   const company = companyDetails[0];
   return (
     <Card>
-      <CardHeader className="flex justify-between">
+      <CardHeader className="flex flex-col gap-4 md:flex-row md:gap-0 md:justify-between">
         <div className="space-y-4">
           <div className="flex gap-4 items-center">
             {company.company.logoUrl ? (
@@ -38,17 +38,17 @@ export default async function CompanyDetails({
               </span>
             </div>
           </div>
-          <div className="flex gap-20 items-center">
+          <div className="flex flex-col gap-4 items-start text-sm sm:flex-row sm:items-center sm:space-y-0 md:gap-20 md:text-base">
             <div className="flex gap-2 items-center text-gray-600">
-              <MapPin className="text-gray-500" />
+              <MapPin className="w-5 text-gray-500 md:w-6" />
               <span>{company.company.headquarters}</span>
             </div>
             <div className="flex gap-2 items-center text-gray-600">
-              <Calendar className="text-gray-500" />
+              <Calendar className="w-5 text-gray-500 md:w-6" />
               <span>Founded {company.company.foundationYear}</span>
             </div>
             <div className="flex gap-2 items-center text-gray-600">
-              <Users className="text-gray-500" />
+              <Users className="w-5 text-gray-500 md:w-6" />
               <span>
                 Size{" "}
                 {company.company.size === "small"
@@ -61,8 +61,8 @@ export default async function CompanyDetails({
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-4">
-          <Button variant="outline" asChild>
+        <div className="flex flex-col gap-4 justify-between items-center w-full sm:flex-row md:flex-col md:justify-start md:w-fit">
+          <Button variant="outline" className="w-full sm:w-fit" asChild>
             <Link
               target="_blank"
               href={
