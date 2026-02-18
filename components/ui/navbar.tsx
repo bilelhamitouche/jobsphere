@@ -12,39 +12,46 @@ export default async function Navbar() {
   });
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex justify-between items-center px-4 py-3 mx-auto">
+      <div className="container flex justify-between items-center py-3 px-4 mx-auto">
         <div className="animate-fade-in-down">
           <Logo />
         </div>
         <nav className="hidden gap-1 items-center md:flex">
           <Link
             href="/jobs"
-            className="relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-lg hover:text-primary group"
+            className="relative py-2 px-4 text-sm font-medium rounded-lg transition-all duration-300 group hover:text-primary"
           >
             Find Jobs
-            <span className="absolute inset-x-0 bottom-0 h-0.5 scale-x-0 transition-transform duration-300 bg-primary rounded-full group-hover:scale-x-100" />
+            <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full transition-transform duration-300 scale-x-0 group-hover:scale-x-100 bg-primary" />
           </Link>
           <Link
             href="/companies"
-            className="relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-lg hover:text-primary group"
+            className="relative py-2 px-4 text-sm font-medium rounded-lg transition-all duration-300 group hover:text-primary"
           >
             Companies
-            <span className="absolute inset-x-0 bottom-0 h-0.5 scale-x-0 transition-transform duration-300 bg-primary rounded-full group-hover:scale-x-100" />
+            <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full transition-transform duration-300 scale-x-0 group-hover:scale-x-100 bg-primary" />
           </Link>
           <Link
             href="/about"
-            className="relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-lg hover:text-primary group"
+            className="relative py-2 px-4 text-sm font-medium rounded-lg transition-all duration-300 group hover:text-primary"
           >
             About Us
-            <span className="absolute inset-x-0 bottom-0 h-0.5 scale-x-0 transition-transform duration-300 bg-primary rounded-full group-hover:scale-x-100" />
+            <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full transition-transform duration-300 scale-x-0 group-hover:scale-x-100 bg-primary" />
           </Link>
         </nav>
         {!session?.user ? (
-          <div className="hidden space-x-3 md:block animate-fade-in-up">
-            <Button variant="outline" asChild className="transition-all duration-300 hover:shadow-md">
+          <div className="hidden items-center space-x-3 md:flex animate-fade-in-up">
+            <Button
+              variant="outline"
+              asChild
+              className="transition-all duration-300 hover:shadow-md"
+            >
               <Link href="/signin">Sign In</Link>
             </Button>
-            <Button asChild className="transition-all duration-300 hover:shadow-lg hover:scale-105">
+            <Button
+              asChild
+              className="transition-all duration-300 hover:shadow-lg hover:scale-105"
+            >
               <Link href="/recruiter-signin" className="text-sm">
                 Recruiter Sign In
               </Link>
