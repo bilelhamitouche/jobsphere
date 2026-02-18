@@ -9,7 +9,7 @@ import { Briefcase } from "lucide-react";
 
 export default function NoJobs() {
   return (
-    <Empty>
+    <Empty className="col-span-2">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <Briefcase />

@@ -12,7 +12,7 @@ import Link from "next/link";
 
 export default function NoCompanies() {
   return (
-    <Empty>
+    <Empty className="col-span-2">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <Factory />
