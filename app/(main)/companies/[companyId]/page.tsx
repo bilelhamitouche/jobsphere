@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Suspense } from "react";
 import CompanyDetailsSkeleton from "../components/CompanyDetailsSkeleton";
+import JobListSkeleton from "../../jobs/components/JobListSkeleton";
 
 export default async function Company({
   params,
@@ -24,7 +25,9 @@ export default async function Company({
       <Suspense fallback={<CompanyDetailsSkeleton />}>
         <CompanyDetails companyId={companyId} />
       </Suspense>
-      <CompanyJobsList companyId={companyId} />
+      <Suspense fallback={<JobListSkeleton />}>
+        <CompanyJobsList companyId={companyId} />
+      </Suspense>
     </div>
   );
 }
