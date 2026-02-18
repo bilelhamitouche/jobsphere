@@ -46,6 +46,7 @@ export default function JobDetailsSidebar({
       <CardHeader className="space-y-2">
         <Button
           size="lg"
+          className="text-sm md:text-base"
           disabled={isLoading}
           onClick={async () => {
             setIsLoading(true);
@@ -76,6 +77,7 @@ export default function JobDetailsSidebar({
         </Button>
         <Button
           variant="outline"
+          className="text-sm md:text-base"
           size="lg"
           disabled={isSaveLoading}
           onClick={async () => {

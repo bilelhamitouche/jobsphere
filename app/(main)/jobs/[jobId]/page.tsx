@@ -28,7 +28,7 @@ export default async function JobListing({
         <ArrowLeft className="text-primary" />
         <span className="text-primary">Back to Jobs</span>
       </Link>
-      <div className="flex flex-col gap-8 w-full h-full md:flex-row">
+      <div className="flex flex-col gap-8 w-full h-full lg:flex-row">
         <Suspense fallback={<JobDetailsCardSkeleton />}>
           <JobDetailsCard
             position={jobListing.position}

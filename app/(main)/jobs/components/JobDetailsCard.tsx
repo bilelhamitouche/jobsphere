@@ -60,7 +60,7 @@ export default async function JobDetailsCard({
             </div>
           )}
           <div className="flex flex-col gap-2">
-            <h2 className="text-3xl font-bold">{position}</h2>
+            <h2 className="text-2xl font-bold md:text-3xl">{position}</h2>
             <div className="flex items-center font-medium">
               <Link className="text-primary" href={`/companies/${companyId}`}>
                 {company}
@@ -70,7 +70,7 @@ export default async function JobDetailsCard({
             </div>
           </div>
         </CardTitle>
-        <div className="flex gap-8 items-center w-full">
+        <div className="flex gap-8 items-center w-full text-sm md:text-base">
           <div className="flex gap-2 items-center text-gray-700">
             <MapPin size="20" />
             <span>{location}</span>
@@ -92,11 +92,13 @@ export default async function JobDetailsCard({
       <CardContent className="space-y-8">
         <div className="flex flex-col gap-2">
           <h3 className="text-xl font-semibold">Job Description</h3>
-          <p className="leading-7 text-gray-700">{description}</p>
+          <p className="text-sm leading-7 text-gray-700 md:text-base">
+            {description}
+          </p>
         </div>
         <div className="flex flex-col gap-4">
           <h3 className="text-xl font-semibold">Job Requirements</h3>
-          <ul className="flex flex-col gap-2 pl-4">
+          <ul className="flex flex-col gap-2 pl-4 text-sm md:text-base">
             {requirements.map((requirement, index) => (
               <li key={index} className="list-disc">
                 {requirement.requirement}
@@ -106,7 +108,7 @@ export default async function JobDetailsCard({
         </div>
         <div className="flex flex-col gap-4">
           <h3 className="text-xl font-semibold">Job Responbilility</h3>
-          <ul className="flex flex-col gap-2 pl-4">
+          <ul className="flex flex-col gap-2 pl-4 text-sm md:text-base">
             {responsibilities.map((responsibility, index) => (
               <li key={index} className="list-disc">
                 {responsibility.responsibility}
